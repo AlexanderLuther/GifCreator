@@ -1,9 +1,11 @@
 package com.hluther.gui;
 import com.hluther.controlClasses.GraphicEditorDriver;
+import com.hluther.controlClasses.TextWriterDriver;
 import com.hluther.entityClasses.Canvas;
 import com.hluther.entityClasses.ImageDTO;
 import java.awt.Color;
 import java.util.ArrayList;
+import javax.swing.JTextArea;
 /**
  *
  * @author helmuth
@@ -11,18 +13,21 @@ import java.util.ArrayList;
 public class GraphicEditor extends javax.swing.JDialog {
     
     private GraphicEditorDriver graphicEditorDriver = new GraphicEditorDriver();
+    private TextWriterDriver textWriter = new TextWriterDriver();
     private ArrayList<Canvas> canvases;
+    private JTextArea timeTextArea;
     private ColorComboBox colors;
     private Canvas canvas;
 
-    public GraphicEditor(java.awt.Frame parent, boolean modal, ArrayList<Canvas> canvases) {
+    public GraphicEditor(GifCreatorFrame parent, boolean modal, ArrayList<Canvas> canvases) {
         super(parent, modal);
         initComponents();
+        this.timeTextArea = parent.getTimeTextArea();
         this.canvases = canvases;
         this.setLocationRelativeTo(null);
         this.addCanvas();
     }
-
+    
     /*
     AGREGAR LOS LIENZOS A LA INTERFAZ.
     Metodo encargado de agregar todos los lienzos en el arrayList
@@ -495,6 +500,7 @@ public class GraphicEditor extends javax.swing.JDialog {
     private void modifyDurationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modifyDurationActionPerformed
         if(!durationTextArea.getText().isEmpty() && !durationTextArea.getText().isBlank()){
             canvas.getTime().getImages().get(imageIdComboBox.getSelectedIndex()).setDuration(Integer.parseInt(durationTextArea.getText()));
+            timeTextArea.setText(textWriter.writeTimeFileText(canvases));
         }
     }//GEN-LAST:event_modifyDurationActionPerformed
 
@@ -508,6 +514,7 @@ public class GraphicEditor extends javax.swing.JDialog {
     private void setStartEndActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_setStartEndActionPerformed
         canvas.getTime().setStartId(startComboBox.getSelectedItem().toString());
         canvas.getTime().setEndId(endComboBox.getSelectedItem().toString());
+        timeTextArea.setText(textWriter.writeTimeFileText(canvases));
     }//GEN-LAST:event_setStartEndActionPerformed
 
     /**
@@ -540,7 +547,7 @@ public class GraphicEditor extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                GraphicEditor dialog = new GraphicEditor(new javax.swing.JFrame(), true, null);
+                GraphicEditor dialog = new GraphicEditor(new GifCreatorFrame(), true, null);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {

@@ -54,6 +54,10 @@ public class GifCreatorFrame extends javax.swing.JFrame {
         generateGifMenu.setEnabled(false);  
     }
 
+    public JTextArea getTimeTextArea(){
+        return textAreas[2];
+    }
+    
     /*
     ABRIR UN NUEVO PANEL EN EL JTABBEDPANE
     Metodo encargado de:
