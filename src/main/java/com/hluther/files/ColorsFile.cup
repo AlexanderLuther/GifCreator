@@ -1,0 +1,118 @@
+package com.hluther.parser;
+import java_cup.runtime.*;
+import com.hluther.gui.GifCreatorFrame;
+import com.hluther.lexer.ColorsFileLexer;
+import com.hluther.controlClasses.ColorsFileDriver;
+import com.hluther.entityClasses.CColor;
+import java.awt.Color;
+import java.util.Hashtable;
+parser code {:
+
+    private GifCreatorFrame gifCreatorFrame;
+    private ColorsFileDriver colorsFileDriver;
+    private Hashtable symbolTable;
+    private Hashtable<String, CColor> colors;
+    
+    public ColorsFileParser(ColorsFileLexer lexer, GifCreatorFrame gifCreatorFrame, ColorsFileDriver colorsFileDriver, Hashtable symbolTable) { 
+        super(lexer);
+        this.gifCreatorFrame = gifCreatorFrame;
+        this.colorsFileDriver = colorsFileDriver;
+        this.symbolTable = symbolTable;
+    }
+
+    public void syntax_error(Symbol s){
+        //konquestFrame.printGameSaveSintaxError(s);
+    }
+
+    public void unrecovered_syntax_error(Symbol s){
+        //konquestFrame.printGameSaveSintaxError(s);
+    }
+
+    public void semanticError(String lexeme, int line, int column, int errorType){
+        String msg = "";    
+        switch(errorType){
+            case 0:
+                msg = "Error Semantico -> No existe ningun lienzo con el identificador ["+lexeme+"]. Se descartan todos los colores. Linea: "+line+" Columna: "+column; 
+            break;
+            case 1:
+                msg = "Error Semantico -> Ya existe un color con el identificador ["+lexeme+"]. El color fue descartado. Linea: "+line+" Columna: "+column; 
+            break;
+        }
+        gifCreatorFrame.printError(msg, 1);
+    }
+
+:}
+
+/* Terminals */
+terminal String     CURLYBRACKETO, CURLYBRACKETC, COLON, COMMA, ID, RED, BLUE, GREEN, HEX, HEXCODE, COLORS;
+terminal Integer    INTEGER;
+
+/* Non-terminals */
+non terminal                            colors, canvases;  
+non terminal Integer                    integerValue, red, green, blue;
+non terminal Color                      colorRGB, colorAttribute;
+non terminal Hashtable<String, CColor>  color;
+
+/* The grammar */
+start with colors;
+
+colors::=    CURLYBRACKETO COLORS COLON CURLYBRACKETO  canvases CURLYBRACKETC CURLYBRACKETC
+             ;
+
+canvases::=     ID:name COLON CURLYBRACKETO color:colors CURLYBRACKETC COMMA canvases 
+                {:  if(symbolTable.get(name) != null){
+                        colorsFileDriver.addColors(name, colors);
+                    }
+                    else{
+                        semanticError(name, nameleft, nameright, 0);
+                    } 
+                :}
+                | ID:name COLON CURLYBRACKETO color:colors CURLYBRACKETC
+                {:  if(symbolTable.get(name) != null){
+                        colorsFileDriver.addColors(name, colors);
+                    }
+                    else{
+                        semanticError(name, nameleft, nameright, 0);
+                    } 
+                :}
+                ;
+
+color::=    ID:name COLON CURLYBRACKETO colorAttribute:color CURLYBRACKETC COMMA color:allColors
+            {:  if(allColors.get(name) == null){
+                    allColors.put(name, new CColor(color, name));;
+                }
+                else{
+                    semanticError(name, nameleft, nameright, 1);
+                }
+                RESULT = allColors;
+            :}
+            | ID:name COLON CURLYBRACKETO colorAttribute:color CURLYBRACKETC
+            {:  colors = new Hashtable();
+                colors.put(name, new CColor(color, name));
+                RESULT = colors; 
+            :}
+            ;
+
+colorAttribute::=   HEX COLON HEXCODE:value {: RESULT = Color.decode(value); :}   
+                    | colorRGB:color {: RESULT = color; :}
+                    ;      
+
+colorRGB::=     red:red COMMA blue:blue COMMA green:green {: RESULT = new Color(red, blue, green); :}
+                | red:red COMMA green:green COMMA blue:blue {: RESULT = new Color(red, blue, green); :}
+                | blue:blue COMMA red:red COMMA green:green {: RESULT = new Color(red, blue, green); :}
+                | blue:blue COMMA green:green COMMA red:red {: RESULT = new Color(red, blue, green); :}
+                | green:green COMMA red:red COMMA blue:blue {: RESULT = new Color(red, blue, green); :}
+                | green:green COMMA blue:blue COMMA red:red {: RESULT = new Color(red, blue, green); :}
+                ;
+
+red::=      RED integerValue:amount {: RESULT = amount; :}
+            ;
+
+blue::=     GREEN integerValue:amount {: RESULT = amount; :}
+            ;
+
+green::=    BLUE integerValue:amount {: RESULT = amount; :} 
+            ;
+
+integerValue::=     COLON INTEGER:amount {: RESULT = amount; :}
+                    ;

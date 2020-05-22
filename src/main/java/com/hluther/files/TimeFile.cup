@@ -1,0 +1,133 @@
+package com.hluther.parser;
+import java_cup.runtime.*;
+import com.hluther.gui.GifCreatorFrame;
+import com.hluther.lexer.TimeFileLexer;
+import com.hluther.entityClasses.ImageDTO;
+import com.hluther.entityClasses.Time;
+import com.hluther.controlClasses.TimeFileDriver;
+import java.util.LinkedList;
+import java.util.Hashtable;
+
+parser code {:
+
+    private GifCreatorFrame gifCreatorFrame;
+    private TimeFileDriver timeFileDriver;
+    private LinkedList<ImageDTO> imagesArray;
+    private Hashtable symbolTable;
+    
+    public TimeFileParser(TimeFileLexer lexer, GifCreatorFrame gifCreatorFrame, TimeFileDriver timeFileDriver, Hashtable symbolTable) { 
+        super(lexer);
+        this.gifCreatorFrame = gifCreatorFrame;
+        this.timeFileDriver = timeFileDriver;
+        this.symbolTable = symbolTable;
+    }
+
+    public void syntax_error(Symbol s){
+        //konquestFrame.printGameSaveSintaxError(s);
+    }
+
+    public void unrecovered_syntax_error(Symbol s){
+        //konquestFrame.printGameSaveSintaxError(s);
+    } 
+
+    public void semanticError(String lexeme, int line, int column, int errorType){
+        String msg = "";    
+        switch(errorType){
+            case 0:
+                msg = "Error Semantico -> No existe ningun lienzo con el identificador ["+lexeme+"]. Se descartan todos los tiempos. Linea: "+line+" Columna: "+column; 
+            break;
+            case 1:
+                msg = "Error Semantico -> Ya existe una imagen con el identificador ["+lexeme+"]. Se descarto la imagen. Linea: "+line+" Columna: "+column; 
+            break;
+        }
+        gifCreatorFrame.printError(msg, 2);
+    }
+
+:}
+
+/* Terminals */
+terminal String     CURLYBRACKETO, CURLYBRACKETC, SQUAREBRACKETO, SQUAREBRACKETC, COLON, COMMA, CANVASID, TIME, STARTID, END, LITERAL, IMAGES, ID, DURATION;
+terminal Integer    INTEGER;
+
+/* Non-terminals */
+non terminal                        times, canvas; 
+non terminal String                 startId, end, id; 
+non terminal Integer                duration;  
+non terminal ImageDTO               attribute;
+non terminal LinkedList<ImageDTO>   imagesAttributes, images;
+non terminal Time                   timeAttributes;
+
+/* The grammar */
+start with times;
+
+times::=    CURLYBRACKETO TIME COLON CURLYBRACKETO canvas CURLYBRACKETC CURLYBRACKETC
+            ;
+
+canvas::=   CANVASID:name COLON CURLYBRACKETO timeAttributes:time CURLYBRACKETC COMMA canvas 
+            {:  if(symbolTable.get(name) != null){
+                    time.setCanvasId(name);
+                    timeFileDriver.addTime(name, time);
+                }
+                else{
+                    semanticError(name, nameleft, nameright, 0);
+                } 
+            :}
+            | CANVASID:name COLON CURLYBRACKETO timeAttributes:time CURLYBRACKETC
+            {:  if(symbolTable.get(name) != null){
+                    time.setCanvasId(name);
+                    timeFileDriver.addTime(name, time);
+                }
+                else{
+                    semanticError(name, nameleft, nameright, 0);
+                }
+            :}
+            ;
+
+timeAttributes::=   startId:initialName COMMA end:endName COMMA images:allImages {: RESULT = new Time(initialName, endName, allImages); :}
+                    | startId:initialName COMMA images:allImages COMMA end:endName {: RESULT = new Time(initialName, endName, allImages); :}
+                    | end:endName COMMA startId:initialName COMMA images:allImages {: RESULT = new Time(initialName, endName, allImages); :}
+                    | end:endName COMMA images:allImages COMMA startId:initialName {: RESULT = new Time(initialName, endName, allImages); :}
+                    | images:allImages COMMA startId:initialName COMMA end:endName {: RESULT = new Time(initialName, endName, allImages); :}  
+                    | images:allImages COMMA end:endName COMMA startId:initialName {: RESULT = new Time(initialName, endName, allImages); :}
+                    ;
+
+startId::=      STARTID COLON LITERAL:name {: RESULT = name.replaceAll("\"", ""); :}
+                ;
+
+end::=      END COLON LITERAL:name {: RESULT = name.replaceAll("\"", ""); :}
+            ;
+
+images::=   IMAGES COLON SQUAREBRACKETO imagesAttributes:allImages SQUAREBRACKETC {: RESULT = allImages; :}
+            ;
+
+imagesAttributes::=  CURLYBRACKETO attribute:image CURLYBRACKETC COMMA imagesAttributes:allImages
+                     {: boolean add = true;
+                        for(ImageDTO currentImage : allImages){
+                            if(currentImage.getId().equals(image.getId())){
+                                add = false;
+                            }
+                        }
+                        if(add){
+                            allImages.addFirst(image);
+                        }
+                        else{
+                            semanticError(image.getId(), imageleft, imageright, 1);
+                        }
+                        RESULT = allImages; 
+                     :}
+                     | CURLYBRACKETO attribute:image CURLYBRACKETC
+                     {: imagesArray = new LinkedList<>();
+                        imagesArray.addFirst(image); 
+                        RESULT = imagesArray;
+                     :} 
+                    ;
+
+attribute::=    duration:amount COMMA id:name {: RESULT = new ImageDTO(name, amount); :}
+                | id:name COMMA duration:amount {: RESULT = new ImageDTO(name, amount); :}
+                ;
+
+duration::=     DURATION COLON INTEGER:amount {: RESULT = amount; :}
+                ;
+
+id::=   ID COLON LITERAL:name {: RESULT = name.replaceAll("\"", ""); :}
+        ;

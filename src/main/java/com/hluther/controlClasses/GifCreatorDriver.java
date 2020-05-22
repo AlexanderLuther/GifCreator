@@ -16,7 +16,7 @@ import javax.swing.text.BadLocationException;
  *
  * @author helmuth
  */
-public class GuiDriver {
+public class GifCreatorDriver {
     
     private final FileNameExtensionFilter filterLNZ = new FileNameExtensionFilter("LNZ","lnz");
     private final FileNameExtensionFilter filterCLRS = new FileNameExtensionFilter("CLRS","clrs");
@@ -106,5 +106,7 @@ public class GuiDriver {
             }
         }); 
     }
+    
+    
     
 }

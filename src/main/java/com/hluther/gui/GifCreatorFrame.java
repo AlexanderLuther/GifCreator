@@ -1,8 +1,14 @@
 package com.hluther.gui;
-
+import com.hluther.controlClasses.AnalysisDriver;
+import com.hluther.controlClasses.CanvasFileDriver;
+import com.hluther.controlClasses.ColorsFileDriver;
 import com.hluther.controlClasses.FilesDriver;
 import javax.swing.JFileChooser;
-import com.hluther.controlClasses.GuiDriver;
+import com.hluther.controlClasses.GifCreatorDriver;
+import com.hluther.controlClasses.TimeFileDriver;
+import com.hluther.entityClasses.CColor;
+import java.awt.Color;
+import java.util.Hashtable;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
@@ -18,14 +24,26 @@ public class GifCreatorFrame extends javax.swing.JFrame {
     tabbedPanes[2] = archivo.tmp
     tabbedPanes[3] = archivo.pnt
     */
-    private GuiDriver guiDriver = new GuiDriver();
+    private GifCreatorDriver guiDriver = new GifCreatorDriver();
     private FilesDriver filesDriver = new FilesDriver();
     private JFileChooser fileChooser;
     private JPanel[] panels = new JPanel[4];
     private JTextArea[] textAreas = new JTextArea[4];
     private String[] titles = new String[4];
-            
     
+    private AnalysisDriver analysisDriver = new AnalysisDriver();
+    private Hashtable symbolTable;
+    private CanvasFileDriver canvasFileDriver;
+    private ColorsFileDriver colorsFileDriver;
+    private TimeFileDriver timeFileDriver;
+    
+    private boolean canvasError = false; 
+    private boolean colorsError = false;
+    private boolean timeError = false;
+    private boolean paintError = false;
+    
+    private GraphicEditor graphicEditor;
+   
     public GifCreatorFrame() {
         initComponents();
         this.setExtendedState(MAXIMIZED_BOTH);
@@ -33,9 +51,9 @@ public class GifCreatorFrame extends javax.swing.JFrame {
         messagesAreaPanel.setVisible(false);
         showMessagesAreaMenu.setSelected(false);
         graphicEditorMenu.setEnabled(false);
-        generateGifMenu.setEnabled(false);
+        generateGifMenu.setEnabled(false);  
     }
-    
+
     /*
     ABRIR UN NUEVO PANEL EN EL JTABBEDPANE
     Metodo encargado de:
@@ -123,7 +141,42 @@ public class GifCreatorFrame extends javax.swing.JFrame {
         }
         return selection;
     }
-
+      
+    /*
+    IMPRESION DE ERRORES LEXICOS, SINTACTICOS Y SEMANTICOS.
+    */
+    public void printError(String errorMessage, int fileType){
+        messagesAreaPanel.setVisible(true);
+        showMessagesAreaMenu.setSelected(true);
+        switch(fileType){
+            case 0:
+                if(!canvasError){
+                    messagesTextArea.setText(messagesTextArea.getText() + "\nERRORES EN ARCHIVO DE LIENZOS: "+titles[0]+"\n");
+                    canvasError = true;
+                }    
+            break;     
+            case 1:
+                if(!colorsError){
+                    messagesTextArea.setText(messagesTextArea.getText() + "\nERRORES EN ARCHIVO DE COLORES: "+titles[1]+"\n");
+                    colorsError = true;
+                } 
+            break;
+            case 2:
+                if(!timeError){
+                    messagesTextArea.setText(messagesTextArea.getText() + "\nERRORES EN ARCHIVO DE TIEMPOS: "+titles[2]+"\n");
+                    timeError = true;
+                }   
+            break;
+            case 3:
+                if(!paintError){
+                    messagesTextArea.setText(messagesTextArea.getText() + "\nERRORES EN ARCHIVO DE PINTURA: "+titles[3]+"\n");
+                    paintError = true;
+                } 
+            break;
+        }
+        messagesTextArea.setText(messagesTextArea.getText() + errorMessage + "\n");
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -134,10 +187,12 @@ public class GifCreatorFrame extends javax.swing.JFrame {
         editorTabbedPane = new javax.swing.JTabbedPane();
         messagesAreaPanel = new javax.swing.JPanel();
         messagesAreaFrame = new javax.swing.JInternalFrame();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        messagesTextArea = new javax.swing.JTextArea();
         footerPanel = new javax.swing.JPanel();
         positionLabel = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
-        jMenuBar1 = new javax.swing.JMenuBar();
+        menu = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         newMenu = new javax.swing.JMenu();
         newCanvasMenu = new javax.swing.JMenuItem();
@@ -193,17 +248,15 @@ public class GifCreatorFrame extends javax.swing.JFrame {
 
         messagesAreaFrame.setBackground(new java.awt.Color(54, 63, 69));
         messagesAreaFrame.setVisible(true);
+        messagesAreaFrame.getContentPane().setLayout(new javax.swing.BoxLayout(messagesAreaFrame.getContentPane(), javax.swing.BoxLayout.LINE_AXIS));
 
-        javax.swing.GroupLayout messagesAreaFrameLayout = new javax.swing.GroupLayout(messagesAreaFrame.getContentPane());
-        messagesAreaFrame.getContentPane().setLayout(messagesAreaFrameLayout);
-        messagesAreaFrameLayout.setHorizontalGroup(
-            messagesAreaFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        messagesAreaFrameLayout.setVerticalGroup(
-            messagesAreaFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        messagesTextArea.setEditable(false);
+        messagesTextArea.setColumns(20);
+        messagesTextArea.setRows(5);
+        messagesTextArea.setText("\n");
+        jScrollPane1.setViewportView(messagesTextArea);
+
+        messagesAreaFrame.getContentPane().add(jScrollPane1);
 
         messagesAreaPanel.add(messagesAreaFrame);
 
@@ -233,8 +286,8 @@ public class GifCreatorFrame extends javax.swing.JFrame {
 
         getContentPane().add(backgroundPanel, "card2");
 
-        jMenuBar1.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.LOWERED));
-        jMenuBar1.setBorderPainted(false);
+        menu.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+        menu.setBorderPainted(false);
 
         jMenu1.setForeground(new java.awt.Color(51, 51, 51));
         jMenu1.setText("Archivo");
@@ -322,7 +375,7 @@ public class GifCreatorFrame extends javax.swing.JFrame {
         });
         jMenu1.add(exitMenu);
 
-        jMenuBar1.add(jMenu1);
+        menu.add(jMenu1);
 
         jMenu2.setForeground(new java.awt.Color(51, 51, 51));
         jMenu2.setText("Analisis");
@@ -332,9 +385,14 @@ public class GifCreatorFrame extends javax.swing.JFrame {
         analysisMenu.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
         analysisMenu.setForeground(new java.awt.Color(54, 63, 69));
         analysisMenu.setText("Analizar Archivos");
+        analysisMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                analysisMenuActionPerformed(evt);
+            }
+        });
         jMenu2.add(analysisMenu);
 
-        jMenuBar1.add(jMenu2);
+        menu.add(jMenu2);
 
         generateMenu.setForeground(new java.awt.Color(51, 51, 51));
         generateMenu.setText("Generar");
@@ -344,6 +402,11 @@ public class GifCreatorFrame extends javax.swing.JFrame {
         graphicEditorMenu.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
         graphicEditorMenu.setForeground(new java.awt.Color(54, 63, 69));
         graphicEditorMenu.setText("Editor Grafico");
+        graphicEditorMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                graphicEditorMenuActionPerformed(evt);
+            }
+        });
         generateMenu.add(graphicEditorMenu);
 
         generateGifMenu.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_G, java.awt.event.InputEvent.CTRL_MASK));
@@ -352,7 +415,7 @@ public class GifCreatorFrame extends javax.swing.JFrame {
         generateGifMenu.setText("Generar Gif");
         generateMenu.add(generateGifMenu);
 
-        jMenuBar1.add(generateMenu);
+        menu.add(generateMenu);
 
         jMenu3.setForeground(new java.awt.Color(51, 51, 51));
         jMenu3.setText("Ver");
@@ -370,7 +433,7 @@ public class GifCreatorFrame extends javax.swing.JFrame {
         });
         jMenu3.add(showMessagesAreaMenu);
 
-        jMenuBar1.add(jMenu3);
+        menu.add(jMenu3);
 
         jMenu4.setForeground(new java.awt.Color(51, 51, 51));
         jMenu4.setText("Ayuda");
@@ -410,14 +473,13 @@ public class GifCreatorFrame extends javax.swing.JFrame {
         jMenu4.add(aboutMenu);
         jMenu4.add(jSeparator1);
 
-        jMenuBar1.add(jMenu4);
+        menu.add(jMenu4);
 
-        setJMenuBar(jMenuBar1);
+        setJMenuBar(menu);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    
     //CERRAR APLICACION.
     private void exitMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitMenuActionPerformed
         System.exit(0);
@@ -512,6 +574,45 @@ public class GifCreatorFrame extends javax.swing.JFrame {
         filesDriver.openPDF("technicalManual.pdf");
     }//GEN-LAST:event_technicalManualMenuActionPerformed
 
+    //REALIZAR ANALISIS SINTACTICO Y LEXICO
+    private void analysisMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_analysisMenuActionPerformed
+        if(panels[0] == null || panels[1] == null || panels[2] == null || panels[3] == null){
+            JOptionPane.showMessageDialog(rootPane, "Para poder realizar el analisis se necesita abrir los cuatro tipos de archivos.", "Error", 0);
+        }
+        else{
+            //Inicializar variables
+            canvasError = false;
+            colorsError = false;
+            timeError = false;
+            paintError = false;
+            messagesTextArea.setText("");
+            symbolTable = new Hashtable();
+            //Realizar analisis
+            canvasFileDriver = new CanvasFileDriver();
+            analysisDriver.doCanvasFileAnalysis(textAreas[0].getText(), this, canvasFileDriver, symbolTable);            
+            colorsFileDriver = new ColorsFileDriver(canvasFileDriver.getCanvases());
+            analysisDriver.doColorsFileAnalysis(textAreas[1].getText(), this, colorsFileDriver, symbolTable);
+            timeFileDriver = new TimeFileDriver(colorsFileDriver.getCanvases());
+            analysisDriver.doTimeFileAnalysis(textAreas[2].getText(), this, timeFileDriver, symbolTable);
+            
+            //Activar el editor grafico
+            if(!canvasError && !colorsError && !timeError && !paintError){
+                graphicEditorMenu.setEnabled(true);
+                generateGifMenu.setEnabled(true);
+            }
+            else{
+                graphicEditorMenu.setEnabled(false);
+                generateGifMenu.setEnabled(false);
+            }
+        }
+    }//GEN-LAST:event_analysisMenuActionPerformed
+
+    //ABRIR EL EDITOR GRAFICO DE LIENZOS.
+    private void graphicEditorMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_graphicEditorMenuActionPerformed
+        graphicEditor = new GraphicEditor(this, true, timeFileDriver.getCanvases());
+        graphicEditor.setVisible(true);
+    }//GEN-LAST:event_graphicEditorMenuActionPerformed
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -560,10 +661,12 @@ public class GifCreatorFrame extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
-    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPopupMenu.Separator jSeparator1;
+    private javax.swing.JMenuBar menu;
     private javax.swing.JInternalFrame messagesAreaFrame;
     private javax.swing.JPanel messagesAreaPanel;
+    private javax.swing.JTextArea messagesTextArea;
     private javax.swing.JMenuItem newCanvasMenu;
     private javax.swing.JMenuItem newColorMenu;
     private javax.swing.JMenu newMenu;

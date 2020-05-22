@@ -1,0 +1,186 @@
+package com.hluther.parser;
+import java_cup.runtime.*;
+import com.hluther.gui.GifCreatorFrame;
+import com.hluther.lexer.CanvasFileLexer;
+import com.hluther.controlClasses.CanvasFileDriver;
+import com.hluther.entityClasses.SizeDTO;
+import com.hluther.entityClasses.Canvas;
+import java.awt.Color;
+import java.util.Hashtable;
+
+parser code {:
+
+    private GifCreatorFrame gifCreatorFrame;
+    private CanvasFileDriver canvasFileDriver;
+    private Hashtable symbolTable;
+    private int errorType;
+    
+    public CanvasFileParser(CanvasFileLexer lexer, GifCreatorFrame gifCreatorFrame, CanvasFileDriver canvasFileDriver, Hashtable symbolTable) { 
+        super(lexer);
+        this.gifCreatorFrame = gifCreatorFrame;
+        this.canvasFileDriver = canvasFileDriver;
+        this.symbolTable = symbolTable;
+    }
+
+    public void syntax_error(Symbol s){
+        System.out.println("Error " + s.value.toString());
+        String msg = "";
+        switch(errorType){
+            case 0:
+                msg = "Error Sintactico -> Lexema recibido: ["+s.value.toString()+"]. Linea: "+s.left+" Columna: "+s.right+" Se ha descartado completamente el lienzo.";
+            break;
+            case 1:
+                msg = "Error Sintactico -> Lexema recibido: ["+s.value.toString()+"]. Linea: "+s.left+" Columna: "+s.right+
+                      " Se establecio por defecto como color del lienzo el color negro";
+            break;
+            case 2:
+                //msg = "Error Sintactico -> Lexema recibido: []. Linea: "+s.left+" Columna: "+s.right+
+                  //    "Se esperaba \"gif\" o \"png\". El valor asignado por defecto es \"gif\"";
+            break;
+            case 3:
+               // msg = "Error Sintactico -> Lexema recibido: []. Linea: "+s.left+" Columna: "+s.right+
+                 //     "Se esperaba \"gif\" o \"png\". El valor asignado por defecto es \"gif\"";
+            break;
+
+        }
+        gifCreatorFrame.printError(msg, 0);
+    }
+
+    public void unrecovered_syntax_error(Symbol s){
+        System.out.println("Error Grave" + s);
+    } 
+   
+    public void semanticError(String lexeme, int line, int column){
+        gifCreatorFrame.printError("Error Semantico -> Ya existe un lienzo con el identificador ["+lexeme+"]. Se descarto el lienzo. Linea: "+line+" Columna: "+column, 0);
+    }
+
+:}
+
+/* Terminals */
+terminal String     CURLYBRACKETO, CURLYBRACKETC, COLON, COMMA, ID, LITERAL, RED, BLUE, GREEN, HEX, HEXCODE, CANVAS, BACKGROUND, SIZE, SQUARE, DIMENSIONX, DIMENSIONY, NAME, TYPE, GIF, PNG; 
+terminal Integer    INTEGER;
+
+/* Non-terminals */
+non terminal            canvases, canvas;  
+non terminal Integer    integerValue, square, dimensionX, dimensionY, red, blue, green;
+non terminal String     name;
+non terminal Color      color, backgroundAttribute, background;
+non terminal SizeDTO    size, sizeAttribute;
+non terminal Boolean    type, imageType;
+non terminal Canvas     canvasAttribute;
+
+
+/* The grammar */
+start with canvases;
+
+canvases::=     CURLYBRACKETO CANVAS COLON CURLYBRACKETO canvas	CURLYBRACKETC CURLYBRACKETC
+                ;
+	
+canvas::=   ID:value COLON CURLYBRACKETO  canvasAttribute:canvas CURLYBRACKETC COMMA canvas 
+            {:  if(symbolTable.get(value) == null){
+                    canvas.setId(value); 
+                    canvasFileDriver.addCanvas(canvas); 
+                    symbolTable.put(value, value);
+                }
+                else{
+                    semanticError(value, valueleft, valueright);
+                } 
+            :}
+            | ID:value COLON CURLYBRACKETO canvasAttribute:canvas CURLYBRACKETC 
+            {:  if(symbolTable.get(value) == null){
+                    canvas.setId(value); 
+                    canvasFileDriver.addCanvas(canvas); 
+                    symbolTable.put(value, value);
+                }
+                else{
+                    semanticError(value, valueleft, valueright);
+                } 
+            :}
+            ;
+
+canvasAttribute::=  background:background COMMA name:name COMMA type:type COMMA size:size {: RESULT = new Canvas(name, size.getPixelsAmount(), size.getRows(), size.getColumns(), background,  type); :}
+                    | name:name COMMA background:background COMMA type:type COMMA size:size {: RESULT = new Canvas(name, size.getPixelsAmount(), size.getRows(), size.getColumns(), background,  type); :}
+                    | name:name COMMA type:type COMMA background:background COMMA size:size {: RESULT = new Canvas(name, size.getPixelsAmount(), size.getRows(), size.getColumns(), background,  type); :}
+                    | name:name COMMA type:type COMMA size:size COMMA background:background {: RESULT = new Canvas(name, size.getPixelsAmount(), size.getRows(), size.getColumns(), background,  type); :}
+                    | background:background COMMA name:name COMMA size:size COMMA type:type {: RESULT = new Canvas(name, size.getPixelsAmount(), size.getRows(), size.getColumns(), background,  type); :}
+                    | name:name COMMA background:background COMMA size:size COMMA type:type {: RESULT = new Canvas(name, size.getPixelsAmount(), size.getRows(), size.getColumns(), background,  type); :}
+                    | name:name COMMA size:size COMMA background:background COMMA type:type {: RESULT = new Canvas(name, size.getPixelsAmount(), size.getRows(), size.getColumns(), background,  type); :}
+                    | name:name COMMA size:size COMMA type:type COMMA background:background {: RESULT = new Canvas(name, size.getPixelsAmount(), size.getRows(), size.getColumns(), background,  type); :}
+                    | background:background COMMA size:size COMMA type:type COMMA name:name {: RESULT = new Canvas(name, size.getPixelsAmount(), size.getRows(), size.getColumns(), background,  type); :}
+                    | size:size COMMA background:background COMMA type:type COMMA name:name {: RESULT = new Canvas(name, size.getPixelsAmount(), size.getRows(), size.getColumns(), background,  type); :}
+                    | size:size COMMA type:type COMMA background:background COMMA name:name {: RESULT = new Canvas(name, size.getPixelsAmount(), size.getRows(), size.getColumns(), background,  type); :}
+                    | size:size COMMA type:type COMMA name:name COMMA background:background {: RESULT = new Canvas(name, size.getPixelsAmount(), size.getRows(), size.getColumns(), background,  type); :}
+                    | background:background COMMA size:size COMMA name:name COMMA type:type {: RESULT = new Canvas(name, size.getPixelsAmount(), size.getRows(), size.getColumns(), background,  type); :}
+                    | size:size COMMA background:background COMMA name:name COMMA type:type {: RESULT = new Canvas(name, size.getPixelsAmount(), size.getRows(), size.getColumns(), background,  type); :}
+                    | size:size COMMA name:name COMMA background:background COMMA type:type {: RESULT = new Canvas(name, size.getPixelsAmount(), size.getRows(), size.getColumns(), background,  type); :} 
+                    | size:size COMMA name:name COMMA type:type COMMA background:background {: RESULT = new Canvas(name, size.getPixelsAmount(), size.getRows(), size.getColumns(), background,  type); :}
+                    | background:background COMMA type:type COMMA name:name COMMA size:size {: RESULT = new Canvas(name, size.getPixelsAmount(), size.getRows(), size.getColumns(), background,  type); :}
+                    | type:type COMMA background:background COMMA name:name COMMA size:size {: RESULT = new Canvas(name, size.getPixelsAmount(), size.getRows(), size.getColumns(), background,  type); :}
+                    | type:type COMMA name:name COMMA background:background COMMA size:size {: RESULT = new Canvas(name, size.getPixelsAmount(), size.getRows(), size.getColumns(), background,  type); :}
+                    | type:type COMMA name:name COMMA size:size COMMA background:background {: RESULT = new Canvas(name, size.getPixelsAmount(), size.getRows(), size.getColumns(), background,  type); :}
+                    | background:background COMMA type:type COMMA size:size COMMA name:name {: RESULT = new Canvas(name, size.getPixelsAmount(), size.getRows(), size.getColumns(), background,  type); :}
+                    | type:type COMMA background:background COMMA size:size COMMA name:name {: RESULT = new Canvas(name, size.getPixelsAmount(), size.getRows(), size.getColumns(), background,  type); :}
+                    | type:type COMMA size:size COMMA background:background COMMA name:name {: RESULT = new Canvas(name, size.getPixelsAmount(), size.getRows(), size.getColumns(), background,  type); :} 
+                    | type:type COMMA size:size COMMA name:name COMMA background:background {: RESULT = new Canvas(name, size.getPixelsAmount(), size.getRows(), size.getColumns(), background,  type); :}
+                    | error:e canvas CURLYBRACKETC {: syntax_error((Symbol)e); errorType = 0; :}
+                    ;    
+
+background::=   BACKGROUND COLON CURLYBRACKETO backgroundAttribute:color CURLYBRACKETC {: RESULT = color; :}
+                ;
+
+backgroundAttribute::=  HEX COLON HEXCODE:value {: RESULT = Color.decode(value); :}   
+                        | color:color {: RESULT = color; :}
+                        ;      
+
+color::=    red:red COMMA blue:blue COMMA green:green {: RESULT = new Color(red, blue, green); :}
+            | red:red COMMA green:green COMMA blue:blue {: RESULT = new Color(red, blue, green); :}
+            | blue:blue COMMA red:red COMMA green:green {: RESULT = new Color(red, blue, green); :}
+            | blue:blue COMMA green:green COMMA red:red {: RESULT = new Color(red, blue, green); :}
+            | green:green COMMA red:red COMMA blue:blue {: RESULT = new Color(red, blue, green); :}
+            | green:green COMMA blue:blue COMMA red:red {: RESULT = new Color(red, blue, green); :}
+            ;
+
+red::=  RED integerValue:amount {: RESULT = amount; :}
+        ;
+
+blue::=     GREEN integerValue:amount {: RESULT = amount; :}
+            ;
+
+green::=    BLUE integerValue:amount {: RESULT = amount; :} 
+            ;
+
+size::=     SIZE COLON CURLYBRACKETO sizeAttribute:size CURLYBRACKETC {: RESULT = size; :}
+            ;
+
+sizeAttribute::=    square:pixelsAmount COMMA dimensionX:rows COMMA dimensionY:columns {: RESULT = new SizeDTO(pixelsAmount, rows, columns); :}
+                    | square:pixelsAmount COMMA dimensionY:columns COMMA dimensionX:rows {: RESULT = new SizeDTO(pixelsAmount, rows, columns); :}
+                    | dimensionX:rows COMMA square:pixelsAmount COMMA dimensionY:columns {: RESULT = new SizeDTO(pixelsAmount, rows, columns); :}
+                    | dimensionX:rows COMMA dimensionY:columns COMMA square:pixelsAmount {: RESULT = new SizeDTO(pixelsAmount, rows, columns); :}
+                    | dimensionY:columns COMMA square:pixelsAmount COMMA dimensionX:rows {: RESULT = new SizeDTO(pixelsAmount, rows, columns); :}
+                    | dimensionY:columns COMMA dimensionX:rows COMMA square:pixelsAmount {: RESULT = new SizeDTO(pixelsAmount, rows, columns); :}
+                    ;
+
+square::=   SQUARE integerValue:amount {: RESULT = amount; :}
+            ;
+
+dimensionX::=   DIMENSIONX integerValue:amount {: RESULT = amount; :}
+                ;
+
+dimensionY::=   DIMENSIONY integerValue:amount {: RESULT = amount; :}
+                ;
+
+integerValue::=     COLON INTEGER:amount {: RESULT = amount; :}
+                    ;
+
+name::=     NAME COLON LITERAL:name {: RESULT = name.replaceAll("\"", ""); :}
+            ;
+
+type::=     TYPE COLON imageType:value {: RESULT = value; :}
+            ;
+
+imageType::=    GIF {: RESULT = true; :}
+                | PNG {: RESULT = false; :}
+                ;
+
+
+
