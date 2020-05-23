@@ -2,9 +2,8 @@ package com.hluther.gui;
 import com.hluther.controlClasses.GraphicEditorDriver;
 import com.hluther.controlClasses.TextWriterDriver;
 import com.hluther.entityClasses.Canvas;
-import com.hluther.entityClasses.ImageDTO;
-import java.awt.Color;
 import java.util.ArrayList;
+import javax.swing.JPanel;
 import javax.swing.JTextArea;
 /**
  *
@@ -18,6 +17,8 @@ public class GraphicEditor extends javax.swing.JDialog {
     private JTextArea timeTextArea;
     private ColorComboBox colors;
     private Canvas canvas;
+    private ArrayList<JPanel> panels = new ArrayList<>();
+    private boolean makeActions = false;
 
     public GraphicEditor(GifCreatorFrame parent, boolean modal, ArrayList<Canvas> canvases) {
         super(parent, modal);
@@ -26,6 +27,8 @@ public class GraphicEditor extends javax.swing.JDialog {
         this.canvases = canvases;
         this.setLocationRelativeTo(null);
         this.addCanvas();
+        makeActions = true;
+        graphicEditorDriver.setCurrentCanvasPanel(0, canvas, panels, 0);
     }
     
     /*
@@ -35,7 +38,22 @@ public class GraphicEditor extends javax.swing.JDialog {
     */
     private void addCanvas(){
         for(Canvas canvas : canvases){
-            graphicEditorDriver.addCanvas(canvas.getId(), canvasesTabbedPane);
+            graphicEditorDriver.addCanvas(canvas, canvasesTabbedPane, this, panels);
+        }
+    }
+
+    /*
+    PINTAR UN CUADRO
+    Metodo encargado de pintar un cuadro con el color seleccionado en el selector
+    de colores. Si se encuentra activado el borrador se pinta el cuadro del mismo
+    color que el del lienzo. 
+    */
+    public void paintSquare(CellPanel cell){
+        if(erraserActivate.isSelected()){
+            cell.setBackground(canvas.getBackgroundColor());
+        }
+        else{
+            cell.setBackground(selectedColorPanel.getBackground());
         }
     }
    
@@ -203,13 +221,15 @@ public class GraphicEditor extends javax.swing.JDialog {
         jPanel11.add(jLabel7);
 
         selectedColorPanel.setBackground(new java.awt.Color(54, 63, 69));
-        selectedColorPanel.setPreferredSize(new java.awt.Dimension(19, 30));
+        selectedColorPanel.setMaximumSize(new java.awt.Dimension(40, 32767));
+        selectedColorPanel.setMinimumSize(new java.awt.Dimension(40, 0));
+        selectedColorPanel.setPreferredSize(new java.awt.Dimension(40, 30));
 
         javax.swing.GroupLayout selectedColorPanelLayout = new javax.swing.GroupLayout(selectedColorPanel);
         selectedColorPanel.setLayout(selectedColorPanelLayout);
         selectedColorPanelLayout.setHorizontalGroup(
             selectedColorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 37, Short.MAX_VALUE)
+            .addGap(0, 40, Short.MAX_VALUE)
         );
         selectedColorPanelLayout.setVerticalGroup(
             selectedColorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -357,7 +377,7 @@ public class GraphicEditor extends javax.swing.JDialog {
                 .addContainerGap())
             .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, durationPanelLayout.createSequentialGroup()
-                .addContainerGap(31, Short.MAX_VALUE)
+                .addContainerGap(32, Short.MAX_VALUE)
                 .addComponent(modifyDuration, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(29, 29, 29))
         );
@@ -397,7 +417,7 @@ public class GraphicEditor extends javax.swing.JDialog {
             .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(imagePanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(imageIdComboBox, 0, 148, Short.MAX_VALUE)
+                .addComponent(imageIdComboBox, 0, 149, Short.MAX_VALUE)
                 .addContainerGap())
         );
         imagePanelLayout.setVerticalGroup(
@@ -439,45 +459,35 @@ public class GraphicEditor extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     /*
-    LLENAR EL JCOMBOBOX DE IMAGENES.
-    Metodo encargado de obtener el lienzo que se encuentra seleccionado actualmente.
-    Llena los JComboBox con todos los id's de las imagenes del lienzo actual.
-    Establece el item del JComboBox de imagenes seleccionado al indice 1.
-    Establece el item del JComboBox de imagen de inicio al valor contenido en startId del lienzo actual.
-    Establece el item del JComboBox de imagen de fin al valor contenido en endId del lienzo actual.
+    LLENAR LOS JCOMBO BOX.
+    Metodo encargado de:
+        1. Obtener el lienzo que se encuentra seleccionado actualmente.
+        2. Llamar al metodo setComboBoxItems para llenar los JComboBox.
+        3. Llamar al metodo addColorComboBox para agregar un selector de colores.
+        4. Establecer el color de fondo del JPanel selectedColor panel y establecer
+           el estado selected del JCheckBox en false.
     */
     private void canvasesTabbedPaneStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_canvasesTabbedPaneStateChanged
         canvas = canvases.get(canvasesTabbedPane.getSelectedIndex());
-        imageIdComboBox.removeAllItems();
-        startComboBox.removeAllItems();
-        endComboBox.removeAllItems();
-        for(ImageDTO currentImage : canvas.getTime().getImages()){
-            imageIdComboBox.addItem(currentImage.getId());
-            startComboBox.addItem(currentImage.getId());
-            endComboBox.addItem(currentImage.getId());
-        }
-        imageIdComboBox.setSelectedIndex(0);
-        startComboBox.setSelectedItem(canvas.getTime().getStartId());
-        endComboBox.setSelectedItem(canvas.getTime().getEndId());
-        //JComboBox de colores.
-        colorPanel.removeAll();
-        colors = new ColorComboBox(canvas.getColors());
-        colorPanel.add(colors);
-        colorPanel.repaint();
-        colorPanel.revalidate();
-        graphicEditorDriver.addColorComboBoxEvent(colors, selectedColorPanel);
-        selectedColorPanel.setBackground(new Color(54,63,69));
+        graphicEditorDriver.setComboBoxItems(imageIdComboBox, startComboBox, endComboBox, canvas);
+        colors = graphicEditorDriver.addColorComboBox(colorPanel, selectedColorPanel, canvas);
+        selectedColorPanel.setBackground(colors.getSelectedColor());
         erraserActivate.setSelected(false);
     }//GEN-LAST:event_canvasesTabbedPaneStateChanged
 
     /*
     OBTENER E IMPRIMIR LA DURACION DE LA IMAGEN SELECCIONADA.
-    Metodo encargado de obtener y llenar el JTextField con el valor del atributo
-    duracion contenido dentro de la imagen seleccionada en el JComboBox de imagenes.
+    Metodo encargado de:
+        1. Obtener y llenar el JTextField con el valor del atributo duracion 
+           contenido dentro de la imagen seleccionada en el JComboBox de imagenes.
+        2. Establecer la imagen correspondiente en el liezo actual.
     */
     private void imageIdComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_imageIdComboBoxItemStateChanged
         if(imageIdComboBox.getSelectedIndex() >= 0){
             durationTextArea.setText(String.valueOf(canvas.getTime().getImages().get(imageIdComboBox.getSelectedIndex()).getDuration()));
+            if(makeActions){
+                graphicEditorDriver.setCurrentCanvasPanel(canvasesTabbedPane.getSelectedIndex(), canvas, panels, imageIdComboBox.getSelectedIndex());
+            } 
         }
     }//GEN-LAST:event_imageIdComboBoxItemStateChanged
 

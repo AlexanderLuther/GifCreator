@@ -6,8 +6,6 @@ import com.hluther.controlClasses.FilesDriver;
 import javax.swing.JFileChooser;
 import com.hluther.controlClasses.GifCreatorDriver;
 import com.hluther.controlClasses.TimeFileDriver;
-import com.hluther.entityClasses.CColor;
-import java.awt.Color;
 import java.util.Hashtable;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -17,7 +15,6 @@ import javax.swing.JTextArea;
  * @author helmuth
  */
 public class GifCreatorFrame extends javax.swing.JFrame {
-
     /*
     tabbedPanes[0] = archivo.lnz
     tabbedPanes[1] = archivo.clrs
@@ -417,6 +414,11 @@ public class GifCreatorFrame extends javax.swing.JFrame {
         generateGifMenu.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
         generateGifMenu.setForeground(new java.awt.Color(54, 63, 69));
         generateGifMenu.setText("Generar Gif");
+        generateGifMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                generateGifMenuActionPerformed(evt);
+            }
+        });
         generateMenu.add(generateGifMenu);
 
         menu.add(generateMenu);
@@ -585,6 +587,7 @@ public class GifCreatorFrame extends javax.swing.JFrame {
         }
         else{
             //Inicializar variables
+            graphicEditor = null;
             canvasError = false;
             colorsError = false;
             timeError = false;
@@ -613,9 +616,20 @@ public class GifCreatorFrame extends javax.swing.JFrame {
 
     //ABRIR EL EDITOR GRAFICO DE LIENZOS.
     private void graphicEditorMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_graphicEditorMenuActionPerformed
-        graphicEditor = new GraphicEditor(this, true, timeFileDriver.getCanvases());
+        if(graphicEditor == null){
+            graphicEditor = new GraphicEditor(this, true, timeFileDriver.getCanvases());
+        }
         graphicEditor.setVisible(true);
     }//GEN-LAST:event_graphicEditorMenuActionPerformed
+
+    private void generateGifMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateGifMenuActionPerformed
+        if(graphicEditor == null){
+            JOptionPane.showMessageDialog(rootPane, "Todos los lienzos se encuentran en blanco.", "Error", 0);
+        }
+        else{
+            //Generar gif
+        }
+    }//GEN-LAST:event_generateGifMenuActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
