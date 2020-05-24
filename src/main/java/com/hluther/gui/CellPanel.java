@@ -23,6 +23,10 @@ public class CellPanel extends JPanel implements MouseListener{
         this.addMouseListener(this);
     }
 
+    public void setGraphicEditor(GraphicEditor graphicEditor) {
+        this.graphicEditor = graphicEditor;
+    }
+
     @Override
     public Dimension getPreferredSize() {
         return new Dimension(size, size);

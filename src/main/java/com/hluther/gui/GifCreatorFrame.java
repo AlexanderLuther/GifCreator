@@ -3,12 +3,26 @@ import com.hluther.controlClasses.AnalysisDriver;
 import com.hluther.controlClasses.CanvasFileDriver;
 import com.hluther.controlClasses.ColorsFileDriver;
 import com.hluther.controlClasses.FilesDriver;
+import com.hluther.entityClasses.Canvas;
 import javax.swing.JFileChooser;
 import com.hluther.controlClasses.GifCreatorDriver;
 import com.hluther.controlClasses.TimeFileDriver;
+import com.hluther.entityClasses.ImageDTO;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics2D;
+import java.awt.Panel;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.LinkedList;
+import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 /**
  *
@@ -40,6 +54,8 @@ public class GifCreatorFrame extends javax.swing.JFrame {
     private boolean paintError = false;
     
     private GraphicEditor graphicEditor;
+    
+    private ArrayList<Canvas> canvases = new ArrayList<>();
    
     public GifCreatorFrame() {
         initComponents();
@@ -214,7 +230,6 @@ public class GifCreatorFrame extends javax.swing.JFrame {
         userManualMenu = new javax.swing.JMenuItem();
         technicalManualMenu = new javax.swing.JMenuItem();
         aboutMenu = new javax.swing.JMenuItem();
-        jSeparator1 = new javax.swing.JPopupMenu.Separator();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Gif Creator");
@@ -222,21 +237,24 @@ public class GifCreatorFrame extends javax.swing.JFrame {
         setPreferredSize(new java.awt.Dimension(800, 600));
         getContentPane().setLayout(new java.awt.CardLayout());
 
+        backgroundPanel.setBackground(new java.awt.Color(54, 63, 69));
         backgroundPanel.setLayout(new java.awt.BorderLayout());
 
+        principalPanel.setBackground(new java.awt.Color(54, 63, 69));
         principalPanel.setMaximumSize(new java.awt.Dimension(32767, 100));
         principalPanel.setMinimumSize(new java.awt.Dimension(100, 100));
-        principalPanel.setOpaque(false);
         principalPanel.setPreferredSize(new java.awt.Dimension(150, 400));
         principalPanel.setLayout(new java.awt.BorderLayout());
 
+        editorAreaPanel.setBackground(new java.awt.Color(54, 63, 69));
+        editorAreaPanel.setForeground(new java.awt.Color(157, 157, 157));
         editorAreaPanel.setMaximumSize(new java.awt.Dimension(32767, 200));
         editorAreaPanel.setMinimumSize(new java.awt.Dimension(800, 150));
-        editorAreaPanel.setOpaque(false);
         editorAreaPanel.setLayout(new javax.swing.BoxLayout(editorAreaPanel, javax.swing.BoxLayout.LINE_AXIS));
 
-        editorTabbedPane.setBackground(new java.awt.Color(54, 63, 69));
-        editorTabbedPane.setOpaque(true);
+        editorTabbedPane.setBackground(new java.awt.Color(25, 150, 135));
+        editorTabbedPane.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        editorTabbedPane.setForeground(new java.awt.Color(255, 255, 255));
         editorAreaPanel.add(editorTabbedPane);
 
         principalPanel.add(editorAreaPanel, java.awt.BorderLayout.CENTER);
@@ -270,13 +288,13 @@ public class GifCreatorFrame extends javax.swing.JFrame {
         footerPanel.setPreferredSize(new java.awt.Dimension(400, 25));
         footerPanel.setLayout(new java.awt.BorderLayout());
 
-        positionLabel.setBackground(new java.awt.Color(54, 63, 69));
+        positionLabel.setBackground(new java.awt.Color(48, 50, 52));
         positionLabel.setForeground(new java.awt.Color(255, 255, 255));
         positionLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         positionLabel.setOpaque(true);
         footerPanel.add(positionLabel, java.awt.BorderLayout.CENTER);
 
-        jLabel1.setBackground(new java.awt.Color(54, 63, 69));
+        jLabel1.setBackground(new java.awt.Color(48, 50, 52));
         jLabel1.setMaximumSize(new java.awt.Dimension(10, 0));
         jLabel1.setMinimumSize(new java.awt.Dimension(10, 0));
         jLabel1.setOpaque(true);
@@ -287,19 +305,27 @@ public class GifCreatorFrame extends javax.swing.JFrame {
 
         getContentPane().add(backgroundPanel, "card2");
 
-        menu.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.LOWERED));
-        menu.setBorderPainted(false);
+        menu.setBackground(new java.awt.Color(48, 50, 53));
+        menu.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        menu.setForeground(new java.awt.Color(0, 0, 0));
+        menu.setAutoscrolls(true);
 
-        jMenu1.setForeground(new java.awt.Color(51, 51, 51));
-        jMenu1.setText("Archivo");
+        jMenu1.setBackground(new java.awt.Color(48, 50, 53));
+        jMenu1.setForeground(new java.awt.Color(255, 255, 255));
+        jMenu1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/formato-de-documento-portable.png"))); // NOI18N
+        jMenu1.setText("Archivo ");
         jMenu1.setFont(new java.awt.Font("Noto Sans Mono", 1, 14)); // NOI18N
+        jMenu1.setOpaque(true);
 
-        newMenu.setForeground(new java.awt.Color(54, 63, 69));
+        newMenu.setBackground(new java.awt.Color(0, 153, 51));
+        newMenu.setForeground(new java.awt.Color(255, 255, 255));
         newMenu.setText("Nuevo");
         newMenu.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
+        newMenu.setOpaque(true);
 
-        newCanvasMenu.setBackground(new java.awt.Color(54, 63, 69));
+        newCanvasMenu.setBackground(new java.awt.Color(48, 50, 53));
         newCanvasMenu.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
+        newCanvasMenu.setForeground(new java.awt.Color(255, 255, 255));
         newCanvasMenu.setText("Lienzos");
         newCanvasMenu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -308,8 +334,9 @@ public class GifCreatorFrame extends javax.swing.JFrame {
         });
         newMenu.add(newCanvasMenu);
 
-        newColorMenu.setBackground(new java.awt.Color(54, 63, 69));
+        newColorMenu.setBackground(new java.awt.Color(48, 50, 53));
         newColorMenu.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
+        newColorMenu.setForeground(new java.awt.Color(255, 255, 255));
         newColorMenu.setText("Colores");
         newColorMenu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -318,8 +345,9 @@ public class GifCreatorFrame extends javax.swing.JFrame {
         });
         newMenu.add(newColorMenu);
 
-        newTimeMenu.setBackground(new java.awt.Color(54, 63, 69));
+        newTimeMenu.setBackground(new java.awt.Color(48, 50, 53));
         newTimeMenu.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
+        newTimeMenu.setForeground(new java.awt.Color(255, 255, 255));
         newTimeMenu.setText("Tiempo");
         newTimeMenu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -328,8 +356,9 @@ public class GifCreatorFrame extends javax.swing.JFrame {
         });
         newMenu.add(newTimeMenu);
 
-        newPaintMenu.setBackground(new java.awt.Color(54, 63, 69));
+        newPaintMenu.setBackground(new java.awt.Color(48, 50, 53));
         newPaintMenu.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
+        newPaintMenu.setForeground(new java.awt.Color(255, 255, 255));
         newPaintMenu.setText("Pintar");
         newPaintMenu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -341,9 +370,9 @@ public class GifCreatorFrame extends javax.swing.JFrame {
         jMenu1.add(newMenu);
 
         openMenu.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
-        openMenu.setBackground(new java.awt.Color(54, 63, 69));
+        openMenu.setBackground(new java.awt.Color(48, 50, 53));
         openMenu.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
-        openMenu.setForeground(new java.awt.Color(54, 63, 69));
+        openMenu.setForeground(new java.awt.Color(255, 255, 255));
         openMenu.setText("Abrir");
         openMenu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -353,9 +382,9 @@ public class GifCreatorFrame extends javax.swing.JFrame {
         jMenu1.add(openMenu);
 
         saveMenu.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
-        saveMenu.setBackground(new java.awt.Color(54, 63, 69));
+        saveMenu.setBackground(new java.awt.Color(48, 50, 53));
         saveMenu.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
-        saveMenu.setForeground(new java.awt.Color(54, 63, 69));
+        saveMenu.setForeground(new java.awt.Color(255, 255, 255));
         saveMenu.setText("Guardar");
         saveMenu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -365,9 +394,9 @@ public class GifCreatorFrame extends javax.swing.JFrame {
         jMenu1.add(saveMenu);
 
         exitMenu.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_MASK));
-        exitMenu.setBackground(new java.awt.Color(54, 63, 69));
+        exitMenu.setBackground(new java.awt.Color(48, 50, 53));
         exitMenu.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
-        exitMenu.setForeground(new java.awt.Color(54, 63, 69));
+        exitMenu.setForeground(new java.awt.Color(255, 255, 255));
         exitMenu.setText("Salir");
         exitMenu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -378,13 +407,15 @@ public class GifCreatorFrame extends javax.swing.JFrame {
 
         menu.add(jMenu1);
 
-        jMenu2.setForeground(new java.awt.Color(51, 51, 51));
-        jMenu2.setText("Analisis");
+        jMenu2.setForeground(new java.awt.Color(255, 255, 255));
+        jMenu2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/buscar (1).png"))); // NOI18N
+        jMenu2.setText("Analisis ");
         jMenu2.setFont(new java.awt.Font("Noto Sans Mono", 1, 14)); // NOI18N
 
         analysisMenu.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.CTRL_MASK));
+        analysisMenu.setBackground(new java.awt.Color(48, 50, 53));
         analysisMenu.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
-        analysisMenu.setForeground(new java.awt.Color(54, 63, 69));
+        analysisMenu.setForeground(new java.awt.Color(255, 255, 255));
         analysisMenu.setText("Analizar Archivos");
         analysisMenu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -395,13 +426,15 @@ public class GifCreatorFrame extends javax.swing.JFrame {
 
         menu.add(jMenu2);
 
-        generateMenu.setForeground(new java.awt.Color(51, 51, 51));
-        generateMenu.setText("Generar");
+        generateMenu.setForeground(new java.awt.Color(255, 255, 255));
+        generateMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gif.png"))); // NOI18N
+        generateMenu.setText("Generar ");
         generateMenu.setFont(new java.awt.Font("Noto Sans Mono", 1, 14)); // NOI18N
 
         graphicEditorMenu.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.CTRL_MASK));
+        graphicEditorMenu.setBackground(new java.awt.Color(48, 50, 53));
         graphicEditorMenu.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
-        graphicEditorMenu.setForeground(new java.awt.Color(54, 63, 69));
+        graphicEditorMenu.setForeground(new java.awt.Color(255, 255, 255));
         graphicEditorMenu.setText("Editor Grafico");
         graphicEditorMenu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -411,8 +444,9 @@ public class GifCreatorFrame extends javax.swing.JFrame {
         generateMenu.add(graphicEditorMenu);
 
         generateGifMenu.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_G, java.awt.event.InputEvent.CTRL_MASK));
+        generateGifMenu.setBackground(new java.awt.Color(48, 50, 53));
         generateGifMenu.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
-        generateGifMenu.setForeground(new java.awt.Color(54, 63, 69));
+        generateGifMenu.setForeground(new java.awt.Color(255, 255, 255));
         generateGifMenu.setText("Generar Gif");
         generateGifMenu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -423,13 +457,16 @@ public class GifCreatorFrame extends javax.swing.JFrame {
 
         menu.add(generateMenu);
 
-        jMenu3.setForeground(new java.awt.Color(51, 51, 51));
-        jMenu3.setText("Ver");
+        jMenu3.setBackground(new java.awt.Color(48, 50, 53));
+        jMenu3.setForeground(new java.awt.Color(255, 255, 255));
+        jMenu3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ojo.png"))); // NOI18N
+        jMenu3.setText("Ver ");
         jMenu3.setFont(new java.awt.Font("Noto Sans Mono", 1, 14)); // NOI18N
 
         showMessagesAreaMenu.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_M, java.awt.event.InputEvent.CTRL_MASK));
+        showMessagesAreaMenu.setBackground(new java.awt.Color(48, 50, 53));
         showMessagesAreaMenu.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
-        showMessagesAreaMenu.setForeground(new java.awt.Color(54, 63, 69));
+        showMessagesAreaMenu.setForeground(new java.awt.Color(255, 255, 255));
         showMessagesAreaMenu.setSelected(true);
         showMessagesAreaMenu.setText("Mostrar Area de Mensajes");
         showMessagesAreaMenu.addActionListener(new java.awt.event.ActionListener() {
@@ -441,14 +478,17 @@ public class GifCreatorFrame extends javax.swing.JFrame {
 
         menu.add(jMenu3);
 
-        jMenu4.setForeground(new java.awt.Color(51, 51, 51));
+        jMenu4.setForeground(new java.awt.Color(255, 255, 255));
+        jMenu4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/acerca-de.png"))); // NOI18N
         jMenu4.setText("Ayuda");
         jMenu4.setFont(new java.awt.Font("Noto Sans Mono", 1, 14)); // NOI18N
 
         userManualMenu.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_U, java.awt.event.InputEvent.CTRL_MASK));
-        userManualMenu.setBackground(new java.awt.Color(54, 63, 69));
+        userManualMenu.setBackground(new java.awt.Color(48, 50, 53));
         userManualMenu.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
+        userManualMenu.setForeground(new java.awt.Color(255, 255, 255));
         userManualMenu.setText("Manual de Usuario");
+        userManualMenu.setOpaque(true);
         userManualMenu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 userManualMenuActionPerformed(evt);
@@ -457,9 +497,11 @@ public class GifCreatorFrame extends javax.swing.JFrame {
         jMenu4.add(userManualMenu);
 
         technicalManualMenu.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_T, java.awt.event.InputEvent.CTRL_MASK));
-        technicalManualMenu.setBackground(new java.awt.Color(54, 63, 69));
+        technicalManualMenu.setBackground(new java.awt.Color(48, 50, 53));
         technicalManualMenu.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
+        technicalManualMenu.setForeground(new java.awt.Color(255, 255, 255));
         technicalManualMenu.setText("Manual Tecnico");
+        technicalManualMenu.setOpaque(true);
         technicalManualMenu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 technicalManualMenuActionPerformed(evt);
@@ -468,16 +510,17 @@ public class GifCreatorFrame extends javax.swing.JFrame {
         jMenu4.add(technicalManualMenu);
 
         aboutMenu.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_I, java.awt.event.InputEvent.CTRL_MASK));
-        aboutMenu.setBackground(new java.awt.Color(54, 63, 69));
+        aboutMenu.setBackground(new java.awt.Color(48, 50, 53));
         aboutMenu.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
+        aboutMenu.setForeground(new java.awt.Color(255, 255, 255));
         aboutMenu.setText("Acerca De");
+        aboutMenu.setOpaque(true);
         aboutMenu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 aboutMenuActionPerformed(evt);
             }
         });
         jMenu4.add(aboutMenu);
-        jMenu4.add(jSeparator1);
 
         menu.add(jMenu4);
 
@@ -493,7 +536,7 @@ public class GifCreatorFrame extends javax.swing.JFrame {
 
     //ACERCA DE.
     private void aboutMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aboutMenuActionPerformed
-        JOptionPane.showMessageDialog(rootPane, "<html><center><font color=\"blue\"><b>Desarollado por: <br> Helmuth Alexander Luther Montejo <br> 201730457<b> </font></center></html>", "Acerca De", 1);
+        JOptionPane.showMessageDialog(rootPane, "<html><center><p style=\"color:rgb(54,63,69);\"><b>Desarollado por: <br> Helmuth Alexander Luther Montejo <br> 201730457<b> </p></center></html>", "Acerca De", 1);
     }//GEN-LAST:event_aboutMenuActionPerformed
 
     //MOSTRAR Y OCULTAR AREA DE MENSAJES.
@@ -602,6 +645,9 @@ public class GifCreatorFrame extends javax.swing.JFrame {
             timeFileDriver = new TimeFileDriver(colorsFileDriver.getCanvases());
             analysisDriver.doTimeFileAnalysis(textAreas[2].getText(), this, timeFileDriver, symbolTable);
             
+            //Obtener lienzos
+            canvases = timeFileDriver.getCanvases();
+            
             //Activar el editor grafico
             if(!canvasError && !colorsError && !timeError && !paintError){
                 graphicEditorMenu.setEnabled(true);
@@ -623,14 +669,55 @@ public class GifCreatorFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_graphicEditorMenuActionPerformed
 
     private void generateGifMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateGifMenuActionPerformed
-        if(graphicEditor == null){
-            JOptionPane.showMessageDialog(rootPane, "Todos los lienzos se encuentran en blanco.", "Error", 0);
-        }
-        else{
-            //Generar gif
-        }
+      /*
+        
+        
+        for(Canvas canvas : canvases){
+        
+           ArrayList<BufferedImage> bufferedImages = new ArrayList<>();
+           String startId = canvas.getTime().getStartId();
+           String endId = canvas.getTime().getEndId(); 
+           int startIndex = canvas.getTime().getIdIndex(startId);
+           int endIndex = canvas.getTime().getIdIndex(endId);
+           LinkedList<ImageDTO> images = canvas.getTime().getImages();
+            
+            
+            
+            for(int i = startIndex; i < endIndex+1; i++){
+                  
+              //  CanvasPanel canvasP = images.get(i).getCanvasPanel();
+              //  canvasP.doLayout();
+                
+                
+                
+                
+                
+                
+            initUI(canvasP, images.get(i).getId(), canvas.getColumns(), canvas.getRows(), canvas.getPixelsAmount());
+            }
+            
+        
+            System.out.println(bufferedImages.size());
+        }    
+        */
     }//GEN-LAST:event_generateGifMenuActionPerformed
-
+ 
+   /*  protected void initUI(JPanel panel, String name, int width, int height, int size){
+        panel.setPreferredSize(new Dimension(width*size, height*size));
+        panel.setSize(panel.getPreferredSize());
+        BufferedImage bi = new BufferedImage(panel.getWidth(), panel.getHeight(), BufferedImage.TYPE_INT_RGB);
+        Graphics2D g = bi.createGraphics();
+        panel.print(g);
+        g.dispose();
+        try {
+            ImageIO.write(bi, "png", new File(name+".png"));
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }*/
+    
+    
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -680,7 +767,6 @@ public class GifCreatorFrame extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JMenuBar menu;
     private javax.swing.JInternalFrame messagesAreaFrame;
     private javax.swing.JPanel messagesAreaPanel;

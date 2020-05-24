@@ -25,16 +25,16 @@ public class GraphicEditorDriver {
     
     
     public void addCanvas(Canvas canvas, JTabbedPane canvasesTabbedPane, GraphicEditor editor, ArrayList<JPanel> panels){
-        this.addCanvasPanel(canvas, editor); 
+        this.addGraphicEditor(canvas, editor); 
         panel = new JPanel();
         canvasesTabbedPane.addTab(canvas.getId(), panel);
         panels.add(panel);
     }
     
    
-    public void addCanvasPanel(Canvas canvas, GraphicEditor graphicEditor){
+    public void addGraphicEditor(Canvas canvas, GraphicEditor graphicEditor){
         for(ImageDTO image : canvas.getTime().getImages()){
-            image.setCanvasPanel(new CanvasPanel(canvas.getColumns(), canvas.getRows(), canvas.getPixelsAmount(), canvas.getBackgroundColor(), graphicEditor));    
+            image.getCanvasPanel().setGraphicEditor(graphicEditor);
         }
     }
 

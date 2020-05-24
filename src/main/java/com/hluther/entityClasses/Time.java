@@ -50,5 +50,14 @@ public class Time {
         this.images = images;
     }
     
+    public int getIdIndex(String id){
+        for(int i = 0; i < images.size(); i++){
+            if(images.get(i).getId().equals(id)){
+                return i;
+            }
+        }
+        return -1;
+    }
+
     
 }

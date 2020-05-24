@@ -3,7 +3,6 @@ import com.hluther.entityClasses.Canvas;
 import com.hluther.entityClasses.ImageDTO;
 import com.hluther.entityClasses.Time;
 import com.hluther.gui.CanvasPanel;
-import java.awt.Color;
 import java.util.ArrayList;
 
 /**
@@ -13,8 +12,7 @@ import java.util.ArrayList;
 public class TimeFileDriver {
     
     private ArrayList<Canvas> canvases;
-    private CanvasPanel canvasPanel;
-    
+
     public TimeFileDriver(ArrayList<Canvas> canvases) {
         this.canvases = canvases;
     }
@@ -37,6 +35,10 @@ public class TimeFileDriver {
                 canvas = currentCanvas;
                 break;
             }
+        }
+        
+        for(ImageDTO image : time.getImages()){
+            image.setCanvasPanel(new CanvasPanel(canvas.getColumns(), canvas.getRows(), canvas.getPixelsAmount(), canvas.getBackgroundColor(), null));
         }
         canvas.setTime(time); 
     }
