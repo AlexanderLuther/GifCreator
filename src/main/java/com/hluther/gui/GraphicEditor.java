@@ -1,6 +1,7 @@
 package com.hluther.gui;
 import com.hluther.controlClasses.GraphicEditorDriver;
 import com.hluther.controlClasses.TextWriterDriver;
+import com.hluther.controlClasses.ThreadDriver;
 import com.hluther.entityClasses.Canvas;
 import java.util.ArrayList;
 import javax.swing.JPanel;
@@ -13,6 +14,7 @@ public class GraphicEditor extends javax.swing.JDialog {
     
     private GraphicEditorDriver graphicEditorDriver = new GraphicEditorDriver();
     private TextWriterDriver textWriter = new TextWriterDriver();
+    private ThreadDriver threadDriver = new ThreadDriver();
     private ArrayList<Canvas> canvases;
     private JTextArea timeTextArea;
     private ColorComboBox colors;
@@ -29,6 +31,10 @@ public class GraphicEditor extends javax.swing.JDialog {
         this.addCanvas();
         makeActions = true;
         graphicEditorDriver.setCurrentCanvasPanel(0, canvas, panels, 0);
+    }
+    
+    public void setBorder(){
+        canvas.getTime().getImages().get(imageIdComboBox.getSelectedIndex()).getCanvasPanel().setBorder(false);
     }
     
     /*
@@ -82,6 +88,7 @@ public class GraphicEditor extends javax.swing.JDialog {
         jLabel8 = new javax.swing.JLabel();
         jPanel12 = new javax.swing.JPanel();
         erraserActivate = new javax.swing.JCheckBox();
+        messagesLabel = new javax.swing.JLabel();
         jPanel8 = new javax.swing.JPanel();
         timePanel = new javax.swing.JPanel();
         startEndPanel = new javax.swing.JPanel();
@@ -119,20 +126,19 @@ public class GraphicEditor extends javax.swing.JDialog {
         colorsPanel.setPreferredSize(new java.awt.Dimension(300, 150));
         colorsPanel.setLayout(new java.awt.BorderLayout());
 
-        Jpanel45.setBackground(new java.awt.Color(48, 50, 52));
+        Jpanel45.setBackground(new java.awt.Color(54, 63, 69));
         Jpanel45.setPreferredSize(new java.awt.Dimension(300, 20));
         Jpanel45.setLayout(new java.awt.BorderLayout());
         colorsPanel.add(Jpanel45, java.awt.BorderLayout.PAGE_START);
 
-        jPanel3.setBackground(new java.awt.Color(48, 50, 52));
+        jPanel3.setBackground(new java.awt.Color(54, 63, 69));
         jPanel3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jPanel3.setLayout(new java.awt.BorderLayout());
 
-        JPanel8856.setBackground(new java.awt.Color(48, 50, 52));
+        JPanel8856.setBackground(new java.awt.Color(54, 63, 69));
         JPanel8856.setPreferredSize(new java.awt.Dimension(300, 50));
         JPanel8856.setLayout(new java.awt.BorderLayout());
 
-        jLabel5.setBackground(new java.awt.Color(48, 50, 52));
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("   Colores:");
         jLabel5.setPreferredSize(new java.awt.Dimension(57, 20));
@@ -142,7 +148,7 @@ public class GraphicEditor extends javax.swing.JDialog {
         JpANEL.setPreferredSize(new java.awt.Dimension(300, 30));
         JpANEL.setLayout(new javax.swing.BoxLayout(JpANEL, javax.swing.BoxLayout.LINE_AXIS));
 
-        jPanel4.setBackground(new java.awt.Color(48, 50, 52));
+        jPanel4.setBackground(new java.awt.Color(54, 63, 69));
         jPanel4.setPreferredSize(new java.awt.Dimension(30, 30));
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
@@ -158,12 +164,12 @@ public class GraphicEditor extends javax.swing.JDialog {
 
         JpANEL.add(jPanel4);
 
-        colorPanel.setBackground(new java.awt.Color(48, 50, 52));
+        colorPanel.setBackground(new java.awt.Color(54, 63, 69));
         colorPanel.setPreferredSize(new java.awt.Dimension(240, 30));
         colorPanel.setLayout(new java.awt.BorderLayout());
         JpANEL.add(colorPanel);
 
-        jPanel6.setBackground(new java.awt.Color(48, 50, 52));
+        jPanel6.setBackground(new java.awt.Color(54, 63, 69));
         jPanel6.setPreferredSize(new java.awt.Dimension(30, 30));
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
@@ -190,7 +196,7 @@ public class GraphicEditor extends javax.swing.JDialog {
         jPanel9.setPreferredSize(new java.awt.Dimension(0, 100));
         jPanel9.setLayout(new java.awt.BorderLayout());
 
-        jPanel10.setBackground(new java.awt.Color(48, 50, 52));
+        jPanel10.setBackground(new java.awt.Color(54, 63, 69));
         jPanel10.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jPanel10.setPreferredSize(new java.awt.Dimension(20, 10));
 
@@ -207,7 +213,7 @@ public class GraphicEditor extends javax.swing.JDialog {
 
         jPanel9.add(jPanel10, java.awt.BorderLayout.PAGE_START);
 
-        jPanel11.setBackground(new java.awt.Color(48, 50, 52));
+        jPanel11.setBackground(new java.awt.Color(54, 63, 69));
         jPanel11.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jPanel11.setMaximumSize(new java.awt.Dimension(30, 23));
         jPanel11.setMinimumSize(new java.awt.Dimension(30, 23));
@@ -221,7 +227,7 @@ public class GraphicEditor extends javax.swing.JDialog {
         jLabel7.setText("      ");
         jPanel11.add(jLabel7);
 
-        selectedColorPanel.setBackground(new java.awt.Color(48, 50, 52));
+        selectedColorPanel.setBackground(new java.awt.Color(54, 63, 69));
         selectedColorPanel.setMaximumSize(new java.awt.Dimension(40, 32767));
         selectedColorPanel.setMinimumSize(new java.awt.Dimension(40, 0));
         selectedColorPanel.setPreferredSize(new java.awt.Dimension(40, 30));
@@ -244,17 +250,26 @@ public class GraphicEditor extends javax.swing.JDialog {
 
         jPanel9.add(jPanel11, java.awt.BorderLayout.CENTER);
 
-        jPanel12.setBackground(new java.awt.Color(48, 50, 52));
+        jPanel12.setBackground(new java.awt.Color(54, 63, 69));
         jPanel12.setMaximumSize(new java.awt.Dimension(32767, 50));
         jPanel12.setMinimumSize(new java.awt.Dimension(0, 50));
         jPanel12.setPreferredSize(new java.awt.Dimension(300, 50));
 
-        erraserActivate.setBackground(new java.awt.Color(48, 50, 52));
+        erraserActivate.setBackground(new java.awt.Color(54, 63, 69));
         erraserActivate.setForeground(new java.awt.Color(255, 255, 255));
         erraserActivate.setText("Borrador Activado");
         erraserActivate.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        erraserActivate.setFocusPainted(false);
         erraserActivate.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         erraserActivate.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+
+        messagesLabel.setBackground(new java.awt.Color(255, 255, 255));
+        messagesLabel.setFont(new java.awt.Font("Noto Sans Mono", 1, 14)); // NOI18N
+        messagesLabel.setForeground(new java.awt.Color(25, 150, 135));
+        messagesLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        messagesLabel.setMaximumSize(new java.awt.Dimension(0, 20));
+        messagesLabel.setMinimumSize(new java.awt.Dimension(0, 20));
+        messagesLabel.setPreferredSize(new java.awt.Dimension(0, 20));
 
         javax.swing.GroupLayout jPanel12Layout = new javax.swing.GroupLayout(jPanel12);
         jPanel12.setLayout(jPanel12Layout);
@@ -264,19 +279,22 @@ public class GraphicEditor extends javax.swing.JDialog {
                 .addContainerGap()
                 .addComponent(erraserActivate)
                 .addContainerGap(151, Short.MAX_VALUE))
+            .addComponent(messagesLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel12Layout.setVerticalGroup(
             jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel12Layout.createSequentialGroup()
                 .addComponent(erraserActivate)
-                .addGap(0, 25, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(messagesLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         jPanel9.add(jPanel12, java.awt.BorderLayout.PAGE_END);
 
         jPanel5.add(jPanel9, java.awt.BorderLayout.PAGE_START);
 
-        jPanel8.setBackground(new java.awt.Color(48, 50, 52));
+        jPanel8.setBackground(new java.awt.Color(54, 63, 69));
         jPanel8.setPreferredSize(new java.awt.Dimension(296, 140));
         jPanel8.setLayout(new javax.swing.BoxLayout(jPanel8, javax.swing.BoxLayout.LINE_AXIS));
         jPanel5.add(jPanel8, java.awt.BorderLayout.PAGE_END);
@@ -291,7 +309,7 @@ public class GraphicEditor extends javax.swing.JDialog {
         timePanel.setPreferredSize(new java.awt.Dimension(300, 200));
         timePanel.setLayout(new javax.swing.BoxLayout(timePanel, javax.swing.BoxLayout.LINE_AXIS));
 
-        startEndPanel.setBackground(new java.awt.Color(48, 50, 52));
+        startEndPanel.setBackground(new java.awt.Color(54, 63, 69));
         startEndPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
@@ -349,8 +367,9 @@ public class GraphicEditor extends javax.swing.JDialog {
         imagenDurationPanel.setBackground(new java.awt.Color(54, 63, 69));
         imagenDurationPanel.setLayout(new java.awt.BorderLayout());
 
-        durationPanel.setBackground(new java.awt.Color(48, 50, 52));
+        durationPanel.setBackground(new java.awt.Color(54, 63, 69));
         durationPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        durationPanel.setOpaque(false);
 
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -398,8 +417,9 @@ public class GraphicEditor extends javax.swing.JDialog {
 
         imagenDurationPanel.add(durationPanel, java.awt.BorderLayout.CENTER);
 
-        imagePanel.setBackground(new java.awt.Color(48, 50, 52));
+        imagePanel.setBackground(new java.awt.Color(54, 63, 69));
         imagePanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        imagePanel.setOpaque(false);
 
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -445,7 +465,7 @@ public class GraphicEditor extends javax.swing.JDialog {
         canvasesPanel.setLayout(new java.awt.BorderLayout());
 
         canvasesTabbedPane.setBackground(new java.awt.Color(25, 150, 135));
-        canvasesTabbedPane.setForeground(new java.awt.Color(255, 255, 255));
+        canvasesTabbedPane.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         canvasesTabbedPane.setOpaque(true);
         canvasesTabbedPane.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
@@ -514,6 +534,8 @@ public class GraphicEditor extends javax.swing.JDialog {
         if(!durationTextArea.getText().isEmpty() && !durationTextArea.getText().isBlank()){
             canvas.getTime().getImages().get(imageIdComboBox.getSelectedIndex()).setDuration(Integer.parseInt(durationTextArea.getText()));
             timeTextArea.setText(textWriter.writeTimeFileText(canvases));
+            messagesLabel.setText("Duracion Modificada.");
+            threadDriver.cleanJLabel(messagesLabel);
         }
     }//GEN-LAST:event_modifyDurationActionPerformed
 
@@ -528,6 +550,8 @@ public class GraphicEditor extends javax.swing.JDialog {
         canvas.getTime().setStartId(startComboBox.getSelectedItem().toString());
         canvas.getTime().setEndId(endComboBox.getSelectedItem().toString());
         timeTextArea.setText(textWriter.writeTimeFileText(canvases));
+        messagesLabel.setText("Inicio y fin modificados.");
+        threadDriver.cleanJLabel(messagesLabel);
     }//GEN-LAST:event_setStartEndActionPerformed
 
     /**
@@ -606,6 +630,7 @@ public class GraphicEditor extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
+    private javax.swing.JLabel messagesLabel;
     private javax.swing.JButton modifyDuration;
     private javax.swing.JPanel selectedColorPanel;
     private javax.swing.JButton setStartEnd;

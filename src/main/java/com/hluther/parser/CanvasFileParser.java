@@ -1148,12 +1148,12 @@ class CUP$CanvasFileParser$actions {
 		int pixelsAmountleft = ((java_cup.runtime.Symbol)CUP$CanvasFileParser$stack.elementAt(CUP$CanvasFileParser$top-4)).left;
 		int pixelsAmountright = ((java_cup.runtime.Symbol)CUP$CanvasFileParser$stack.elementAt(CUP$CanvasFileParser$top-4)).right;
 		Integer pixelsAmount = (Integer)((java_cup.runtime.Symbol) CUP$CanvasFileParser$stack.elementAt(CUP$CanvasFileParser$top-4)).value;
-		int rowsleft = ((java_cup.runtime.Symbol)CUP$CanvasFileParser$stack.elementAt(CUP$CanvasFileParser$top-2)).left;
-		int rowsright = ((java_cup.runtime.Symbol)CUP$CanvasFileParser$stack.elementAt(CUP$CanvasFileParser$top-2)).right;
-		Integer rows = (Integer)((java_cup.runtime.Symbol) CUP$CanvasFileParser$stack.elementAt(CUP$CanvasFileParser$top-2)).value;
-		int columnsleft = ((java_cup.runtime.Symbol)CUP$CanvasFileParser$stack.peek()).left;
-		int columnsright = ((java_cup.runtime.Symbol)CUP$CanvasFileParser$stack.peek()).right;
-		Integer columns = (Integer)((java_cup.runtime.Symbol) CUP$CanvasFileParser$stack.peek()).value;
+		int columnsleft = ((java_cup.runtime.Symbol)CUP$CanvasFileParser$stack.elementAt(CUP$CanvasFileParser$top-2)).left;
+		int columnsright = ((java_cup.runtime.Symbol)CUP$CanvasFileParser$stack.elementAt(CUP$CanvasFileParser$top-2)).right;
+		Integer columns = (Integer)((java_cup.runtime.Symbol) CUP$CanvasFileParser$stack.elementAt(CUP$CanvasFileParser$top-2)).value;
+		int rowsleft = ((java_cup.runtime.Symbol)CUP$CanvasFileParser$stack.peek()).left;
+		int rowsright = ((java_cup.runtime.Symbol)CUP$CanvasFileParser$stack.peek()).right;
+		Integer rows = (Integer)((java_cup.runtime.Symbol) CUP$CanvasFileParser$stack.peek()).value;
 		 RESULT = new SizeDTO(pixelsAmount, rows, columns); 
               CUP$CanvasFileParser$result = parser.getSymbolFactory().newSymbol("sizeAttribute",14, ((java_cup.runtime.Symbol)CUP$CanvasFileParser$stack.elementAt(CUP$CanvasFileParser$top-4)), ((java_cup.runtime.Symbol)CUP$CanvasFileParser$stack.peek()), RESULT);
             }
@@ -1166,9 +1166,27 @@ class CUP$CanvasFileParser$actions {
 		int pixelsAmountleft = ((java_cup.runtime.Symbol)CUP$CanvasFileParser$stack.elementAt(CUP$CanvasFileParser$top-4)).left;
 		int pixelsAmountright = ((java_cup.runtime.Symbol)CUP$CanvasFileParser$stack.elementAt(CUP$CanvasFileParser$top-4)).right;
 		Integer pixelsAmount = (Integer)((java_cup.runtime.Symbol) CUP$CanvasFileParser$stack.elementAt(CUP$CanvasFileParser$top-4)).value;
-		int columnsleft = ((java_cup.runtime.Symbol)CUP$CanvasFileParser$stack.elementAt(CUP$CanvasFileParser$top-2)).left;
-		int columnsright = ((java_cup.runtime.Symbol)CUP$CanvasFileParser$stack.elementAt(CUP$CanvasFileParser$top-2)).right;
-		Integer columns = (Integer)((java_cup.runtime.Symbol) CUP$CanvasFileParser$stack.elementAt(CUP$CanvasFileParser$top-2)).value;
+		int rowsleft = ((java_cup.runtime.Symbol)CUP$CanvasFileParser$stack.elementAt(CUP$CanvasFileParser$top-2)).left;
+		int rowsright = ((java_cup.runtime.Symbol)CUP$CanvasFileParser$stack.elementAt(CUP$CanvasFileParser$top-2)).right;
+		Integer rows = (Integer)((java_cup.runtime.Symbol) CUP$CanvasFileParser$stack.elementAt(CUP$CanvasFileParser$top-2)).value;
+		int columnsleft = ((java_cup.runtime.Symbol)CUP$CanvasFileParser$stack.peek()).left;
+		int columnsright = ((java_cup.runtime.Symbol)CUP$CanvasFileParser$stack.peek()).right;
+		Integer columns = (Integer)((java_cup.runtime.Symbol) CUP$CanvasFileParser$stack.peek()).value;
+		 RESULT = new SizeDTO(pixelsAmount, rows, columns); 
+              CUP$CanvasFileParser$result = parser.getSymbolFactory().newSymbol("sizeAttribute",14, ((java_cup.runtime.Symbol)CUP$CanvasFileParser$stack.elementAt(CUP$CanvasFileParser$top-4)), ((java_cup.runtime.Symbol)CUP$CanvasFileParser$stack.peek()), RESULT);
+            }
+          return CUP$CanvasFileParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 44: // sizeAttribute ::= dimensionX COMMA square COMMA dimensionY 
+            {
+              SizeDTO RESULT =null;
+		int columnsleft = ((java_cup.runtime.Symbol)CUP$CanvasFileParser$stack.elementAt(CUP$CanvasFileParser$top-4)).left;
+		int columnsright = ((java_cup.runtime.Symbol)CUP$CanvasFileParser$stack.elementAt(CUP$CanvasFileParser$top-4)).right;
+		Integer columns = (Integer)((java_cup.runtime.Symbol) CUP$CanvasFileParser$stack.elementAt(CUP$CanvasFileParser$top-4)).value;
+		int pixelsAmountleft = ((java_cup.runtime.Symbol)CUP$CanvasFileParser$stack.elementAt(CUP$CanvasFileParser$top-2)).left;
+		int pixelsAmountright = ((java_cup.runtime.Symbol)CUP$CanvasFileParser$stack.elementAt(CUP$CanvasFileParser$top-2)).right;
+		Integer pixelsAmount = (Integer)((java_cup.runtime.Symbol) CUP$CanvasFileParser$stack.elementAt(CUP$CanvasFileParser$top-2)).value;
 		int rowsleft = ((java_cup.runtime.Symbol)CUP$CanvasFileParser$stack.peek()).left;
 		int rowsright = ((java_cup.runtime.Symbol)CUP$CanvasFileParser$stack.peek()).right;
 		Integer rows = (Integer)((java_cup.runtime.Symbol) CUP$CanvasFileParser$stack.peek()).value;
@@ -1178,7 +1196,25 @@ class CUP$CanvasFileParser$actions {
           return CUP$CanvasFileParser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 44: // sizeAttribute ::= dimensionX COMMA square COMMA dimensionY 
+          case 45: // sizeAttribute ::= dimensionX COMMA dimensionY COMMA square 
+            {
+              SizeDTO RESULT =null;
+		int columnsleft = ((java_cup.runtime.Symbol)CUP$CanvasFileParser$stack.elementAt(CUP$CanvasFileParser$top-4)).left;
+		int columnsright = ((java_cup.runtime.Symbol)CUP$CanvasFileParser$stack.elementAt(CUP$CanvasFileParser$top-4)).right;
+		Integer columns = (Integer)((java_cup.runtime.Symbol) CUP$CanvasFileParser$stack.elementAt(CUP$CanvasFileParser$top-4)).value;
+		int rowsleft = ((java_cup.runtime.Symbol)CUP$CanvasFileParser$stack.elementAt(CUP$CanvasFileParser$top-2)).left;
+		int rowsright = ((java_cup.runtime.Symbol)CUP$CanvasFileParser$stack.elementAt(CUP$CanvasFileParser$top-2)).right;
+		Integer rows = (Integer)((java_cup.runtime.Symbol) CUP$CanvasFileParser$stack.elementAt(CUP$CanvasFileParser$top-2)).value;
+		int pixelsAmountleft = ((java_cup.runtime.Symbol)CUP$CanvasFileParser$stack.peek()).left;
+		int pixelsAmountright = ((java_cup.runtime.Symbol)CUP$CanvasFileParser$stack.peek()).right;
+		Integer pixelsAmount = (Integer)((java_cup.runtime.Symbol) CUP$CanvasFileParser$stack.peek()).value;
+		 RESULT = new SizeDTO(pixelsAmount, rows, columns); 
+              CUP$CanvasFileParser$result = parser.getSymbolFactory().newSymbol("sizeAttribute",14, ((java_cup.runtime.Symbol)CUP$CanvasFileParser$stack.elementAt(CUP$CanvasFileParser$top-4)), ((java_cup.runtime.Symbol)CUP$CanvasFileParser$stack.peek()), RESULT);
+            }
+          return CUP$CanvasFileParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 46: // sizeAttribute ::= dimensionY COMMA square COMMA dimensionX 
             {
               SizeDTO RESULT =null;
 		int rowsleft = ((java_cup.runtime.Symbol)CUP$CanvasFileParser$stack.elementAt(CUP$CanvasFileParser$top-4)).left;
@@ -1196,7 +1232,7 @@ class CUP$CanvasFileParser$actions {
           return CUP$CanvasFileParser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 45: // sizeAttribute ::= dimensionX COMMA dimensionY COMMA square 
+          case 47: // sizeAttribute ::= dimensionY COMMA dimensionX COMMA square 
             {
               SizeDTO RESULT =null;
 		int rowsleft = ((java_cup.runtime.Symbol)CUP$CanvasFileParser$stack.elementAt(CUP$CanvasFileParser$top-4)).left;
@@ -1205,42 +1241,6 @@ class CUP$CanvasFileParser$actions {
 		int columnsleft = ((java_cup.runtime.Symbol)CUP$CanvasFileParser$stack.elementAt(CUP$CanvasFileParser$top-2)).left;
 		int columnsright = ((java_cup.runtime.Symbol)CUP$CanvasFileParser$stack.elementAt(CUP$CanvasFileParser$top-2)).right;
 		Integer columns = (Integer)((java_cup.runtime.Symbol) CUP$CanvasFileParser$stack.elementAt(CUP$CanvasFileParser$top-2)).value;
-		int pixelsAmountleft = ((java_cup.runtime.Symbol)CUP$CanvasFileParser$stack.peek()).left;
-		int pixelsAmountright = ((java_cup.runtime.Symbol)CUP$CanvasFileParser$stack.peek()).right;
-		Integer pixelsAmount = (Integer)((java_cup.runtime.Symbol) CUP$CanvasFileParser$stack.peek()).value;
-		 RESULT = new SizeDTO(pixelsAmount, rows, columns); 
-              CUP$CanvasFileParser$result = parser.getSymbolFactory().newSymbol("sizeAttribute",14, ((java_cup.runtime.Symbol)CUP$CanvasFileParser$stack.elementAt(CUP$CanvasFileParser$top-4)), ((java_cup.runtime.Symbol)CUP$CanvasFileParser$stack.peek()), RESULT);
-            }
-          return CUP$CanvasFileParser$result;
-
-          /*. . . . . . . . . . . . . . . . . . . .*/
-          case 46: // sizeAttribute ::= dimensionY COMMA square COMMA dimensionX 
-            {
-              SizeDTO RESULT =null;
-		int columnsleft = ((java_cup.runtime.Symbol)CUP$CanvasFileParser$stack.elementAt(CUP$CanvasFileParser$top-4)).left;
-		int columnsright = ((java_cup.runtime.Symbol)CUP$CanvasFileParser$stack.elementAt(CUP$CanvasFileParser$top-4)).right;
-		Integer columns = (Integer)((java_cup.runtime.Symbol) CUP$CanvasFileParser$stack.elementAt(CUP$CanvasFileParser$top-4)).value;
-		int pixelsAmountleft = ((java_cup.runtime.Symbol)CUP$CanvasFileParser$stack.elementAt(CUP$CanvasFileParser$top-2)).left;
-		int pixelsAmountright = ((java_cup.runtime.Symbol)CUP$CanvasFileParser$stack.elementAt(CUP$CanvasFileParser$top-2)).right;
-		Integer pixelsAmount = (Integer)((java_cup.runtime.Symbol) CUP$CanvasFileParser$stack.elementAt(CUP$CanvasFileParser$top-2)).value;
-		int rowsleft = ((java_cup.runtime.Symbol)CUP$CanvasFileParser$stack.peek()).left;
-		int rowsright = ((java_cup.runtime.Symbol)CUP$CanvasFileParser$stack.peek()).right;
-		Integer rows = (Integer)((java_cup.runtime.Symbol) CUP$CanvasFileParser$stack.peek()).value;
-		 RESULT = new SizeDTO(pixelsAmount, rows, columns); 
-              CUP$CanvasFileParser$result = parser.getSymbolFactory().newSymbol("sizeAttribute",14, ((java_cup.runtime.Symbol)CUP$CanvasFileParser$stack.elementAt(CUP$CanvasFileParser$top-4)), ((java_cup.runtime.Symbol)CUP$CanvasFileParser$stack.peek()), RESULT);
-            }
-          return CUP$CanvasFileParser$result;
-
-          /*. . . . . . . . . . . . . . . . . . . .*/
-          case 47: // sizeAttribute ::= dimensionY COMMA dimensionX COMMA square 
-            {
-              SizeDTO RESULT =null;
-		int columnsleft = ((java_cup.runtime.Symbol)CUP$CanvasFileParser$stack.elementAt(CUP$CanvasFileParser$top-4)).left;
-		int columnsright = ((java_cup.runtime.Symbol)CUP$CanvasFileParser$stack.elementAt(CUP$CanvasFileParser$top-4)).right;
-		Integer columns = (Integer)((java_cup.runtime.Symbol) CUP$CanvasFileParser$stack.elementAt(CUP$CanvasFileParser$top-4)).value;
-		int rowsleft = ((java_cup.runtime.Symbol)CUP$CanvasFileParser$stack.elementAt(CUP$CanvasFileParser$top-2)).left;
-		int rowsright = ((java_cup.runtime.Symbol)CUP$CanvasFileParser$stack.elementAt(CUP$CanvasFileParser$top-2)).right;
-		Integer rows = (Integer)((java_cup.runtime.Symbol) CUP$CanvasFileParser$stack.elementAt(CUP$CanvasFileParser$top-2)).value;
 		int pixelsAmountleft = ((java_cup.runtime.Symbol)CUP$CanvasFileParser$stack.peek()).left;
 		int pixelsAmountright = ((java_cup.runtime.Symbol)CUP$CanvasFileParser$stack.peek()).right;
 		Integer pixelsAmount = (Integer)((java_cup.runtime.Symbol) CUP$CanvasFileParser$stack.peek()).value;

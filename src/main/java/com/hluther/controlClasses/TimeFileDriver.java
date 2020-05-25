@@ -38,7 +38,7 @@ public class TimeFileDriver {
         }
         
         for(ImageDTO image : time.getImages()){
-            image.setCanvasPanel(new CanvasPanel(canvas.getColumns(), canvas.getRows(), canvas.getPixelsAmount(), canvas.getBackgroundColor(), null));
+            image.setCanvasPanel(new CanvasPanel(canvas.getRows(), canvas.getColumns(), canvas.getPixelsAmount(), canvas.getBackgroundColor(), null));
         }
         canvas.setTime(time); 
     }

@@ -8,21 +8,11 @@ import javax.swing.JFileChooser;
 import com.hluther.controlClasses.GifCreatorDriver;
 import com.hluther.controlClasses.TimeFileDriver;
 import com.hluther.entityClasses.ImageDTO;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics2D;
-import java.awt.Panel;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Hashtable;
-import java.util.LinkedList;
-import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 /**
  *
@@ -35,7 +25,7 @@ public class GifCreatorFrame extends javax.swing.JFrame {
     tabbedPanes[2] = archivo.tmp
     tabbedPanes[3] = archivo.pnt
     */
-    private GifCreatorDriver guiDriver = new GifCreatorDriver();
+    private GifCreatorDriver gifCreatorDriver = new GifCreatorDriver();
     private FilesDriver filesDriver = new FilesDriver();
     private JFileChooser fileChooser;
     private JPanel[] panels = new JPanel[4];
@@ -88,7 +78,7 @@ public class GifCreatorFrame extends javax.swing.JFrame {
     */
     private void openPanel(int type, String name, String data){
         if(panels[type] == null){
-            guiDriver.addPanel(name, data, editorTabbedPane, positionLabel, panels, textAreas, type);
+            gifCreatorDriver.addPanel(name, data, editorTabbedPane, positionLabel, panels, textAreas, type);
             titles[type] = name;
         }
         else{
@@ -125,7 +115,7 @@ public class GifCreatorFrame extends javax.swing.JFrame {
     */
     private void reOpenPanel(int type, String name, String data){
             this.removePanel(type);
-            guiDriver.addPanel(name, data, editorTabbedPane, positionLabel, panels, textAreas, type);
+            gifCreatorDriver.addPanel(name, data, editorTabbedPane, positionLabel, panels, textAreas, type);
             titles[type] = name;
     }
     
@@ -150,7 +140,7 @@ public class GifCreatorFrame extends javax.swing.JFrame {
     */
     private int saveFile(String fileName, int type){
         fileChooser = new JFileChooser();
-        this.guiDriver.configureFileChooserSave(fileChooser, fileName, type);
+        this.gifCreatorDriver.configureFileChooserSave(fileChooser, fileName, type);
         int selection = fileChooser.showSaveDialog(this);      
         if(selection == JFileChooser.APPROVE_OPTION){
             filesDriver.createFile(fileChooser.getSelectedFile().toString(), textAreas[type].getText());
@@ -254,7 +244,6 @@ public class GifCreatorFrame extends javax.swing.JFrame {
 
         editorTabbedPane.setBackground(new java.awt.Color(25, 150, 135));
         editorTabbedPane.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        editorTabbedPane.setForeground(new java.awt.Color(255, 255, 255));
         editorAreaPanel.add(editorTabbedPane);
 
         principalPanel.add(editorAreaPanel, java.awt.BorderLayout.CENTER);
@@ -560,7 +549,7 @@ public class GifCreatorFrame extends javax.swing.JFrame {
     */
     private void openMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openMenuActionPerformed
         fileChooser = new JFileChooser();
-        this.guiDriver.configureFileChooserOpen(fileChooser);
+        this.gifCreatorDriver.configureFileChooserOpen(fileChooser);
         int selection = fileChooser.showOpenDialog(this);      
         if(selection == JFileChooser.APPROVE_OPTION){
             String fileName = fileChooser.getSelectedFile().getName(); 
@@ -626,7 +615,7 @@ public class GifCreatorFrame extends javax.swing.JFrame {
     //REALIZAR ANALISIS SINTACTICO Y LEXICO
     private void analysisMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_analysisMenuActionPerformed
         if(panels[0] == null || panels[1] == null || panels[2] == null || panels[3] == null){
-            JOptionPane.showMessageDialog(rootPane, "Para poder realizar el analisis se necesita abrir los cuatro tipos de archivos.", "Error", 0);
+            JOptionPane.showMessageDialog(rootPane, "<html><font color=red>Para poder realizar el analisis se necesita abrir los cuatro tipos de archivos.</font></html>", "Error", 0);
         }
         else{
             //Inicializar variables
@@ -650,8 +639,10 @@ public class GifCreatorFrame extends javax.swing.JFrame {
             
             //Activar el editor grafico
             if(!canvasError && !colorsError && !timeError && !paintError){
+                messagesAreaPanel.setVisible(false);
                 graphicEditorMenu.setEnabled(true);
                 generateGifMenu.setEnabled(true);
+                JOptionPane.showMessageDialog(rootPane, "<html><center><p style=\"color:rgb(54,63,69);\">Analisis Exitoso.</p></center></html>", "Proceso de analisis.", 1);
             }
             else{
                 graphicEditorMenu.setEnabled(false);
@@ -665,59 +656,71 @@ public class GifCreatorFrame extends javax.swing.JFrame {
         if(graphicEditor == null){
             graphicEditor = new GraphicEditor(this, true, timeFileDriver.getCanvases());
         }
+        else{
+            graphicEditor.setBorder();
+        }
         graphicEditor.setVisible(true);
     }//GEN-LAST:event_graphicEditorMenuActionPerformed
 
+    /*
+    GENERAR IMAGENES GIF Y PNG.
+    Metodo encargado de generar las imagenes en base a los datos establecidos por cada 
+    lienzo de imagen de inicio e imagen de fin.
+    */
     private void generateGifMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateGifMenuActionPerformed
-      /*
-        
-        
-        for(Canvas canvas : canvases){
-        
-           ArrayList<BufferedImage> bufferedImages = new ArrayList<>();
-           String startId = canvas.getTime().getStartId();
-           String endId = canvas.getTime().getEndId(); 
-           int startIndex = canvas.getTime().getIdIndex(startId);
-           int endIndex = canvas.getTime().getIdIndex(endId);
-           LinkedList<ImageDTO> images = canvas.getTime().getImages();
-            
-            
-            
-            for(int i = startIndex; i < endIndex+1; i++){
-                  
-              //  CanvasPanel canvasP = images.get(i).getCanvasPanel();
-              //  canvasP.doLayout();
-                
-                
-                
-                
-                
-                
-            initUI(canvasP, images.get(i).getId(), canvas.getColumns(), canvas.getRows(), canvas.getPixelsAmount());
+        Thread hilo = new Thread(){
+        @Override 
+        public  void run(){
+            try {
+                CanvasPanel canvasPanel;
+                for(Canvas canvas : canvases){
+
+                    //Crear arrayList para almacenar las imagenes y los tiempos.
+                    ArrayList<BufferedImage> bufferedImages = new ArrayList<>();
+                    ArrayList<Integer> times = new ArrayList<>();
+
+                    //Obtener los indices que limitan la creacion de la imagen
+                    int startIndex = canvas.getTime().getIdIndex(canvas.getTime().getStartId());
+                    int endIndex = canvas.getTime().getIdIndex( canvas.getTime().getEndId());
+
+                    for(int i = startIndex; i <= endIndex; i++){
+                        //Obtener la imagen actual.
+                        ImageDTO currentImage = canvas.getTime().getImages().get(i);
+
+                        //Obtener CanvasPanel y sus medidas.
+                        canvasPanel = currentImage.getCanvasPanel();
+                        int columns = canvas.getColumns();
+                        int rows = canvas.getRows();
+                        int size = canvas.getPixelsAmount();
+
+                        //Eliminar bordes.
+                        canvasPanel.setBorder(true);
+
+                        //Agregar tiempo y agregar imagen.
+                        times.add(currentImage.getDuration());
+                        bufferedImages.add(gifCreatorDriver.createBufferedImage(canvasPanel, rows, columns, size));        
+                    } 
+
+                    //Crear extension del archivo.
+                    String extension = ".png";
+                    if(canvas.isGIF()){
+                        extension = ".gif";
+                    }
+
+                    //Crear la imagen.
+                    if(!bufferedImages.isEmpty()){
+                        gifCreatorDriver.createGif(bufferedImages, times, canvas.getImageName() + extension);
+                    }
+                }
+                JOptionPane.showMessageDialog(rootPane, "Imagenes generadas exitosamente.", "Exito", 1);
+            }    
+            catch (Exception e) {
+                System.out.println(e.toString());
             }
-            
-        
-            System.out.println(bufferedImages.size());
-        }    
-        */
+        }};
+        hilo.start();    
     }//GEN-LAST:event_generateGifMenuActionPerformed
  
-   /*  protected void initUI(JPanel panel, String name, int width, int height, int size){
-        panel.setPreferredSize(new Dimension(width*size, height*size));
-        panel.setSize(panel.getPreferredSize());
-        BufferedImage bi = new BufferedImage(panel.getWidth(), panel.getHeight(), BufferedImage.TYPE_INT_RGB);
-        Graphics2D g = bi.createGraphics();
-        panel.print(g);
-        g.dispose();
-        try {
-            ImageIO.write(bi, "png", new File(name+".png"));
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }*/
-    
-    
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">

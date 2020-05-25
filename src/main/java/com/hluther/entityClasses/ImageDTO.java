@@ -39,5 +39,4 @@ public class ImageDTO {
     public void setCanvasPanel(CanvasPanel canvasPanel) {
         this.canvasPanel = canvasPanel;
     }
-
 }

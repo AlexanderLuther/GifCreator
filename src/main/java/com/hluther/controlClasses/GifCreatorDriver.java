@@ -1,7 +1,18 @@
 package com.hluther.controlClasses;
+import com.hluther.gui.CanvasPanel;
 import com.hluther.gui.LineNumber;
+import java.awt.Dimension;
+import java.awt.Graphics2D;
 import java.awt.GridLayout;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
+import javax.imageio.stream.FileImageOutputStream;
+import javax.imageio.stream.ImageOutputStream;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -107,6 +118,45 @@ public class GifCreatorDriver {
         }); 
     }
     
+    /*
+    CAPTURAR IMAGEN DE JPANEL.
+    Metodo que recibe como parametros una instancia de la clase CanvasPanel, y las medidas
+    de la intancia. Obtiene y devuelve un BufferedImage del CanvasPanel recibido.
+    */
+    public BufferedImage createBufferedImage(CanvasPanel canvasPanel, int width, int height, int size){
+        canvasPanel.setPreferredSize(new Dimension(height*size, width*size));
+        canvasPanel.setSize(canvasPanel.getPreferredSize());
+        canvasPanel.doLayout();
+        BufferedImage image = new BufferedImage(canvasPanel.getWidth(), canvasPanel.getHeight(), BufferedImage.TYPE_INT_RGB);
+        Graphics2D g = image.createGraphics();
+        canvasPanel.print(g);
+        g.dispose();
+        return image;
+    }
+    
+    /*
+    CREAR IMAGEN GIF.
+    Metodo encargado de generar una imagen gif. Recibe como parametros las BufferedImages 
+    que se utilizaran para crear el gif. Los tiempos entre cada una de las transiciones 
+    y el nombre que tendra la imagen gif resultante.
+    */
+    public void createGif(ArrayList<BufferedImage> images, ArrayList<Integer> times, String imageName) {
+        try {
+            BufferedImage firstImage = images.get(0);
+            ImageOutputStream output = new FileImageOutputStream(new File(imageName));
+            GifSequenceWriter writer =  new GifSequenceWriter(output, firstImage.getType(), times.get(0), true);
+            writer.writeToSequence(firstImage, times.get(0));
+            for(int i = 1; i <images.size(); i++) {
+                BufferedImage nextImage = images.get(i);
+                writer.writeToSequence(nextImage, times.get(i));
+            }
+            writer.close();
+            output.close();
+        } 
+        catch (IOException ex) {
+            System.out.println("Error creando la imagen gif.");
+        }
+    }
     
     
 }

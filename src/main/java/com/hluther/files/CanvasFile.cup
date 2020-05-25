@@ -152,12 +152,12 @@ green::=    BLUE integerValue:amount {: RESULT = amount; :}
 size::=     SIZE COLON CURLYBRACKETO sizeAttribute:size CURLYBRACKETC {: RESULT = size; :}
             ;
 
-sizeAttribute::=    square:pixelsAmount COMMA dimensionX:rows COMMA dimensionY:columns {: RESULT = new SizeDTO(pixelsAmount, rows, columns); :}
-                    | square:pixelsAmount COMMA dimensionY:columns COMMA dimensionX:rows {: RESULT = new SizeDTO(pixelsAmount, rows, columns); :}
-                    | dimensionX:rows COMMA square:pixelsAmount COMMA dimensionY:columns {: RESULT = new SizeDTO(pixelsAmount, rows, columns); :}
-                    | dimensionX:rows COMMA dimensionY:columns COMMA square:pixelsAmount {: RESULT = new SizeDTO(pixelsAmount, rows, columns); :}
-                    | dimensionY:columns COMMA square:pixelsAmount COMMA dimensionX:rows {: RESULT = new SizeDTO(pixelsAmount, rows, columns); :}
-                    | dimensionY:columns COMMA dimensionX:rows COMMA square:pixelsAmount {: RESULT = new SizeDTO(pixelsAmount, rows, columns); :}
+sizeAttribute::=    square:pixelsAmount COMMA dimensionX:columns COMMA dimensionY:rows {: RESULT = new SizeDTO(pixelsAmount, rows, columns); :}
+                    | square:pixelsAmount COMMA dimensionY:rows COMMA dimensionX:columns {: RESULT = new SizeDTO(pixelsAmount, rows, columns); :}
+                    | dimensionX:columns COMMA square:pixelsAmount COMMA dimensionY:rows {: RESULT = new SizeDTO(pixelsAmount, rows, columns); :}
+                    | dimensionX:columns COMMA dimensionY:rows COMMA square:pixelsAmount {: RESULT = new SizeDTO(pixelsAmount, rows, columns); :}
+                    | dimensionY:rows COMMA square:pixelsAmount COMMA dimensionX:columns {: RESULT = new SizeDTO(pixelsAmount, rows, columns); :}
+                    | dimensionY:rows COMMA dimensionX:columns COMMA square:pixelsAmount {: RESULT = new SizeDTO(pixelsAmount, rows, columns); :}
                     ;
 
 square::=   SQUARE integerValue:amount {: RESULT = amount; :}

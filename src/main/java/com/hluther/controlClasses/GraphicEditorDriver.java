@@ -5,7 +5,13 @@ import com.hluther.gui.GraphicEditor;
 import com.hluther.entityClasses.Canvas;
 import com.hluther.entityClasses.ImageDTO;
 import com.hluther.gui.CanvasPanel;
+import com.hluther.gui.CellPanel;
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -13,6 +19,9 @@ import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.border.Border;
+import javax.swing.border.EtchedBorder;
+import javax.swing.border.LineBorder;
 /**
  *
  * @author helmuth
@@ -67,9 +76,9 @@ public class GraphicEditorDriver {
         1. Crear una nueva instancia de la clase ColorComboBox y le pasa
            como paramtro los colores contenidos dentro del lienzo.
         2. Remueve todos los items dentro del JPanel colorPanel, agregar al 
-           panel colorPanel el ColorComboBox creado, repinta y revalida el panel. 
-        3. Agrega un evento dentro del ColorComboBox para que el panel selectedColor
-           panel establezca su color de fondo al valor del color seleccionado dentro
+           board colorPanel el ColorComboBox creado, repinta y revalida el board. 
+        3. Agrega un evento dentro del ColorComboBox para que el board selectedColor
+           board establezca su color de fondo al valor del color seleccionado dentro
            del JColorComboBox.
     */
     public ColorComboBox addColorComboBox(JPanel colorPanel, JPanel selectedColorPanel,  Canvas canvas){
@@ -92,13 +101,16 @@ public class GraphicEditorDriver {
     
     /*
     Metodo encargado de:    
-        1. Obtener el lienzo que se encuentra seleccionado.
-        2. Crear una nueva instancia de JScrollPane y agregarle la imagen del lienzo.
-        3. Establecer el layout del panel actual e insertar el JScrollPane.
-        4. Repintar y revalidar el panel.
+        1. Obtener el liezo actual y establecer los bordes.
+        2. Remover todos los componentes dentro del JTabbed pane donde se insertara 
+           el lienzo.
+        3. Crear un JScrollPane y agregarselo al lienzo.
+        4. Agregar el JScrollPane al JTabbedPane indicado por el parametro tabberdPaneIndex.
+        5. Repintar y revalidar el JTabbedPane
     */
-    public void setCurrentCanvasPanel(int tabbedPaneIndex, Canvas canvas, ArrayList<JPanel> panels, int imageIdIndex){
+    public void setCurrentCanvasPanel(int tabbedPaneIndex, Canvas canvas, ArrayList<JPanel> panels, int imageIdIndex){        
         CanvasPanel canvasPanel = canvas.getTime().getImages().get(imageIdIndex).getCanvasPanel();
+        canvasPanel.setBorder(false);
         panels.get(tabbedPaneIndex).removeAll();        
         scrollPane = new JScrollPane();
         scrollPane.setViewportView(canvasPanel);        

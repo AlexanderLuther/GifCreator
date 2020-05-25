@@ -7,6 +7,7 @@ import java.awt.GridBagLayout;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
+import javax.swing.border.LineBorder;
 /**
  *
  * @author helmuth
@@ -31,7 +32,8 @@ public class CanvasPanel extends JPanel {
             for (int col = 0; col < columns; col++) {
                 gbc.gridx = col;
                 gbc.gridy = row;
-                CellPanel cellPane = new CellPanel(size, color, graphicEditor);  
+                CellPanel cellPane = new CellPanel(size, color, graphicEditor); 
+                cellPane.setSize(new Dimension(size, size));
                 cells[row][col] = cellPane;
                 Border border = new EtchedBorder();
                 cellPane.setBorder(border);
@@ -56,6 +58,19 @@ public class CanvasPanel extends JPanel {
     public CellPanel getCells(int row, int column) {
         return cells[row][column];
     }
+    
+     public void setBorder(boolean noBoder){
+        for(int i = 0; i < rows; i++){
+            for(int j = 0; j < columns; j++){
+                if(noBoder){
+                    cells[i][j].setBorder(new LineBorder(Color.BLACK, 0, false));
+                }
+                else{
+                    cells[i][j].setBorder(new EtchedBorder());
+                }
+            }
+        }
+    } 
 }
     
    
