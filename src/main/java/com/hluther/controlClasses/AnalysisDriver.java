@@ -2,9 +2,11 @@ package com.hluther.controlClasses;
 import com.hluther.gui.GifCreatorFrame;
 import com.hluther.lexer.CanvasFileLexer;
 import com.hluther.lexer.ColorsFileLexer;
+import com.hluther.lexer.PaintFileLexer;
 import com.hluther.lexer.TimeFileLexer;
 import com.hluther.parser.CanvasFileParser;
 import com.hluther.parser.ColorsFileParser;
+import com.hluther.parser.PaintFileParser;
 import com.hluther.parser.TimeFileParser;
 import java.io.StringReader;
 import java.util.Hashtable;
@@ -35,4 +37,12 @@ public class AnalysisDriver {
         } 
         catch (Exception ex) {}
     }
+     
+    public void doPaintFileAnalysis(String text, GifCreatorFrame gifCreatorFrame, PaintFileDriver paintFileDriver, Hashtable symbolTable){
+        try { 
+            new PaintFileParser(new PaintFileLexer(new StringReader(text), gifCreatorFrame), gifCreatorFrame, paintFileDriver, symbolTable).parse();
+        } 
+        catch (Exception ex) {}
+    } 
+     
 }

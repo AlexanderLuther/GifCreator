@@ -45,7 +45,7 @@
                     <archive>
                         <manifest>
 //Aqui se establece el nombre de la clase principal
-                            <mainClass>com.hluther.gui.GifCreatorFrame</mainClass>
+                            <mainClass>com.hluther.gifCreator.GifCreator</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

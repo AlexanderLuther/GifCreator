@@ -95,7 +95,7 @@ WhiteSpace = {LineTerminator} | [ \t\f]
     ({Letter} | "_") ({Letter} | {Number} | "_")*                               { printToken("ID"); printError(); return symbol(CanvasSym.ID, yytext()); }
     {Number}+                                                                   { printToken("INTEGER"); printError(); return symbol(CanvasSym.INTEGER, Integer.parseInt(yytext())); }
     ("#"){HexNumber}{HexNumber}{HexNumber}{HexNumber}{HexNumber}{HexNumber}     { printToken("HEXCODE"); printError(); return symbol(CanvasSym.HEXCODE, yytext()); }
-    ("\"") ({Letter} | {Number} | " ")* ("\"")                                  { printToken("LITERAL"); printError(); return symbol(CanvasSym.LITERAL, yytext()); }
+    ("\"") [^*]~ ("\"")                                                         { printToken("LITERAL"); printError(); return symbol(CanvasSym.LITERAL, yytext()); }
     {WhiteSpace}                        { printError(); }//Ignore
      .                                  { createErrorLexeme(new String(yytext()), (yyline+1), yycolumn); }  
 }

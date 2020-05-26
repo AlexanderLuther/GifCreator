@@ -1,0 +1,292 @@
+package com.hluther.parser;
+import java_cup.runtime.*;
+import com.hluther.gui.GifCreatorFrame;
+import com.hluther.lexer.PaintFileLexer;
+import com.hluther.controlClasses.PaintFileDriver;
+import com.hluther.entityClasses.Canvas;
+import com.hluther.entityClasses.Data;
+import com.hluther.entityClasses.TemporalData;
+import java.util.ArrayList;
+import java.util.Hashtable;
+
+parser code {:
+
+    private GifCreatorFrame gifCreatorFrame;
+    private PaintFileDriver paintFileDriver;
+    private Hashtable<String, Canvas> canvasTable;
+    private Hashtable<String, Data> symbolTable;
+    private ArrayList<TemporalData> temporalData;
+    private Data data;
+    
+    public PaintFileParser(PaintFileLexer lexer, GifCreatorFrame gifCreatorFrame, PaintFileDriver paintFileDriver, Hashtable<String, Canvas> canvasTable) { 
+        super(lexer);
+        this.gifCreatorFrame = gifCreatorFrame;
+        this.paintFileDriver = paintFileDriver;
+        this.canvasTable = canvasTable;
+        this.symbolTable = new Hashtable<>();
+        this.temporalData = new ArrayList<>();
+    }
+
+    public void syntax_error(Symbol s){
+        //konquestFrame.printGameSaveSintaxError(s);
+    }
+
+    public void unrecovered_syntax_error(Symbol s){
+        //konquestFrame.printGameSaveSintaxError(s);
+    } 
+
+    public void semanticError(String lexeme, int line, int column, int errorType){
+        String msg = "";    
+        switch(errorType){
+            case 0:
+                msg = "Error Semantico -> Ya existe una variable con el nombre ["+lexeme+"]. Linea: "+line+" Columna: "+column; 
+            break;
+            case 1:
+                msg = "Error Semantico -> No existe ninguna variable con el nombre  ["+lexeme+"]. Imposible asignar un valor. Linea: "+line+" Columna: "+column; 
+            break;
+        }
+        gifCreatorFrame.printError(msg, 3);
+    }
+
+
+    public void addEmptyVar(String id, int type, int row, int column){
+        if(existVar(id)){
+            data = new Data(id, type, true);
+            symbolTable.put(id, data);
+        }
+        else{
+             semanticError(id, row, column, 0);
+        }
+    }
+    
+    public void addVar(String newId, String id, int type, int newIdRow, int newIdColumn, int idRow, int idColumn){
+        if(existVar(newId)){
+            temporalData.add(new TemporalData(newId, id, idRow, idColumn, type));
+        }
+        else{
+            semanticError(id, newIdRow, newIdColumn, 0);
+        }
+    }
+
+    public boolean existVar(String id){
+        return symbolTable.get(id) == null;  
+    }
+
+
+:}
+
+/* Terminals */
+terminal String     ID, INT, STRING, BOOLEAN, STRINGLITERAL, IDLITERAL, EQUALS, SEMICOLON, COMMA, PLUS, MINUS, MULTIPLICATION, DIVISION, SQUAREBRACKETO, SQUAREBRACKETC, VARS, INSTRUCTIONS,
+                    PARENTHESISO, PARENTHESISC, FULLSTOP, PAINT, WHILE, CURLYBRACKETO, CURLYBRACKETC, AND, OR, COMPARATION, IF, ELSE, LESSEQUALSTHAN, MOREEQUALSTHAN, MORETHAN,
+                    LESSTHAN, BETWEEN;
+terminal Integer    INTEGER;
+terminal Boolean    TRUE, FALSE;
+
+/* Non-terminals */
+non terminal             varStructure, vars, intType, stringType, booleanType, integerInitialization, stringInitialization, booleanInitialization, stringList, integerList, stringValue,
+                         booleanList, instructions, instruction, assignValues, paint, stringParam, intParam, rank, integerValue, loop, conditional, else, conditions, logicalOp, relationalOp;
+non terminal Boolean    booleanValue;
+non terminal Integer    term, operation, factor;
+
+precedence left MULTIPLICATION, DIVISION;
+precedence left PLUS, MINUS;
+
+/* The grammar */
+start with varStructure;
+
+//------------------------------------  DECLARACION DE VARIABLES    ------------------------------------//
+varStructure::= VARS SQUAREBRACKETO vars SQUAREBRACKETC instructions {: paintFileDriver.createData(symbolTable, temporalData, gifCreatorFrame);  System.out.println("VARIABLES"); :}
+                ;
+
+vars::=     intType vars
+            | stringType vars 
+            | booleanType vars
+            | intType
+            | stringType 
+            | booleanType 
+            ;
+
+intType::=  INT ID:name SEMICOLON {: addEmptyVar(name, 0, nameleft, nameright); :}
+            | INT integerInitialization SEMICOLON
+            | INT ID:newName EQUALS ID:name SEMICOLON {: addVar(newName, name, 0, newNameleft, newNameright, nameleft, nameright); :}
+            | INT ID:name COMMA integerList SEMICOLON {: addEmptyVar(name, 0, nameleft, nameright); :}
+            | INT integerInitialization COMMA integerList SEMICOLON
+            | INT ID:newName EQUALS ID:name COMMA integerList SEMICOLON {: addVar(newName, name, 0, newNameleft, newNameright, nameleft, nameright); :}
+            ;
+        
+stringType::=   STRING ID:name SEMICOLON  {: addEmptyVar(name, 1, nameleft, nameright); :}
+                | STRING stringInitialization SEMICOLON
+                | STRING ID:newName EQUALS ID:name SEMICOLON {: addVar(newName, name, 1, newNameleft, newNameright, nameleft, nameright); :}
+                | STRING ID COMMA:name stringList SEMICOLON {: addEmptyVar(name, 1, nameleft, nameright); :}
+                | STRING stringInitialization COMMA stringList SEMICOLON
+                | STRING ID:newName EQUALS ID:name COMMA stringList SEMICOLON {: addVar(newName, name, 1, newNameleft, newNameright, nameleft, nameright); :}
+                ;
+
+booleanType::=  BOOLEAN ID:name SEMICOLON {: addEmptyVar(name, 2, nameleft, nameright); :}
+                | BOOLEAN booleanInitialization SEMICOLON
+                | BOOLEAN ID:newName EQUALS ID:name SEMICOLON {: addVar(newName, name, 2, newNameleft, newNameright, nameleft, nameright); :}
+                | BOOLEAN ID:name COMMA booleanList SEMICOLON {: addEmptyVar(name, 2, nameleft, nameright); :}
+                | BOOLEAN booleanInitialization COMMA booleanList SEMICOLON
+                | BOOLEAN ID:newName EQUALS ID:name COMMA booleanList SEMICOLON {: addVar(newName, name, 2, newNameleft, newNameright, nameleft, nameright); :}
+                ;
+
+integerInitialization::=    ID:name EQUALS INTEGER:amount
+                            {:  if(existVar(name)){
+                                    data = new Data(name, amount, 0, false);
+                                    symbolTable.put(name, data);
+                                }
+                                else semanticError(name, nameleft, nameright, 0);
+                            :}
+                            ;
+
+stringInitialization::=     ID:name EQUALS stringValue:value
+                            {:  if(existVar(name)){
+                                 //   data = new Data(name, value.replaceAll("\"", ""), 1, false);
+                                   // symbolTable.put(name, data);
+                                }
+                                else semanticError(name, nameleft, nameright, 0);
+                            :}
+                            ;
+
+stringValue::=  STRINGLITERAL
+                | IDLITERAL
+                ;
+
+booleanInitialization::=    ID:name EQUALS booleanValue:value
+                            {:  if(existVar(name)){
+                                    data = new Data(name, value, 2, false);
+                                    symbolTable.put(name, data);
+                                }
+                                else semanticError(name, nameleft, nameright, 0);
+                            :}
+                            ;
+                            
+booleanValue::=     TRUE:value {: RESULT = value; :}
+                    | FALSE:value {: RESULT = value; :}
+                    ;
+
+integerList::=  ID:name COMMA integerList {: addEmptyVar(name, 0, nameleft, nameright); :}
+                | ID:newName EQUALS ID:name COMMA integerList {: addVar(newName, name, 0, newNameleft, newNameright, nameleft, nameright); :}
+                | integerInitialization COMMA integerList
+                | ID:name {: addEmptyVar(name, 0, nameleft, nameright); :}
+                | ID:newName EQUALS ID:name {: addVar(newName, name, 0, newNameleft, newNameright, nameleft, nameright); :}
+                | integerInitialization
+                ;
+
+stringList::=   ID:name COMMA stringList {: addEmptyVar(name, 1, nameleft, nameright); :}
+                | ID:newName EQUALS ID:name COMMA stringList {: addVar(newName, name, 1, newNameleft, newNameright, nameleft, nameright); :}
+                | stringInitialization COMMA stringList
+                | ID:name {: addEmptyVar(name, 1, nameleft, nameright); :}
+                | ID:newName EQUALS ID:name {: addVar(newName, name, 1, newNameleft, newNameright, nameleft, nameright); :}
+                | stringInitialization
+                ;
+
+booleanList::=   ID:name COMMA booleanList {: addEmptyVar(name, 2, nameleft, nameright); :}
+                | ID:newName EQUALS ID:name COMMA booleanList {: addVar(newName, name, 2, newNameleft, newNameright, nameleft, nameright); :}
+                | booleanInitialization COMMA booleanList
+                | ID:name {: addEmptyVar(name, 2, nameleft, nameright); :}
+                | ID:newName EQUALS ID:name {: addVar(newName, name, 2, newNameleft, newNameright, nameleft, nameright); :}
+                | booleanInitialization
+                ;
+
+
+
+
+
+
+
+//------------------------------------  OPERACIONES ARITMETICAS    ------------------------------------//
+operation::=    operation PLUS term
+                | operation MINUS term
+                | term
+                ;    
+
+term::=     term MULTIPLICATION factor
+            | term DIVISION factor
+            | factor
+            ;
+
+factor::=   INTEGER  
+            | ID
+            ;
+
+
+//------------------------------------  DECLARACION DE INSTRUCCIONES    ------------------------------------//
+instructions::=     INSTRUCTIONS PARENTHESISO ID PARENTHESISC SQUAREBRACKETO instruction SQUAREBRACKETC instructions
+                    | INSTRUCTIONS PARENTHESISO ID PARENTHESISC SQUAREBRACKETO instruction SQUAREBRACKETC 
+                    ;
+
+instruction::=   assignValues instruction
+                | paint instruction
+                | conditional instruction
+                | loop instruction
+                | assignValues 
+                | paint
+                | conditional
+                | loop
+                ;
+
+
+//------------------------------------  ASIGNACION DE VALORES    ------------------------------------//
+
+
+
+//------------------------------------  INSTRUCCION PINTAR    ------------------------------------//
+paint::=    PAINT PARENTHESISO stringParam COMMA stringParam COMMA intParam COMMA intParam PARENTHESISC SEMICOLON
+            ;
+
+stringParam::=  IDLITERAL
+                | ID
+                ;
+
+intParam::=     operation
+                | rank
+                ;
+
+rank::=     integerValue FULLSTOP FULLSTOP integerValue   
+            ;
+
+integerValue::=    INTEGER
+                   | ID
+                   ;
+
+
+//------------------------------------  INSTRUCCION WHILE    ------------------------------------//
+loop::=     WHILE PARENTHESISO conditions PARENTHESISC CURLYBRACKETO instruction CURLYBRACKETC
+            ;
+
+
+//------------------------------------  INSTRUCCION IF-ELSE    ------------------------------------//
+conditional::=      IF PARENTHESISO conditions PARENTHESISC CURLYBRACKETO instruction CURLYBRACKETC else
+                    ;
+
+else::=     ELSE CURLYBRACKETO instruction CURLYBRACKETC
+            |    
+            ;
+
+//------------------------------------  CONDICIONES    ------------------------------------//
+conditions::=   ID logicalOp conditions
+                | relationalOp logicalOp conditions
+                | TRUE logicalOp conditions
+                | FALSE logicalOp conditions
+                | ID
+                | relationalOp
+                | TRUE
+                | FALSE
+                ;
+
+
+//------------------------------------  OPERACIONES LOGICAS    ------------------------------------//
+logicalOp::=    AND
+                | OR
+                ;
+                
+
+//------------------------------------  OPERACIONES RELACIONALES    ------------------------------------//
+relationalOp::=    integerValue COMPARATION integerValue
+                    | integerValue LESSEQUALSTHAN integerValue
+                    | integerValue MOREEQUALSTHAN integerValue
+                    | integerValue LESSTHAN integerValue
+                    | integerValue MORETHAN integerValue
+                    | integerValue BETWEEN integerValue
+                    ;

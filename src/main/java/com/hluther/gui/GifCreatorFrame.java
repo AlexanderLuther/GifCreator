@@ -6,6 +6,7 @@ import com.hluther.controlClasses.FilesDriver;
 import com.hluther.entityClasses.Canvas;
 import javax.swing.JFileChooser;
 import com.hluther.controlClasses.GifCreatorDriver;
+import com.hluther.controlClasses.PaintFileDriver;
 import com.hluther.controlClasses.TimeFileDriver;
 import com.hluther.entityClasses.ImageDTO;
 import java.awt.image.BufferedImage;
@@ -37,6 +38,7 @@ public class GifCreatorFrame extends javax.swing.JFrame {
     private CanvasFileDriver canvasFileDriver;
     private ColorsFileDriver colorsFileDriver;
     private TimeFileDriver timeFileDriver;
+    private PaintFileDriver paintFileDriver;
     
     private boolean canvasError = false; 
     private boolean colorsError = false;
@@ -614,10 +616,10 @@ public class GifCreatorFrame extends javax.swing.JFrame {
 
     //REALIZAR ANALISIS SINTACTICO Y LEXICO
     private void analysisMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_analysisMenuActionPerformed
-        if(panels[0] == null || panels[1] == null || panels[2] == null || panels[3] == null){
+        /*if(panels[0] == null || panels[1] == null || panels[2] == null || panels[3] == null){
             JOptionPane.showMessageDialog(rootPane, "<html><font color=red>Para poder realizar el analisis se necesita abrir los cuatro tipos de archivos.</font></html>", "Error", 0);
         }
-        else{
+        else{*/
             //Inicializar variables
             graphicEditor = null;
             canvasError = false;
@@ -626,14 +628,21 @@ public class GifCreatorFrame extends javax.swing.JFrame {
             paintError = false;
             messagesTextArea.setText("");
             symbolTable = new Hashtable();
-            //Realizar analisis
+            
+            
+         
+            paintFileDriver = new PaintFileDriver();
+            analysisDriver.doPaintFileAnalysis(textAreas[3].getText(), this, paintFileDriver, symbolTable);
+            
+            
+     /*       //Realizar analisis
             canvasFileDriver = new CanvasFileDriver();
             analysisDriver.doCanvasFileAnalysis(textAreas[0].getText(), this, canvasFileDriver, symbolTable);            
             colorsFileDriver = new ColorsFileDriver(canvasFileDriver.getCanvases());
             analysisDriver.doColorsFileAnalysis(textAreas[1].getText(), this, colorsFileDriver, symbolTable);
             timeFileDriver = new TimeFileDriver(colorsFileDriver.getCanvases());
             analysisDriver.doTimeFileAnalysis(textAreas[2].getText(), this, timeFileDriver, symbolTable);
-            
+           
             //Obtener lienzos
             canvases = timeFileDriver.getCanvases();
             
@@ -648,7 +657,8 @@ public class GifCreatorFrame extends javax.swing.JFrame {
                 graphicEditorMenu.setEnabled(false);
                 generateGifMenu.setEnabled(false);
             }
-        }
+        }*/
+            
     }//GEN-LAST:event_analysisMenuActionPerformed
 
     //ABRIR EL EDITOR GRAFICO DE LIENZOS.
@@ -712,7 +722,7 @@ public class GifCreatorFrame extends javax.swing.JFrame {
                         gifCreatorDriver.createGif(bufferedImages, times, canvas.getImageName() + extension);
                     }
                 }
-                JOptionPane.showMessageDialog(rootPane, "Imagenes generadas exitosamente.", "Exito", 1);
+                JOptionPane.showMessageDialog(rootPane, "Imagen(es) generadas exitosamente.", "Exito", 1);
             }    
             catch (Exception e) {
                 System.out.println(e.toString());
