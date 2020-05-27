@@ -616,10 +616,10 @@ public class GifCreatorFrame extends javax.swing.JFrame {
 
     //REALIZAR ANALISIS SINTACTICO Y LEXICO
     private void analysisMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_analysisMenuActionPerformed
-        /*if(panels[0] == null || panels[1] == null || panels[2] == null || panels[3] == null){
+        if(panels[0] == null || panels[1] == null || panels[2] == null || panels[3] == null){
             JOptionPane.showMessageDialog(rootPane, "<html><font color=red>Para poder realizar el analisis se necesita abrir los cuatro tipos de archivos.</font></html>", "Error", 0);
         }
-        else{*/
+        else{
             //Inicializar variables
             graphicEditor = null;
             canvasError = false;
@@ -628,23 +628,16 @@ public class GifCreatorFrame extends javax.swing.JFrame {
             paintError = false;
             messagesTextArea.setText("");
             symbolTable = new Hashtable();
-            
-            
-         
-            paintFileDriver = new PaintFileDriver();
-            analysisDriver.doPaintFileAnalysis(textAreas[3].getText(), this, paintFileDriver, symbolTable);
-            
-            
-     /*       //Realizar analisis
+             
+            //Realizar analisis
             canvasFileDriver = new CanvasFileDriver();
             analysisDriver.doCanvasFileAnalysis(textAreas[0].getText(), this, canvasFileDriver, symbolTable);            
             colorsFileDriver = new ColorsFileDriver(canvasFileDriver.getCanvases());
             analysisDriver.doColorsFileAnalysis(textAreas[1].getText(), this, colorsFileDriver, symbolTable);
             timeFileDriver = new TimeFileDriver(colorsFileDriver.getCanvases());
             analysisDriver.doTimeFileAnalysis(textAreas[2].getText(), this, timeFileDriver, symbolTable);
-           
-            //Obtener lienzos
-            canvases = timeFileDriver.getCanvases();
+            paintFileDriver = new PaintFileDriver();
+            analysisDriver.doPaintFileAnalysis(textAreas[3].getText(), this, paintFileDriver, timeFileDriver.getCanvases());
             
             //Activar el editor grafico
             if(!canvasError && !colorsError && !timeError && !paintError){
@@ -657,7 +650,7 @@ public class GifCreatorFrame extends javax.swing.JFrame {
                 graphicEditorMenu.setEnabled(false);
                 generateGifMenu.setEnabled(false);
             }
-        }*/
+        }
             
     }//GEN-LAST:event_analysisMenuActionPerformed
 

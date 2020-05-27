@@ -1,5 +1,6 @@
 package com.hluther.AST;
 
+import com.hluther.entityClasses.Canvas;
 import java.util.LinkedList;
 
 /**
@@ -45,24 +46,26 @@ public class If implements Instruction{
      * su ejecución
      */
     @Override
-    public Object execute(SymbolTable symbolTable) {
-        if((Boolean)condition.execute(symbolTable)){
+    public Object execute(SymbolTable symbolTable, Canvas currentCanvas) {
+        if((Boolean)condition.execute(symbolTable, currentCanvas)){
             System.out.println("Dentro del if");
+            System.out.println(currentCanvas.getId());
             if(instructionsList != null){
                 SymbolTable localTable = new SymbolTable();
                 localTable.addAll(symbolTable);
-                for(Instruction in: instructionsList){
-                    in.execute(localTable);
+                for(int i = instructionsList.size() -1; i >= 0; i--){
+                    instructionsList.get(i).execute(localTable, currentCanvas);
                 }
+                
             }
         }else{
             System.out.println("Dentro del else.");
             if(elseInstructionsList!=null){
                 SymbolTable localTable=new SymbolTable();
                 localTable.addAll(symbolTable);
-                for(Instruction in: elseInstructionsList){
-                    in.execute(localTable);
-                }            
+                for(int i = elseInstructionsList.size() -1; i >= 0; i--){
+                    elseInstructionsList.get(i).execute(localTable, currentCanvas);
+                }       
             }
         }
         return null;

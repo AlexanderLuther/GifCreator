@@ -1,5 +1,6 @@
 package com.hluther.AST;
 
+import com.hluther.entityClasses.Canvas;
 import java.util.LinkedList;
 
 /**
@@ -18,8 +19,8 @@ public class While implements Instruction{
      * @param instructionsList instrucciones que deben ejecutarse si la condición se cumpliera
      */
     public While(Operation condition, LinkedList<Instruction> instructionsList) {
-        this.condition=condition;
-        this.instructionsList=instructionsList;
+        this.condition = condition;
+        this.instructionsList = instructionsList;
     }
 
     /**
@@ -30,14 +31,14 @@ public class While implements Instruction{
      * @return Esta instrucción retorna nulo porque no produce ningun valor
      */
     @Override
-    public Object execute(SymbolTable symbolTable) {
-        while((Boolean)condition.execute(symbolTable)){
+    public Object execute(SymbolTable symbolTable, Canvas currentCanvas) {
+        while((Boolean)condition.execute(symbolTable, currentCanvas)){
             System.out.println("Dentro del bucle");
             if(instructionsList != null){
                 SymbolTable localTable = new SymbolTable();
                 localTable.addAll(symbolTable);
-                for(Instruction ins:instructionsList){
-                    ins.execute(localTable);
+                for(int i = instructionsList.size() -1; i >= 0; i--){
+                    instructionsList.get(i).execute(localTable, currentCanvas);
                 }
             }
         }

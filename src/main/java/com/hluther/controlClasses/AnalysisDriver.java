@@ -9,7 +9,9 @@ import com.hluther.parser.ColorsFileParser;
 import com.hluther.parser.PaintFileParser;
 import com.hluther.parser.TimeFileParser;
 import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.Hashtable;
+import com.hluther.entityClasses.Canvas;
 
 /**
  *
@@ -38,9 +40,9 @@ public class AnalysisDriver {
         catch (Exception ex) {}
     }
      
-    public void doPaintFileAnalysis(String text, GifCreatorFrame gifCreatorFrame, PaintFileDriver paintFileDriver, Hashtable symbolTable){
+    public void doPaintFileAnalysis(String text, GifCreatorFrame gifCreatorFrame, PaintFileDriver paintFileDriver, ArrayList<Canvas> canvases){
         try { 
-            new PaintFileParser(new PaintFileLexer(new StringReader(text), gifCreatorFrame), gifCreatorFrame, paintFileDriver, symbolTable).parse();
+            new PaintFileParser(new PaintFileLexer(new StringReader(text), gifCreatorFrame), gifCreatorFrame, paintFileDriver, canvases).parse();
         } 
         catch (Exception ex) {}
     } 

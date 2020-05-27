@@ -1,4 +1,6 @@
 package com.hluther.AST;
+
+import com.hluther.entityClasses.Canvas;
 /**
  * Clase que ejecuta las acciones de una instrucción de asignación y que implementa
  * la interfaz de instrucción
@@ -27,8 +29,8 @@ public class Assignment implements Instruction{
      * @return En este caso retorna nulo porque no es una sentencia que genere un value.
      */
     @Override
-    public Object execute(SymbolTable symbolTable) {
-        symbolTable.setValue(id, value.execute(symbolTable));
+    public Object execute(SymbolTable symbolTable, Canvas currentCanvas) {
+        symbolTable.setValue(id, value.execute(symbolTable, currentCanvas));
         return null;
     }
 }

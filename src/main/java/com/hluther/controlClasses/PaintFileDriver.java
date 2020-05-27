@@ -2,8 +2,9 @@ package com.hluther.controlClasses;
 
 import com.hluther.AST.Instruction;
 import com.hluther.AST.SymbolTable;
+import java.util.ArrayList;
 import java.util.LinkedList;
-
+import com.hluther.entityClasses.Canvas;
 /**
  *
  * @author helmuth
@@ -34,9 +35,8 @@ public class PaintFileDriver {
             //será inválida y se cargará como null, por lo tanto no deberá ejecutarse
             //es por esto que se hace esta validación.
             if(abstractSintaxTree.get(i)!=null)
-                abstractSintaxTree.get(i).execute(symbolTable);
+                abstractSintaxTree.get(i).execute(symbolTable, null);
         }
-        
         
         for(int i = 0; i < symbolTable.size(); i++){
             System.out.println(symbolTable.get(i).getId() + " =  " + symbolTable.get(i).getValue());

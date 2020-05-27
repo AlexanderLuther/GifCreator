@@ -24,6 +24,7 @@ import com.hluther.AST.CanvasInstructions;
 import com.hluther.AST.PaintInstructions;
 import com.hluther.AST.While;
 import com.hluther.AST.If;
+import com.hluther.AST.Paint;
 import java_cup.runtime.XMLElement;
 
 /** CUP v0.11b 20160615 (GIT 4ac7450) generated parser.
@@ -49,31 +50,33 @@ public class PaintFileParser extends java_cup.runtime.lr_parser {
   /** Production table. */
   protected static final short _production_table[][] = 
     unpackFromStrings(new String[] {
-    "\000\120\000\002\002\004\000\002\002\003\000\002\004" +
-    "\007\000\002\005\006\000\002\005\006\000\002\005\006" +
-    "\000\002\005\006\000\002\005\006\000\002\005\006\000" +
-    "\002\005\006\000\002\005\005\000\002\005\005\000\002" +
-    "\005\005\000\002\005\005\000\002\005\005\000\002\005" +
-    "\005\000\002\005\005\000\002\005\006\000\002\005\005" +
-    "\000\002\017\005\000\002\015\005\000\002\016\005\000" +
-    "\002\010\003\000\002\011\003\000\002\012\003\000\002" +
-    "\013\005\000\002\025\003\000\002\025\003\000\002\014" +
+    "\000\127\000\002\002\004\000\002\002\003\000\002\003" +
+    "\007\000\002\004\006\000\002\004\006\000\002\004\006" +
+    "\000\002\004\006\000\002\004\006\000\002\004\006\000" +
+    "\002\004\006\000\002\004\005\000\002\004\005\000\002" +
+    "\004\005\000\002\004\005\000\002\004\005\000\002\004" +
+    "\005\000\002\004\005\000\002\004\006\000\002\004\005" +
+    "\000\002\016\005\000\002\014\005\000\002\015\005\000" +
+    "\002\007\003\000\002\010\003\000\002\011\003\000\002" +
+    "\012\005\000\002\025\003\000\002\025\003\000\002\013" +
     "\005\000\002\024\003\000\002\024\003\000\002\030\005" +
     "\000\002\030\005\000\002\030\003\000\002\027\005\000" +
     "\002\027\005\000\002\027\003\000\002\026\003\000\002" +
-    "\026\003\000\002\007\012\000\002\007\011\000\002\006" +
-    "\004\000\002\006\004\000\002\006\004\000\002\006\004" +
-    "\000\002\006\003\000\002\006\003\000\002\006\003\000" +
-    "\002\006\003\000\002\020\006\000\002\031\003\000\002" +
+    "\026\003\000\002\006\012\000\002\006\011\000\002\005" +
+    "\004\000\002\005\004\000\002\005\004\000\002\005\004" +
+    "\000\002\005\003\000\002\005\003\000\002\005\003\000" +
+    "\002\005\003\000\002\017\006\000\002\031\003\000\002" +
     "\031\003\000\002\031\003\000\002\033\005\000\002\033" +
     "\005\000\002\033\005\000\002\033\005\000\002\033\005" +
-    "\000\002\032\003\000\002\032\003\000\002\022\011\000" +
-    "\002\022\010\000\002\034\005\000\002\034\005\000\002" +
+    "\000\002\032\003\000\002\032\003\000\002\021\011\000" +
+    "\002\021\010\000\002\034\005\000\002\034\005\000\002" +
     "\034\005\000\002\034\005\000\002\034\005\000\002\034" +
     "\005\000\002\034\005\000\002\034\005\000\002\034\003" +
     "\000\002\034\003\000\002\034\003\000\002\034\003\000" +
-    "\002\023\015\000\002\023\014\000\002\023\014\000\002" +
-    "\023\013\000\002\023\011\000\002\023\010" });
+    "\002\022\015\000\002\022\014\000\002\022\014\000\002" +
+    "\022\013\000\002\022\011\000\002\022\010\000\002\023" +
+    "\015\000\002\023\020\000\002\023\020\000\002\023\023" +
+    "\000\002\035\003\000\002\035\003\000\002\036\003" });
 
   /** Access to production table. */
   public short[][] production_table() {return _production_table;}
@@ -81,112 +84,139 @@ public class PaintFileParser extends java_cup.runtime.lr_parser {
   /** Parse-action table. */
   protected static final short[][] _action_table = 
     unpackFromStrings(new String[] {
-    "\000\223\000\004\023\006\001\002\000\004\002\000\001" +
-    "\002\000\004\002\225\001\002\000\004\021\007\001\002" +
+    "\000\265\000\004\023\006\001\002\000\004\002\000\001" +
+    "\002\000\004\002\267\001\002\000\004\021\007\001\002" +
     "\000\010\005\013\006\010\007\012\001\002\000\004\004" +
-    "\206\001\002\000\004\022\060\001\002\000\004\004\041" +
+    "\250\001\002\000\004\022\060\001\002\000\004\004\041" +
     "\001\002\000\004\004\014\001\002\000\006\012\023\013" +
     "\uffeb\001\002\000\004\013\021\001\002\000\004\013\017" +
     "\001\002\000\012\005\013\006\010\007\012\022\uffef\001" +
     "\002\000\004\022\ufff0\001\002\000\012\005\013\006\010" +
     "\007\012\022\ufff7\001\002\000\004\022\ufffe\001\002\000" +
-    "\006\004\024\046\025\001\002\000\014\013\uffdb\015\uffdb" +
-    "\016\uffdb\017\uffdb\020\uffdb\001\002\000\014\013\uffdc\015" +
-    "\uffdc\016\uffdc\017\uffdc\020\uffdc\001\002\000\010\013\uffee" +
-    "\015\035\016\036\001\002\000\014\013\uffdd\015\uffdd\016" +
-    "\uffdd\017\uffdd\020\uffdd\001\002\000\014\013\uffe0\015\uffe0" +
-    "\016\uffe0\017\031\020\032\001\002\000\006\004\024\046" +
-    "\025\001\002\000\006\004\024\046\025\001\002\000\014" +
-    "\013\uffde\015\uffde\016\uffde\017\uffde\020\uffde\001\002\000" +
-    "\014\013\uffdf\015\uffdf\016\uffdf\017\uffdf\020\uffdf\001\002" +
-    "\000\006\004\024\046\025\001\002\000\006\004\024\046" +
-    "\025\001\002\000\014\013\uffe1\015\uffe1\016\uffe1\017\031" +
-    "\020\032\001\002\000\014\013\uffe2\015\uffe2\016\uffe2\017" +
-    "\031\020\032\001\002\000\006\012\053\013\uffe9\001\002" +
-    "\000\004\013\051\001\002\000\004\013\047\001\002\000" +
-    "\004\013\045\001\002\000\012\005\013\006\010\007\012" +
-    "\022\ufff3\001\002\000\004\022\ufffa\001\002\000\012\005" +
-    "\013\006\010\007\012\022\ufff5\001\002\000\004\022\ufffc" +
-    "\001\002\000\012\005\013\006\010\007\012\022\ufff1\001" +
-    "\002\000\004\022\ufff8\001\002\000\010\004\054\047\055" +
-    "\050\056\001\002\000\004\013\uffec\001\002\000\004\013" +
-    "\uffe4\001\002\000\004\013\uffe3\001\002\000\004\013\uffe5" +
-    "\001\002\000\004\024\062\001\002\000\004\002\uffff\001" +
-    "\002\000\004\025\063\001\002\000\004\004\064\001\002" +
-    "\000\004\026\065\001\002\000\004\021\066\001\002\000" +
-    "\010\004\067\031\073\037\076\001\002\000\004\012\176" +
-    "\001\002\000\004\022\174\001\002\000\014\004\067\022" +
-    "\uffd1\031\073\033\uffd1\037\076\001\002\000\014\004\067" +
-    "\022\uffd2\031\073\033\uffd2\037\076\001\002\000\004\025" +
-    "\163\001\002\000\014\004\067\022\uffd3\031\073\033\uffd3" +
-    "\037\076\001\002\000\014\004\067\022\uffd4\031\073\033" +
-    "\uffd4\037\076\001\002\000\004\025\077\001\002\000\012" +
-    "\004\101\046\100\047\102\050\104\001\002\000\024\013" +
-    "\uffc7\026\uffc7\034\uffc7\035\uffc7\036\uffc7\041\uffc7\042\uffc7" +
-    "\043\uffc7\044\uffc7\001\002\000\022\026\uffbb\034\155\035" +
-    "\156\036\uffc6\041\uffc6\042\uffc6\043\uffc6\044\uffc6\001\002" +
-    "\000\010\026\uffb9\034\151\035\152\001\002\000\014\036" +
-    "\137\041\136\042\140\043\142\044\141\001\002\000\010" +
-    "\026\uffb8\034\132\035\133\001\002\000\010\026\uffba\034" +
-    "\126\035\127\001\002\000\004\026\107\001\002\000\004" +
-    "\032\110\001\002\000\012\004\067\031\073\033\112\037" +
-    "\076\001\002\000\004\033\120\001\002\000\016\004\uffb2" +
-    "\022\uffb2\031\uffb2\033\uffb2\037\uffb2\040\113\001\002\000" +
-    "\004\032\114\001\002\000\012\004\067\031\073\033\116" +
-    "\037\076\001\002\000\004\033\117\001\002\000\014\004" +
-    "\uffb4\022\uffb4\031\uffb4\033\uffb4\037\uffb4\001\002\000\014" +
-    "\004\uffb6\022\uffb6\031\uffb6\033\uffb6\037\uffb6\001\002\000" +
-    "\016\004\uffb3\022\uffb3\031\uffb3\033\uffb3\037\uffb3\040\121" +
-    "\001\002\000\004\032\122\001\002\000\012\004\067\031" +
-    "\073\033\124\037\076\001\002\000\004\033\125\001\002" +
-    "\000\014\004\uffb5\022\uffb5\031\uffb5\033\uffb5\037\uffb5\001" +
-    "\002\000\014\004\uffb7\022\uffb7\031\uffb7\033\uffb7\037\uffb7" +
-    "\001\002\000\012\004\101\046\100\047\102\050\104\001" +
-    "\002\000\012\004\101\046\100\047\102\050\104\001\002" +
-    "\000\004\026\uffc2\001\002\000\004\026\uffbe\001\002\000" +
-    "\012\004\101\046\100\047\102\050\104\001\002\000\012" +
-    "\004\101\046\100\047\102\050\104\001\002\000\004\026" +
-    "\uffc0\001\002\000\004\026\uffbc\001\002\000\006\004\143" +
-    "\046\100\001\002\000\006\004\143\046\100\001\002\000" +
-    "\006\004\143\046\100\001\002\000\006\004\143\046\100" +
-    "\001\002\000\006\004\143\046\100\001\002\000\012\013" +
-    "\uffc6\026\uffc6\034\uffc6\035\uffc6\001\002\000\012\013\uffc8" +
-    "\026\uffc8\034\uffc8\035\uffc8\001\002\000\012\013\uffc9\026" +
-    "\uffc9\034\uffc9\035\uffc9\001\002\000\012\013\uffca\026\uffca" +
-    "\034\uffca\035\uffca\001\002\000\012\013\uffcc\026\uffcc\034" +
-    "\uffcc\035\uffcc\001\002\000\012\013\uffcb\026\uffcb\034\uffcb" +
-    "\035\uffcb\001\002\000\012\004\101\046\100\047\102\050" +
-    "\104\001\002\000\012\004\101\046\100\047\102\050\104" +
-    "\001\002\000\004\026\uffc1\001\002\000\004\026\uffbd\001" +
-    "\002\000\012\004\101\046\100\047\102\050\104\001\002" +
-    "\000\012\004\101\046\100\047\102\050\104\001\002\000" +
-    "\004\026\uffc3\001\002\000\004\026\uffbf\001\002\000\006" +
-    "\022\uffd8\033\uffd8\001\002\000\006\022\uffd7\033\uffd7\001" +
-    "\002\000\012\004\101\046\100\047\102\050\104\001\002" +
-    "\000\004\026\165\001\002\000\004\032\166\001\002\000" +
-    "\012\004\067\031\073\033\170\037\076\001\002\000\004" +
-    "\033\171\001\002\000\014\004\uffc4\022\uffc4\031\uffc4\033" +
-    "\uffc4\037\uffc4\001\002\000\014\004\uffc5\022\uffc5\031\uffc5" +
-    "\033\uffc5\037\uffc5\001\002\000\006\022\uffd6\033\uffd6\001" +
-    "\002\000\006\022\uffd5\033\uffd5\001\002\000\006\002\uffd9" +
-    "\024\062\001\002\000\004\002\uffda\001\002\000\010\004" +
-    "\203\011\202\046\177\001\002\000\026\013\uffdc\015\uffdc" +
-    "\016\uffdc\017\uffdc\020\uffdc\036\uffc7\041\uffc7\042\uffc7\043" +
-    "\uffc7\044\uffc7\001\002\000\004\013\uffcd\001\002\000\010" +
-    "\013\uffce\015\035\016\036\001\002\000\004\013\uffcf\001" +
-    "\002\000\026\013\uffdb\015\uffdb\016\uffdb\017\uffdb\020\uffdb" +
-    "\036\uffc6\041\uffc6\042\uffc6\043\uffc6\044\uffc6\001\002\000" +
-    "\004\013\205\001\002\000\014\004\uffd0\022\uffd0\031\uffd0" +
-    "\033\uffd0\037\uffd0\001\002\000\006\012\220\013\uffea\001" +
-    "\002\000\004\013\216\001\002\000\004\013\214\001\002" +
-    "\000\004\013\212\001\002\000\012\005\013\006\010\007" +
-    "\012\022\ufff2\001\002\000\004\022\ufff9\001\002\000\012" +
-    "\005\013\006\010\007\012\022\ufff4\001\002\000\004\022" +
-    "\ufffb\001\002\000\012\005\013\006\010\007\012\022\ufff6" +
-    "\001\002\000\004\022\ufffd\001\002\000\010\004\222\010" +
-    "\223\011\224\001\002\000\004\013\uffe8\001\002\000\004" +
-    "\013\uffed\001\002\000\004\013\uffe6\001\002\000\004\013" +
-    "\uffe7\001\002\000\004\002\001\001\002" });
+    "\006\004\024\046\025\001\002\000\020\013\uffdb\014\uffdb" +
+    "\015\uffdb\016\uffdb\017\uffdb\020\uffdb\026\uffdb\001\002\000" +
+    "\020\013\uffdc\014\uffdc\015\uffdc\016\uffdc\017\uffdc\020\uffdc" +
+    "\026\uffdc\001\002\000\010\013\uffee\015\035\016\036\001" +
+    "\002\000\020\013\uffdd\014\uffdd\015\uffdd\016\uffdd\017\uffdd" +
+    "\020\uffdd\026\uffdd\001\002\000\020\013\uffe0\014\uffe0\015" +
+    "\uffe0\016\uffe0\017\031\020\032\026\uffe0\001\002\000\006" +
+    "\004\024\046\025\001\002\000\006\004\024\046\025\001" +
+    "\002\000\020\013\uffde\014\uffde\015\uffde\016\uffde\017\uffde" +
+    "\020\uffde\026\uffde\001\002\000\020\013\uffdf\014\uffdf\015" +
+    "\uffdf\016\uffdf\017\uffdf\020\uffdf\026\uffdf\001\002\000\006" +
+    "\004\024\046\025\001\002\000\006\004\024\046\025\001" +
+    "\002\000\020\013\uffe1\014\uffe1\015\uffe1\016\uffe1\017\031" +
+    "\020\032\026\uffe1\001\002\000\020\013\uffe2\014\uffe2\015" +
+    "\uffe2\016\uffe2\017\031\020\032\026\uffe2\001\002\000\006" +
+    "\012\053\013\uffe9\001\002\000\004\013\051\001\002\000" +
+    "\004\013\047\001\002\000\004\013\045\001\002\000\012" +
+    "\005\013\006\010\007\012\022\ufff3\001\002\000\004\022" +
+    "\ufffa\001\002\000\012\005\013\006\010\007\012\022\ufff5" +
+    "\001\002\000\004\022\ufffc\001\002\000\012\005\013\006" +
+    "\010\007\012\022\ufff1\001\002\000\004\022\ufff8\001\002" +
+    "\000\010\004\054\047\055\050\056\001\002\000\004\013" +
+    "\uffec\001\002\000\004\013\uffe4\001\002\000\004\013\uffe3" +
+    "\001\002\000\004\013\uffe5\001\002\000\004\024\062\001" +
+    "\002\000\004\002\uffff\001\002\000\004\025\063\001\002" +
+    "\000\004\004\064\001\002\000\004\026\065\001\002\000" +
+    "\004\021\066\001\002\000\012\004\077\030\071\031\070" +
+    "\037\075\001\002\000\004\022\246\001\002\000\004\025" +
+    "\237\001\002\000\004\025\176\001\002\000\016\004\077" +
+    "\022\uffd2\030\071\031\070\033\uffd2\037\075\001\002\000" +
+    "\016\004\077\022\uffd3\030\071\031\070\033\uffd3\037\075" +
+    "\001\002\000\016\004\077\022\uffd1\030\071\031\070\033" +
+    "\uffd1\037\075\001\002\000\004\025\126\001\002\000\016" +
+    "\004\077\022\uffd4\030\071\031\070\033\uffd4\037\075\001" +
+    "\002\000\004\012\100\001\002\000\010\004\106\011\105" +
+    "\046\101\001\002\000\034\013\uffdc\014\uffdc\015\uffdc\016" +
+    "\uffdc\017\uffdc\020\uffdc\026\uffdc\027\uffc7\036\uffc7\041\uffc7" +
+    "\042\uffc7\043\uffc7\044\uffc7\001\002\000\004\013\uffcd\001" +
+    "\002\000\010\013\uffce\015\035\016\036\001\002\000\014" +
+    "\036\112\041\111\042\113\043\115\044\114\001\002\000" +
+    "\004\013\uffcf\001\002\000\034\013\uffdb\014\uffdb\015\uffdb" +
+    "\016\uffdb\017\uffdb\020\uffdb\026\uffdb\027\uffc6\036\uffc6\041" +
+    "\uffc6\042\uffc6\043\uffc6\044\uffc6\001\002\000\004\013\110" +
+    "\001\002\000\016\004\uffd0\022\uffd0\030\uffd0\031\uffd0\033" +
+    "\uffd0\037\uffd0\001\002\000\006\004\117\046\116\001\002" +
+    "\000\006\004\117\046\116\001\002\000\006\004\117\046" +
+    "\116\001\002\000\006\004\117\046\116\001\002\000\006" +
+    "\004\117\046\116\001\002\000\026\013\uffc7\014\uffc7\026" +
+    "\uffc7\034\uffc7\035\uffc7\036\uffc7\041\uffc7\042\uffc7\043\uffc7" +
+    "\044\uffc7\001\002\000\014\013\uffc6\014\uffc6\026\uffc6\034" +
+    "\uffc6\035\uffc6\001\002\000\012\013\uffc8\026\uffc8\034\uffc8" +
+    "\035\uffc8\001\002\000\012\013\uffc9\026\uffc9\034\uffc9\035" +
+    "\uffc9\001\002\000\012\013\uffca\026\uffca\034\uffca\035\uffca" +
+    "\001\002\000\012\013\uffcc\026\uffcc\034\uffcc\035\uffcc\001" +
+    "\002\000\012\013\uffcb\026\uffcb\034\uffcb\035\uffcb\001\002" +
+    "\000\006\022\uffd8\033\uffd8\001\002\000\012\004\127\046" +
+    "\116\047\130\050\131\001\002\000\022\026\uffbb\034\167" +
+    "\035\170\036\uffc6\041\uffc6\042\uffc6\043\uffc6\044\uffc6\001" +
+    "\002\000\010\026\uffb9\034\163\035\164\001\002\000\010" +
+    "\026\uffb8\034\157\035\160\001\002\000\010\026\uffba\034" +
+    "\153\035\154\001\002\000\004\026\134\001\002\000\004" +
+    "\032\135\001\002\000\014\004\077\030\071\031\070\033" +
+    "\137\037\075\001\002\000\004\033\145\001\002\000\020" +
+    "\004\uffb2\022\uffb2\030\uffb2\031\uffb2\033\uffb2\037\uffb2\040" +
+    "\140\001\002\000\004\032\141\001\002\000\014\004\077" +
+    "\030\071\031\070\033\143\037\075\001\002\000\004\033" +
+    "\144\001\002\000\016\004\uffb4\022\uffb4\030\uffb4\031\uffb4" +
+    "\033\uffb4\037\uffb4\001\002\000\016\004\uffb6\022\uffb6\030" +
+    "\uffb6\031\uffb6\033\uffb6\037\uffb6\001\002\000\020\004\uffb3" +
+    "\022\uffb3\030\uffb3\031\uffb3\033\uffb3\037\uffb3\040\146\001" +
+    "\002\000\004\032\147\001\002\000\014\004\077\030\071" +
+    "\031\070\033\151\037\075\001\002\000\004\033\152\001" +
+    "\002\000\016\004\uffb5\022\uffb5\030\uffb5\031\uffb5\033\uffb5" +
+    "\037\uffb5\001\002\000\016\004\uffb7\022\uffb7\030\uffb7\031" +
+    "\uffb7\033\uffb7\037\uffb7\001\002\000\012\004\127\046\116" +
+    "\047\130\050\131\001\002\000\012\004\127\046\116\047" +
+    "\130\050\131\001\002\000\004\026\uffc2\001\002\000\004" +
+    "\026\uffbe\001\002\000\012\004\127\046\116\047\130\050" +
+    "\131\001\002\000\012\004\127\046\116\047\130\050\131" +
+    "\001\002\000\004\026\uffc0\001\002\000\004\026\uffbc\001" +
+    "\002\000\012\004\127\046\116\047\130\050\131\001\002" +
+    "\000\012\004\127\046\116\047\130\050\131\001\002\000" +
+    "\004\026\uffc1\001\002\000\004\026\uffbd\001\002\000\012" +
+    "\004\127\046\116\047\130\050\131\001\002\000\012\004" +
+    "\127\046\116\047\130\050\131\001\002\000\004\026\uffc3" +
+    "\001\002\000\004\026\uffbf\001\002\000\006\022\uffd5\033" +
+    "\uffd5\001\002\000\006\022\uffd7\033\uffd7\001\002\000\006" +
+    "\022\uffd6\033\uffd6\001\002\000\006\004\177\011\200\001" +
+    "\002\000\004\014\uffac\001\002\000\004\014\uffad\001\002" +
+    "\000\004\014\202\001\002\000\006\004\177\011\200\001" +
+    "\002\000\004\014\204\001\002\000\006\004\106\046\101" +
+    "\001\002\000\012\014\uffab\015\035\016\036\026\uffab\001" +
+    "\002\000\004\027\222\001\002\000\004\014\210\001\002" +
+    "\000\006\004\106\046\101\001\002\000\004\027\215\001" +
+    "\002\000\004\026\213\001\002\000\004\013\214\001\002" +
+    "\000\016\004\uffb1\022\uffb1\030\uffb1\031\uffb1\033\uffb1\037" +
+    "\uffb1\001\002\000\004\027\216\001\002\000\006\004\117" +
+    "\046\116\001\002\000\004\026\220\001\002\000\004\013" +
+    "\221\001\002\000\016\004\uffaf\022\uffaf\030\uffaf\031\uffaf" +
+    "\033\uffaf\037\uffaf\001\002\000\004\027\223\001\002\000" +
+    "\006\004\117\046\116\001\002\000\004\014\225\001\002" +
+    "\000\006\004\106\046\101\001\002\000\004\027\232\001" +
+    "\002\000\004\026\230\001\002\000\004\013\231\001\002" +
+    "\000\016\004\uffb0\022\uffb0\030\uffb0\031\uffb0\033\uffb0\037" +
+    "\uffb0\001\002\000\004\027\233\001\002\000\006\004\117" +
+    "\046\116\001\002\000\004\026\235\001\002\000\004\013" +
+    "\236\001\002\000\016\004\uffae\022\uffae\030\uffae\031\uffae" +
+    "\033\uffae\037\uffae\001\002\000\012\004\127\046\116\047" +
+    "\130\050\131\001\002\000\004\026\241\001\002\000\004" +
+    "\032\242\001\002\000\014\004\077\030\071\031\070\033" +
+    "\244\037\075\001\002\000\004\033\245\001\002\000\016" +
+    "\004\uffc4\022\uffc4\030\uffc4\031\uffc4\033\uffc4\037\uffc4\001" +
+    "\002\000\016\004\uffc5\022\uffc5\030\uffc5\031\uffc5\033\uffc5" +
+    "\037\uffc5\001\002\000\006\002\uffd9\024\062\001\002\000" +
+    "\004\002\uffda\001\002\000\006\012\262\013\uffea\001\002" +
+    "\000\004\013\260\001\002\000\004\013\256\001\002\000" +
+    "\004\013\254\001\002\000\012\005\013\006\010\007\012" +
+    "\022\ufff2\001\002\000\004\022\ufff9\001\002\000\012\005" +
+    "\013\006\010\007\012\022\ufff4\001\002\000\004\022\ufffb" +
+    "\001\002\000\012\005\013\006\010\007\012\022\ufff6\001" +
+    "\002\000\004\022\ufffd\001\002\000\010\004\264\010\265" +
+    "\011\266\001\002\000\004\013\uffe8\001\002\000\004\013" +
+    "\uffed\001\002\000\004\013\uffe6\001\002\000\004\013\uffe7" +
+    "\001\002\000\004\002\001\001\002" });
 
   /** Access to parse-action table. */
   public short[][] action_table() {return _action_table;}
@@ -194,13 +224,13 @@ public class PaintFileParser extends java_cup.runtime.lr_parser {
   /** <code>reduce_goto</code> table. */
   protected static final short[][] _reduce_table = 
     unpackFromStrings(new String[] {
-    "\000\223\000\006\002\004\004\003\001\001\000\002\001" +
-    "\001\000\002\001\001\000\002\001\001\000\004\005\010" +
-    "\001\001\000\010\011\206\013\207\015\210\001\001\000" +
-    "\002\001\001\000\010\012\042\014\043\016\041\001\001" +
-    "\000\006\010\014\017\015\001\001\000\002\001\001\000" +
-    "\002\001\001\000\002\001\001\000\004\005\017\001\001" +
-    "\000\002\001\001\000\004\005\021\001\001\000\002\001" +
+    "\000\265\000\006\002\004\003\003\001\001\000\002\001" +
+    "\001\000\002\001\001\000\002\001\001\000\004\004\010" +
+    "\001\001\000\010\010\250\012\251\014\252\001\001\000" +
+    "\002\001\001\000\010\011\042\013\043\015\041\001\001" +
+    "\000\006\007\014\016\015\001\001\000\002\001\001\000" +
+    "\002\001\001\000\002\001\001\000\004\004\017\001\001" +
+    "\000\002\001\001\000\004\004\021\001\001\000\002\001" +
     "\001\000\010\026\026\027\027\030\025\001\001\000\002" +
     "\001\001\000\002\001\001\000\002\001\001\000\002\001" +
     "\001\000\002\001\001\000\004\026\033\001\001\000\004" +
@@ -208,56 +238,70 @@ public class PaintFileParser extends java_cup.runtime.lr_parser {
     "\006\026\026\027\037\001\001\000\006\026\026\027\036" +
     "\001\001\000\002\001\001\000\002\001\001\000\002\001" +
     "\001\000\002\001\001\000\002\001\001\000\002\001\001" +
-    "\000\004\005\045\001\001\000\002\001\001\000\004\005" +
-    "\047\001\001\000\002\001\001\000\004\005\051\001\001" +
+    "\000\004\004\045\001\001\000\002\001\001\000\004\004" +
+    "\047\001\001\000\002\001\001\000\004\004\051\001\001" +
     "\000\002\001\001\000\004\024\056\001\001\000\002\001" +
     "\001\000\002\001\001\000\002\001\001\000\002\001\001" +
-    "\000\004\007\060\001\001\000\002\001\001\000\002\001" +
+    "\000\004\006\060\001\001\000\002\001\001\000\002\001" +
     "\001\000\002\001\001\000\002\001\001\000\002\001\001" +
-    "\000\014\003\073\006\067\020\074\022\070\023\071\001" +
-    "\001\000\002\001\001\000\002\001\001\000\014\003\073" +
-    "\006\172\020\074\022\070\023\071\001\001\000\014\003" +
-    "\073\006\171\020\074\022\070\023\071\001\001\000\002" +
-    "\001\001\000\014\003\073\006\161\020\074\022\070\023" +
-    "\071\001\001\000\014\003\073\006\160\020\074\022\070" +
-    "\023\071\001\001\000\002\001\001\000\010\032\102\033" +
-    "\104\034\105\001\001\000\002\001\001\000\002\001\001" +
-    "\000\002\001\001\000\002\001\001\000\002\001\001\000" +
-    "\002\001\001\000\002\001\001\000\002\001\001\000\014" +
-    "\003\073\006\110\020\074\022\070\023\071\001\001\000" +
-    "\002\001\001\000\002\001\001\000\002\001\001\000\014" +
-    "\003\073\006\114\020\074\022\070\023\071\001\001\000" +
-    "\002\001\001\000\002\001\001\000\002\001\001\000\002" +
-    "\001\001\000\002\001\001\000\014\003\073\006\122\020" +
-    "\074\022\070\023\071\001\001\000\002\001\001\000\002" +
-    "\001\001\000\002\001\001\000\010\032\102\033\104\034" +
-    "\130\001\001\000\010\032\102\033\104\034\127\001\001" +
-    "\000\002\001\001\000\002\001\001\000\010\032\102\033" +
-    "\104\034\134\001\001\000\010\032\102\033\104\034\133" +
-    "\001\001\000\002\001\001\000\002\001\001\000\004\032" +
-    "\147\001\001\000\004\032\146\001\001\000\004\032\145" +
-    "\001\001\000\004\032\144\001\001\000\004\032\143\001" +
+    "\000\014\005\066\017\075\021\073\022\071\023\072\001" +
     "\001\000\002\001\001\000\002\001\001\000\002\001\001" +
-    "\000\002\001\001\000\002\001\001\000\002\001\001\000" +
-    "\010\032\102\033\104\034\153\001\001\000\010\032\102" +
-    "\033\104\034\152\001\001\000\002\001\001\000\002\001" +
-    "\001\000\010\032\102\033\104\034\157\001\001\000\010" +
-    "\032\102\033\104\034\156\001\001\000\002\001\001\000" +
-    "\002\001\001\000\002\001\001\000\002\001\001\000\010" +
-    "\032\102\033\104\034\163\001\001\000\002\001\001\000" +
-    "\002\001\001\000\014\003\073\006\166\020\074\022\070" +
-    "\023\071\001\001\000\002\001\001\000\002\001\001\000" +
-    "\002\001\001\000\002\001\001\000\002\001\001\000\004" +
-    "\007\174\001\001\000\002\001\001\000\016\026\026\027" +
-    "\027\030\200\031\203\032\102\033\177\001\001\000\002" +
+    "\000\014\005\174\017\075\021\073\022\071\023\072\001" +
+    "\001\000\014\005\173\017\075\021\073\022\071\023\072" +
+    "\001\001\000\014\005\172\017\075\021\073\022\071\023" +
+    "\072\001\001\000\002\001\001\000\014\005\124\017\075" +
+    "\021\073\022\071\023\072\001\001\000\002\001\001\000" +
+    "\016\026\026\027\027\030\102\031\106\032\103\033\101" +
     "\001\001\000\002\001\001\000\002\001\001\000\002\001" +
     "\001\000\002\001\001\000\002\001\001\000\002\001\001" +
+    "\000\002\001\001\000\002\001\001\000\004\032\123\001" +
+    "\001\000\004\032\122\001\001\000\004\032\121\001\001" +
+    "\000\004\032\120\001\001\000\004\032\117\001\001\000" +
+    "\002\001\001\000\002\001\001\000\002\001\001\000\002" +
+    "\001\001\000\002\001\001\000\002\001\001\000\002\001" +
+    "\001\000\002\001\001\000\010\032\103\033\131\034\132" +
+    "\001\001\000\002\001\001\000\002\001\001\000\002\001" +
+    "\001\000\002\001\001\000\002\001\001\000\002\001\001" +
+    "\000\014\005\135\017\075\021\073\022\071\023\072\001" +
+    "\001\000\002\001\001\000\002\001\001\000\002\001\001" +
+    "\000\014\005\141\017\075\021\073\022\071\023\072\001" +
+    "\001\000\002\001\001\000\002\001\001\000\002\001\001" +
+    "\000\002\001\001\000\002\001\001\000\014\005\147\017" +
+    "\075\021\073\022\071\023\072\001\001\000\002\001\001" +
+    "\000\002\001\001\000\002\001\001\000\010\032\103\033" +
+    "\131\034\155\001\001\000\010\032\103\033\131\034\154" +
+    "\001\001\000\002\001\001\000\002\001\001\000\010\032" +
+    "\103\033\131\034\161\001\001\000\010\032\103\033\131" +
+    "\034\160\001\001\000\002\001\001\000\002\001\001\000" +
+    "\010\032\103\033\131\034\165\001\001\000\010\032\103" +
+    "\033\131\034\164\001\001\000\002\001\001\000\002\001" +
+    "\001\000\010\032\103\033\131\034\171\001\001\000\010" +
+    "\032\103\033\131\034\170\001\001\000\002\001\001\000" +
+    "\002\001\001\000\002\001\001\000\002\001\001\000\002" +
+    "\001\001\000\004\035\200\001\001\000\002\001\001\000" +
+    "\002\001\001\000\002\001\001\000\004\035\202\001\001" +
+    "\000\002\001\001\000\014\026\026\027\027\030\204\032" +
+    "\205\036\206\001\001\000\002\001\001\000\002\001\001" +
+    "\000\002\001\001\000\014\026\026\027\027\030\204\032" +
+    "\210\036\211\001\001\000\002\001\001\000\002\001\001" +
     "\000\002\001\001\000\002\001\001\000\002\001\001\000" +
-    "\002\001\001\000\004\005\212\001\001\000\002\001\001" +
-    "\000\004\005\214\001\001\000\002\001\001\000\004\005" +
-    "\216\001\001\000\002\001\001\000\004\025\220\001\001" +
-    "\000\002\001\001\000\002\001\001\000\002\001\001\000" +
-    "\002\001\001\000\002\001\001" });
+    "\004\032\216\001\001\000\002\001\001\000\002\001\001" +
+    "\000\002\001\001\000\002\001\001\000\004\032\223\001" +
+    "\001\000\002\001\001\000\014\026\026\027\027\030\204" +
+    "\032\225\036\226\001\001\000\002\001\001\000\002\001" +
+    "\001\000\002\001\001\000\002\001\001\000\002\001\001" +
+    "\000\004\032\233\001\001\000\002\001\001\000\002\001" +
+    "\001\000\002\001\001\000\010\032\103\033\131\034\237" +
+    "\001\001\000\002\001\001\000\002\001\001\000\014\005" +
+    "\242\017\075\021\073\022\071\023\072\001\001\000\002" +
+    "\001\001\000\002\001\001\000\002\001\001\000\004\006" +
+    "\246\001\001\000\002\001\001\000\002\001\001\000\002" +
+    "\001\001\000\002\001\001\000\002\001\001\000\004\004" +
+    "\254\001\001\000\002\001\001\000\004\004\256\001\001" +
+    "\000\002\001\001\000\004\004\260\001\001\000\002\001" +
+    "\001\000\004\025\262\001\001\000\002\001\001\000\002" +
+    "\001\001\000\002\001\001\000\002\001\001\000\002\001" +
+    "\001" });
 
   /** Access to <code>reduce_goto</code> table. */
   public short[][] reduce_table() {return _reduce_table;}
@@ -299,13 +343,13 @@ public class PaintFileParser extends java_cup.runtime.lr_parser {
 
     private GifCreatorFrame gifCreatorFrame;
     private PaintFileDriver paintFileDriver;
-    private Hashtable<String, Canvas> canvasTable;
+    private ArrayList<Canvas> canvases;
     
-    public PaintFileParser(PaintFileLexer lexer, GifCreatorFrame gifCreatorFrame, PaintFileDriver paintFileDriver, Hashtable<String, Canvas> canvasTable) { 
+    public PaintFileParser(PaintFileLexer lexer, GifCreatorFrame gifCreatorFrame, PaintFileDriver paintFileDriver, ArrayList<Canvas> canvases) { 
         super(lexer);
         this.gifCreatorFrame = gifCreatorFrame;
         this.paintFileDriver = paintFileDriver;
-        this.canvasTable = canvasTable;
+        this.canvases = canvases;
     }
 
     public void syntax_error(Symbol s){
@@ -392,7 +436,7 @@ class CUP$PaintFileParser$actions {
 		int instructionsListright = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()).right;
 		LinkedList<Instruction> instructionsList = (LinkedList<Instruction>)((java_cup.runtime.Symbol) CUP$PaintFileParser$stack.peek()).value;
 		 RESULT = new LinkedList<>(); RESULT.add(new PaintInstructions(varsList, instructionsList)); 
-              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("varStructure",2, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-4)), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
+              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("varStructure",1, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-4)), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
             }
           return CUP$PaintFileParser$result;
 
@@ -407,7 +451,7 @@ class CUP$PaintFileParser$actions {
 		int instListright = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()).right;
 		LinkedList<Instruction> instList = (LinkedList<Instruction>)((java_cup.runtime.Symbol) CUP$PaintFileParser$stack.peek()).value;
 		 RESULT = instList; RESULT.addLast(inst); 
-              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("vars",3, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-3)), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
+              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("vars",2, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-3)), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
             }
           return CUP$PaintFileParser$result;
 
@@ -422,7 +466,7 @@ class CUP$PaintFileParser$actions {
 		int instListright = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()).right;
 		LinkedList<Instruction> instList = (LinkedList<Instruction>)((java_cup.runtime.Symbol) CUP$PaintFileParser$stack.peek()).value;
 		 RESULT = instList; RESULT.addLast(inst); 
-              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("vars",3, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-3)), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
+              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("vars",2, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-3)), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
             }
           return CUP$PaintFileParser$result;
 
@@ -437,7 +481,7 @@ class CUP$PaintFileParser$actions {
 		int instListright = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()).right;
 		LinkedList<Instruction> instList = (LinkedList<Instruction>)((java_cup.runtime.Symbol) CUP$PaintFileParser$stack.peek()).value;
 		 RESULT = instList; RESULT.addLast(inst); 
-              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("vars",3, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-3)), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
+              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("vars",2, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-3)), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
             }
           return CUP$PaintFileParser$result;
 
@@ -452,7 +496,7 @@ class CUP$PaintFileParser$actions {
 		int instListright = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()).right;
 		LinkedList<Instruction> instList = (LinkedList<Instruction>)((java_cup.runtime.Symbol) CUP$PaintFileParser$stack.peek()).value;
 		 RESULT = instList; RESULT.addLast(inst); 
-              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("vars",3, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-3)), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
+              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("vars",2, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-3)), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
             }
           return CUP$PaintFileParser$result;
 
@@ -467,7 +511,7 @@ class CUP$PaintFileParser$actions {
 		int instListright = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()).right;
 		LinkedList<Instruction> instList = (LinkedList<Instruction>)((java_cup.runtime.Symbol) CUP$PaintFileParser$stack.peek()).value;
 		 RESULT = instList; RESULT.addLast(inst); 
-              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("vars",3, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-3)), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
+              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("vars",2, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-3)), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
             }
           return CUP$PaintFileParser$result;
 
@@ -482,7 +526,7 @@ class CUP$PaintFileParser$actions {
 		int instListright = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()).right;
 		LinkedList<Instruction> instList = (LinkedList<Instruction>)((java_cup.runtime.Symbol) CUP$PaintFileParser$stack.peek()).value;
 		 RESULT = instList; RESULT.addLast(inst); 
-              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("vars",3, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-3)), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
+              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("vars",2, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-3)), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
             }
           return CUP$PaintFileParser$result;
 
@@ -497,7 +541,7 @@ class CUP$PaintFileParser$actions {
 		int instListright = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()).right;
 		LinkedList<Instruction> instList = (LinkedList<Instruction>)((java_cup.runtime.Symbol) CUP$PaintFileParser$stack.peek()).value;
 		 RESULT = instList; RESULT.addLast(inst); 
-              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("vars",3, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-3)), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
+              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("vars",2, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-3)), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
             }
           return CUP$PaintFileParser$result;
 
@@ -509,7 +553,7 @@ class CUP$PaintFileParser$actions {
 		int instright = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-1)).right;
 		Instruction inst = (Instruction)((java_cup.runtime.Symbol) CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-1)).value;
 		 RESULT = new LinkedList<>(); RESULT.addLast(inst); 
-              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("vars",3, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-2)), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
+              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("vars",2, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-2)), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
             }
           return CUP$PaintFileParser$result;
 
@@ -521,7 +565,7 @@ class CUP$PaintFileParser$actions {
 		int instright = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-1)).right;
 		Instruction inst = (Instruction)((java_cup.runtime.Symbol) CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-1)).value;
 		 RESULT = new LinkedList<>(); RESULT.addLast(inst); 
-              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("vars",3, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-2)), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
+              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("vars",2, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-2)), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
             }
           return CUP$PaintFileParser$result;
 
@@ -533,7 +577,7 @@ class CUP$PaintFileParser$actions {
 		int instright = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-1)).right;
 		Instruction inst = (Instruction)((java_cup.runtime.Symbol) CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-1)).value;
 		 RESULT = new LinkedList<>(); RESULT.addLast(inst); 
-              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("vars",3, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-2)), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
+              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("vars",2, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-2)), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
             }
           return CUP$PaintFileParser$result;
 
@@ -545,7 +589,7 @@ class CUP$PaintFileParser$actions {
 		int instright = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-1)).right;
 		Instruction inst = (Instruction)((java_cup.runtime.Symbol) CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-1)).value;
 		 RESULT = new LinkedList<>(); RESULT.addLast(inst); 
-              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("vars",3, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-2)), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
+              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("vars",2, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-2)), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
             }
           return CUP$PaintFileParser$result;
 
@@ -557,7 +601,7 @@ class CUP$PaintFileParser$actions {
 		int instright = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-1)).right;
 		Instruction inst = (Instruction)((java_cup.runtime.Symbol) CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-1)).value;
 		 RESULT = new LinkedList<>(); RESULT.addLast(inst); 
-              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("vars",3, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-2)), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
+              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("vars",2, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-2)), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
             }
           return CUP$PaintFileParser$result;
 
@@ -569,7 +613,7 @@ class CUP$PaintFileParser$actions {
 		int instright = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-1)).right;
 		Instruction inst = (Instruction)((java_cup.runtime.Symbol) CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-1)).value;
 		 RESULT = new LinkedList<>(); RESULT.addLast(inst); 
-              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("vars",3, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-2)), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
+              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("vars",2, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-2)), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
             }
           return CUP$PaintFileParser$result;
 
@@ -581,7 +625,7 @@ class CUP$PaintFileParser$actions {
 		int instright = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-1)).right;
 		Instruction inst = (Instruction)((java_cup.runtime.Symbol) CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-1)).value;
 		 RESULT = new LinkedList<>(); RESULT.addLast(inst); 
-              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("vars",3, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-2)), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
+              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("vars",2, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-2)), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
             }
           return CUP$PaintFileParser$result;
 
@@ -596,7 +640,7 @@ class CUP$PaintFileParser$actions {
 		int instListright = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()).right;
 		LinkedList<Instruction> instList = (LinkedList<Instruction>)((java_cup.runtime.Symbol) CUP$PaintFileParser$stack.peek()).value;
 		 RESULT = instList; RESULT.addLast(inst); 
-              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("vars",3, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-3)), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
+              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("vars",2, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-3)), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
             }
           return CUP$PaintFileParser$result;
 
@@ -608,7 +652,7 @@ class CUP$PaintFileParser$actions {
 		int instright = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-1)).right;
 		Instruction inst = (Instruction)((java_cup.runtime.Symbol) CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-1)).value;
 		 RESULT = new LinkedList<>(); RESULT.addLast(inst); 
-              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("vars",3, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-2)), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
+              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("vars",2, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-2)), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
             }
           return CUP$PaintFileParser$result;
 
@@ -623,7 +667,7 @@ class CUP$PaintFileParser$actions {
 		int valueright = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()).right;
 		Operation value = (Operation)((java_cup.runtime.Symbol) CUP$PaintFileParser$stack.peek()).value;
 		 RESULT = new DeclarationAssignment(id, value, Type.INT); 
-              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("integerOpAssigment",13, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-2)), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
+              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("integerOpAssigment",12, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-2)), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
             }
           return CUP$PaintFileParser$result;
 
@@ -638,7 +682,7 @@ class CUP$PaintFileParser$actions {
 		int valueright = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()).right;
 		String value = (String)((java_cup.runtime.Symbol) CUP$PaintFileParser$stack.peek()).value;
 		 RESULT = new DeclarationAssignment(id, new Operation(value, OperationType.ID), Type.STRING); 
-              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("stringVarAssigment",11, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-2)), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
+              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("stringVarAssigment",10, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-2)), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
             }
           return CUP$PaintFileParser$result;
 
@@ -653,7 +697,7 @@ class CUP$PaintFileParser$actions {
 		int valueright = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()).right;
 		String value = (String)((java_cup.runtime.Symbol) CUP$PaintFileParser$stack.peek()).value;
 		 RESULT = new DeclarationAssignment(id, new Operation(value, OperationType.ID), Type.BOOLEAN); 
-              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("booleanVarAssigment",12, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-2)), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
+              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("booleanVarAssigment",11, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-2)), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
             }
           return CUP$PaintFileParser$result;
 
@@ -665,7 +709,7 @@ class CUP$PaintFileParser$actions {
 		int idright = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()).right;
 		String id = (String)((java_cup.runtime.Symbol) CUP$PaintFileParser$stack.peek()).value;
 		 RESULT = new Declaration(id, Type.INT); 
-              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("integerDeclaration",6, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
+              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("integerDeclaration",5, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
             }
           return CUP$PaintFileParser$result;
 
@@ -677,7 +721,7 @@ class CUP$PaintFileParser$actions {
 		int idright = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()).right;
 		String id = (String)((java_cup.runtime.Symbol) CUP$PaintFileParser$stack.peek()).value;
 		 RESULT = new Declaration(id, Type.STRING); 
-              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("stringDeclaration",7, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
+              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("stringDeclaration",6, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
             }
           return CUP$PaintFileParser$result;
 
@@ -689,7 +733,7 @@ class CUP$PaintFileParser$actions {
 		int idright = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()).right;
 		String id = (String)((java_cup.runtime.Symbol) CUP$PaintFileParser$stack.peek()).value;
 		 RESULT = new Declaration(id, Type.BOOLEAN); 
-              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("booleanDeclaration",8, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
+              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("booleanDeclaration",7, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
             }
           return CUP$PaintFileParser$result;
 
@@ -704,7 +748,7 @@ class CUP$PaintFileParser$actions {
 		int valueright = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()).right;
 		Operation value = (Operation)((java_cup.runtime.Symbol) CUP$PaintFileParser$stack.peek()).value;
 		 RESULT = new DeclarationAssignment(id, value, Type.STRING); 
-              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("stringAssigment",9, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-2)), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
+              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("stringAssigment",8, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-2)), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
             }
           return CUP$PaintFileParser$result;
 
@@ -743,7 +787,7 @@ class CUP$PaintFileParser$actions {
 		int valueright = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()).right;
 		Operation value = (Operation)((java_cup.runtime.Symbol) CUP$PaintFileParser$stack.peek()).value;
 		 RESULT = new DeclarationAssignment(id, value, Type.BOOLEAN); 
-              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("booleanAssigment",10, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-2)), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
+              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("booleanAssigment",9, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-2)), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
             }
           return CUP$PaintFileParser$result;
 
@@ -892,8 +936,8 @@ class CUP$PaintFileParser$actions {
 		int canvasInstleft = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()).left;
 		int canvasInstright = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()).right;
 		LinkedList<Instruction> canvasInst = (LinkedList<Instruction>)((java_cup.runtime.Symbol) CUP$PaintFileParser$stack.peek()).value;
-		 RESULT = canvasInst; RESULT.add(new CanvasInstructions(id, instList)); 
-              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("instructions",5, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-7)), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
+		 RESULT = canvasInst; RESULT.add(new CanvasInstructions(id, instList, canvases)); 
+              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("instructions",4, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-7)), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
             }
           return CUP$PaintFileParser$result;
 
@@ -907,8 +951,8 @@ class CUP$PaintFileParser$actions {
 		int instListleft = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-1)).left;
 		int instListright = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-1)).right;
 		LinkedList<Instruction> instList = (LinkedList<Instruction>)((java_cup.runtime.Symbol) CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-1)).value;
-		 RESULT = new LinkedList<>(); RESULT.add(new CanvasInstructions(id, instList)); 
-              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("instructions",5, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-6)), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
+		 RESULT = new LinkedList<>(); RESULT.add(new CanvasInstructions(id, instList, canvases)); 
+              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("instructions",4, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-6)), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
             }
           return CUP$PaintFileParser$result;
 
@@ -923,7 +967,7 @@ class CUP$PaintFileParser$actions {
 		int instListright = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()).right;
 		LinkedList<Instruction> instList = (LinkedList<Instruction>)((java_cup.runtime.Symbol) CUP$PaintFileParser$stack.peek()).value;
 		 RESULT = instList; RESULT.add(inst); 
-              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("instruction",4, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-1)), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
+              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("instruction",3, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-1)), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
             }
           return CUP$PaintFileParser$result;
 
@@ -931,8 +975,14 @@ class CUP$PaintFileParser$actions {
           case 42: // instruction ::= paint instruction 
             {
               LinkedList<Instruction> RESULT =null;
-
-              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("instruction",4, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-1)), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
+		int instleft = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-1)).left;
+		int instright = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-1)).right;
+		Instruction inst = (Instruction)((java_cup.runtime.Symbol) CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-1)).value;
+		int instListleft = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()).left;
+		int instListright = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()).right;
+		LinkedList<Instruction> instList = (LinkedList<Instruction>)((java_cup.runtime.Symbol) CUP$PaintFileParser$stack.peek()).value;
+		 RESULT = instList; RESULT.add(inst); 
+              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("instruction",3, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-1)), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
             }
           return CUP$PaintFileParser$result;
 
@@ -947,7 +997,7 @@ class CUP$PaintFileParser$actions {
 		int instListright = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()).right;
 		LinkedList<Instruction> instList = (LinkedList<Instruction>)((java_cup.runtime.Symbol) CUP$PaintFileParser$stack.peek()).value;
 		 RESULT = instList; RESULT.add(inst); 
-              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("instruction",4, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-1)), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
+              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("instruction",3, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-1)), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
             }
           return CUP$PaintFileParser$result;
 
@@ -962,7 +1012,7 @@ class CUP$PaintFileParser$actions {
 		int instListright = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()).right;
 		LinkedList<Instruction> instList = (LinkedList<Instruction>)((java_cup.runtime.Symbol) CUP$PaintFileParser$stack.peek()).value;
 		 RESULT = instList; RESULT.add(inst); 
-              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("instruction",4, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-1)), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
+              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("instruction",3, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-1)), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
             }
           return CUP$PaintFileParser$result;
 
@@ -974,7 +1024,7 @@ class CUP$PaintFileParser$actions {
 		int instright = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()).right;
 		Instruction inst = (Instruction)((java_cup.runtime.Symbol) CUP$PaintFileParser$stack.peek()).value;
 		 RESULT = new LinkedList<>(); RESULT.add(inst); 
-              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("instruction",4, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
+              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("instruction",3, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
             }
           return CUP$PaintFileParser$result;
 
@@ -982,8 +1032,11 @@ class CUP$PaintFileParser$actions {
           case 46: // instruction ::= paint 
             {
               LinkedList<Instruction> RESULT =null;
-
-              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("instruction",4, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
+		int instleft = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()).left;
+		int instright = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()).right;
+		Instruction inst = (Instruction)((java_cup.runtime.Symbol) CUP$PaintFileParser$stack.peek()).value;
+		 RESULT = new LinkedList<>(); RESULT.add(inst); 
+              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("instruction",3, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
             }
           return CUP$PaintFileParser$result;
 
@@ -995,7 +1048,7 @@ class CUP$PaintFileParser$actions {
 		int instright = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()).right;
 		Instruction inst = (Instruction)((java_cup.runtime.Symbol) CUP$PaintFileParser$stack.peek()).value;
 		 RESULT = new LinkedList<>(); RESULT.add(inst); 
-              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("instruction",4, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
+              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("instruction",3, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
             }
           return CUP$PaintFileParser$result;
 
@@ -1007,7 +1060,7 @@ class CUP$PaintFileParser$actions {
 		int instright = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()).right;
 		Instruction inst = (Instruction)((java_cup.runtime.Symbol) CUP$PaintFileParser$stack.peek()).value;
 		 RESULT = new LinkedList<>(); RESULT.add(inst); 
-              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("instruction",4, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
+              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("instruction",3, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
             }
           return CUP$PaintFileParser$result;
 
@@ -1022,7 +1075,7 @@ class CUP$PaintFileParser$actions {
 		int valueright = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-1)).right;
 		Operation value = (Operation)((java_cup.runtime.Symbol) CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-1)).value;
 		 RESULT = new Assignment(id, value); 
-              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("assignValues",14, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-3)), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
+              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("assignValues",13, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-3)), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
             }
           return CUP$PaintFileParser$result;
 
@@ -1172,7 +1225,7 @@ class CUP$PaintFileParser$actions {
 		int instListright = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-1)).right;
 		LinkedList<Instruction> instList = (LinkedList<Instruction>)((java_cup.runtime.Symbol) CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-1)).value;
 		 RESULT = new While(conditions, instList); 
-              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("loop",16, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-6)), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
+              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("loop",15, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-6)), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
             }
           return CUP$PaintFileParser$result;
 
@@ -1184,7 +1237,7 @@ class CUP$PaintFileParser$actions {
 		int conditionsright = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-3)).right;
 		Operation conditions = (Operation)((java_cup.runtime.Symbol) CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-3)).value;
 		 RESULT = new While(conditions, null); 
-              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("loop",16, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-5)), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
+              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("loop",15, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-5)), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
             }
           return CUP$PaintFileParser$result;
 
@@ -1370,7 +1423,7 @@ class CUP$PaintFileParser$actions {
 		int elseListright = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-1)).right;
 		LinkedList<Instruction> elseList = (LinkedList<Instruction>)((java_cup.runtime.Symbol) CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-1)).value;
 		 RESULT = new If(conditions, instList, elseList); 
-              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("conditional",17, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-10)), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
+              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("conditional",16, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-10)), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
             }
           return CUP$PaintFileParser$result;
 
@@ -1385,7 +1438,7 @@ class CUP$PaintFileParser$actions {
 		int elseListright = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-1)).right;
 		LinkedList<Instruction> elseList = (LinkedList<Instruction>)((java_cup.runtime.Symbol) CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-1)).value;
 		 RESULT = new If(conditions, null, elseList); 
-              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("conditional",17, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-9)), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
+              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("conditional",16, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-9)), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
             }
           return CUP$PaintFileParser$result;
 
@@ -1400,7 +1453,7 @@ class CUP$PaintFileParser$actions {
 		int instListright = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-4)).right;
 		LinkedList<Instruction> instList = (LinkedList<Instruction>)((java_cup.runtime.Symbol) CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-4)).value;
 		 RESULT = new If(conditions, instList, null); 
-              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("conditional",17, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-9)), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
+              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("conditional",16, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-9)), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
             }
           return CUP$PaintFileParser$result;
 
@@ -1412,7 +1465,7 @@ class CUP$PaintFileParser$actions {
 		int conditionsright = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-6)).right;
 		Operation conditions = (Operation)((java_cup.runtime.Symbol) CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-6)).value;
 		 RESULT = new If(conditions, null, null); 
-              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("conditional",17, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-8)), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
+              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("conditional",16, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-8)), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
             }
           return CUP$PaintFileParser$result;
 
@@ -1427,7 +1480,7 @@ class CUP$PaintFileParser$actions {
 		int instListright = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-1)).right;
 		LinkedList<Instruction> instList = (LinkedList<Instruction>)((java_cup.runtime.Symbol) CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-1)).value;
 		 RESULT = new If(conditions, instList); 
-              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("conditional",17, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-6)), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
+              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("conditional",16, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-6)), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
             }
           return CUP$PaintFileParser$result;
 
@@ -1439,7 +1492,139 @@ class CUP$PaintFileParser$actions {
 		int conditionsright = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-3)).right;
 		Operation conditions = (Operation)((java_cup.runtime.Symbol) CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-3)).value;
 		 RESULT = new If(conditions, null); 
-              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("conditional",17, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-5)), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
+              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("conditional",16, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-5)), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
+            }
+          return CUP$PaintFileParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 80: // paint ::= PAINT PARENTHESISO stringParam COMMA stringParam COMMA intParam COMMA intParam PARENTHESISC SEMICOLON 
+            {
+              Instruction RESULT =null;
+		int value1left = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-8)).left;
+		int value1right = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-8)).right;
+		Operation value1 = (Operation)((java_cup.runtime.Symbol) CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-8)).value;
+		int value2left = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-6)).left;
+		int value2right = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-6)).right;
+		Operation value2 = (Operation)((java_cup.runtime.Symbol) CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-6)).value;
+		int value3left = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-4)).left;
+		int value3right = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-4)).right;
+		Operation value3 = (Operation)((java_cup.runtime.Symbol) CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-4)).value;
+		int value4left = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-2)).left;
+		int value4right = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-2)).right;
+		Operation value4 = (Operation)((java_cup.runtime.Symbol) CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-2)).value;
+		 RESULT = new Paint(value1, value2, value3, value4, 0); 
+              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("paint",17, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-10)), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
+            }
+          return CUP$PaintFileParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 81: // paint ::= PAINT PARENTHESISO stringParam COMMA stringParam COMMA integerValue FULLSTOP FULLSTOP integerValue COMMA intParam PARENTHESISC SEMICOLON 
+            {
+              Instruction RESULT =null;
+		int value1left = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-11)).left;
+		int value1right = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-11)).right;
+		Operation value1 = (Operation)((java_cup.runtime.Symbol) CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-11)).value;
+		int value2left = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-9)).left;
+		int value2right = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-9)).right;
+		Operation value2 = (Operation)((java_cup.runtime.Symbol) CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-9)).value;
+		int value3left = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-7)).left;
+		int value3right = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-7)).right;
+		Operation value3 = (Operation)((java_cup.runtime.Symbol) CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-7)).value;
+		int value4left = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-4)).left;
+		int value4right = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-4)).right;
+		Operation value4 = (Operation)((java_cup.runtime.Symbol) CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-4)).value;
+		int value5left = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-2)).left;
+		int value5right = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-2)).right;
+		Operation value5 = (Operation)((java_cup.runtime.Symbol) CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-2)).value;
+		 RESULT = new Paint(value1, value2, value3, value4, value5, 1); 
+              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("paint",17, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-13)), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
+            }
+          return CUP$PaintFileParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 82: // paint ::= PAINT PARENTHESISO stringParam COMMA stringParam COMMA intParam COMMA integerValue FULLSTOP FULLSTOP integerValue PARENTHESISC SEMICOLON 
+            {
+              Instruction RESULT =null;
+		int value1left = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-11)).left;
+		int value1right = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-11)).right;
+		Operation value1 = (Operation)((java_cup.runtime.Symbol) CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-11)).value;
+		int value2left = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-9)).left;
+		int value2right = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-9)).right;
+		Operation value2 = (Operation)((java_cup.runtime.Symbol) CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-9)).value;
+		int value3left = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-7)).left;
+		int value3right = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-7)).right;
+		Operation value3 = (Operation)((java_cup.runtime.Symbol) CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-7)).value;
+		int value4left = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-5)).left;
+		int value4right = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-5)).right;
+		Operation value4 = (Operation)((java_cup.runtime.Symbol) CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-5)).value;
+		int value5left = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-2)).left;
+		int value5right = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-2)).right;
+		Operation value5 = (Operation)((java_cup.runtime.Symbol) CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-2)).value;
+		 RESULT = new Paint(value1, value2, value3, value4, value5, 2); 
+              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("paint",17, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-13)), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
+            }
+          return CUP$PaintFileParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 83: // paint ::= PAINT PARENTHESISO stringParam COMMA stringParam COMMA integerValue FULLSTOP FULLSTOP integerValue COMMA integerValue FULLSTOP FULLSTOP integerValue PARENTHESISC SEMICOLON 
+            {
+              Instruction RESULT =null;
+		int value1left = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-14)).left;
+		int value1right = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-14)).right;
+		Operation value1 = (Operation)((java_cup.runtime.Symbol) CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-14)).value;
+		int value2left = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-12)).left;
+		int value2right = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-12)).right;
+		Operation value2 = (Operation)((java_cup.runtime.Symbol) CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-12)).value;
+		int value3left = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-10)).left;
+		int value3right = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-10)).right;
+		Operation value3 = (Operation)((java_cup.runtime.Symbol) CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-10)).value;
+		int value4left = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-7)).left;
+		int value4right = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-7)).right;
+		Operation value4 = (Operation)((java_cup.runtime.Symbol) CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-7)).value;
+		int value5left = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-5)).left;
+		int value5right = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-5)).right;
+		Operation value5 = (Operation)((java_cup.runtime.Symbol) CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-5)).value;
+		int value6left = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-2)).left;
+		int value6right = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-2)).right;
+		Operation value6 = (Operation)((java_cup.runtime.Symbol) CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-2)).value;
+		 RESULT = new Paint(value1, value2, value3, value4, value5, value6, 3); 
+              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("paint",17, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.elementAt(CUP$PaintFileParser$top-16)), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
+            }
+          return CUP$PaintFileParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 84: // stringParam ::= IDLITERAL 
+            {
+              Operation RESULT =null;
+		int idleft = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()).left;
+		int idright = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()).right;
+		String id = (String)((java_cup.runtime.Symbol) CUP$PaintFileParser$stack.peek()).value;
+		 RESULT = new Operation(id, OperationType.LITERAL); 
+              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("stringParam",27, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
+            }
+          return CUP$PaintFileParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 85: // stringParam ::= ID 
+            {
+              Operation RESULT =null;
+		int idleft = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()).left;
+		int idright = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()).right;
+		String id = (String)((java_cup.runtime.Symbol) CUP$PaintFileParser$stack.peek()).value;
+		 RESULT = new Operation(id, OperationType.ID); 
+              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("stringParam",27, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
+            }
+          return CUP$PaintFileParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 86: // intParam ::= operation 
+            {
+              Operation RESULT =null;
+		int valueleft = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()).left;
+		int valueright = ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()).right;
+		Operation value = (Operation)((java_cup.runtime.Symbol) CUP$PaintFileParser$stack.peek()).value;
+		 RESULT = value; 
+              CUP$PaintFileParser$result = parser.getSymbolFactory().newSymbol("intParam",28, ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$PaintFileParser$stack.peek()), RESULT);
             }
           return CUP$PaintFileParser$result;
 

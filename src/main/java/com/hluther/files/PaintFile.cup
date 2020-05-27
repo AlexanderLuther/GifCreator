@@ -18,18 +18,19 @@ import com.hluther.AST.CanvasInstructions;
 import com.hluther.AST.PaintInstructions;
 import com.hluther.AST.While;
 import com.hluther.AST.If;
+import com.hluther.AST.Paint;
 
 parser code {:
 
     private GifCreatorFrame gifCreatorFrame;
     private PaintFileDriver paintFileDriver;
-    private Hashtable<String, Canvas> canvasTable;
+    private ArrayList<Canvas> canvases;
     
-    public PaintFileParser(PaintFileLexer lexer, GifCreatorFrame gifCreatorFrame, PaintFileDriver paintFileDriver, Hashtable<String, Canvas> canvasTable) { 
+    public PaintFileParser(PaintFileLexer lexer, GifCreatorFrame gifCreatorFrame, PaintFileDriver paintFileDriver, ArrayList<Canvas> canvases) { 
         super(lexer);
         this.gifCreatorFrame = gifCreatorFrame;
         this.paintFileDriver = paintFileDriver;
-        this.canvasTable = canvasTable;
+        this.canvases = canvases;
     }
 
     public void syntax_error(Symbol s){
@@ -63,11 +64,11 @@ terminal Integer    INTEGER;
 terminal Boolean    TRUE, FALSE;
 
 /* Non-terminals */
-non terminal                            paintStart, paint;
+non terminal                            paintStart;
 non terminal LinkedList<Instruction>    varStructure, vars, instruction, instructions;
 non terminal Instruction                integerDeclaration, stringDeclaration, booleanDeclaration, stringAssigment, booleanAssigment, stringVarAssigment, booleanVarAssigment,
-                                        integerOpAssigment, assignValues, logicalOp, loop, conditional;
-non terminal Operation                  booleanValue, stringValue, factor, term, operation, assignValue, integerValue, relationalOp, conditions;
+                                        integerOpAssigment, assignValues, logicalOp, loop, conditional, paint;
+non terminal Operation                  booleanValue, stringValue, factor, term, operation, assignValue, integerValue, relationalOp, conditions, stringParam, intParam;
 
 precedence left MULTIPLICATION, DIVISION;
 precedence left PLUS, MINUS;
@@ -152,16 +153,16 @@ factor::=   INTEGER:value {: RESULT = new Operation(value); :}
 
 
 //------------------------------------  DECLARACION DE INSTRUCCIONES    ------------------------------------//
-instructions::=     INSTRUCTIONS PARENTHESISO ID:id PARENTHESISC SQUAREBRACKETO instruction:instList SQUAREBRACKETC instructions:canvasInst {: RESULT = canvasInst; RESULT.add(new CanvasInstructions(id, instList)); :}
-                    | INSTRUCTIONS PARENTHESISO ID:id PARENTHESISC SQUAREBRACKETO instruction:instList SQUAREBRACKETC {: RESULT = new LinkedList<>(); RESULT.add(new CanvasInstructions(id, instList)); :}
+instructions::=     INSTRUCTIONS PARENTHESISO ID:id PARENTHESISC SQUAREBRACKETO instruction:instList SQUAREBRACKETC instructions:canvasInst {: RESULT = canvasInst; RESULT.add(new CanvasInstructions(id, instList, canvases)); :}
+                    | INSTRUCTIONS PARENTHESISO ID:id PARENTHESISC SQUAREBRACKETO instruction:instList SQUAREBRACKETC {: RESULT = new LinkedList<>(); RESULT.add(new CanvasInstructions(id, instList, canvases)); :}
                     ;
 
 instruction::=   assignValues:inst instruction:instList {: RESULT = instList; RESULT.add(inst); :}
-                | paint instruction
+                | paint:inst instruction:instList {: RESULT = instList; RESULT.add(inst); :}
                 | conditional:inst instruction:instList {: RESULT = instList; RESULT.add(inst); :}
                 | loop:inst instruction:instList {: RESULT = instList; RESULT.add(inst); :}
                 | assignValues:inst {: RESULT = new LinkedList<>(); RESULT.add(inst); :} 
-                | paint
+                | paint:inst  {: RESULT = new LinkedList<>(); RESULT.add(inst); :}
                 | conditional:inst {: RESULT = new LinkedList<>(); RESULT.add(inst); :}
                 | loop:inst  {: RESULT = new LinkedList<>(); RESULT.add(inst); :}
                 ;
@@ -222,20 +223,15 @@ conditional::=      IF PARENTHESISO conditions:conditions PARENTHESISC CURLYBRAC
 
 
 //------------------------------------  INSTRUCCION PINTAR    ------------------------------------//
-paint::=    PAINT PARENTHESISO stringParam COMMA stringParam COMMA intParam COMMA intParam PARENTHESISC SEMICOLON
+paint::=    PAINT PARENTHESISO stringParam:value1 COMMA stringParam:value2 COMMA intParam:value3 COMMA intParam:value4 PARENTHESISC SEMICOLON {: RESULT = new Paint(value1, value2, value3, value4, 0); :}
+            | PAINT PARENTHESISO stringParam:value1 COMMA stringParam:value2 COMMA integerValue:value3 FULLSTOP FULLSTOP integerValue:value4 COMMA intParam:value5 PARENTHESISC SEMICOLON {: RESULT = new Paint(value1, value2, value3, value4, value5, 1); :}
+            | PAINT PARENTHESISO stringParam:value1 COMMA stringParam:value2 COMMA intParam:value3 COMMA integerValue:value4 FULLSTOP FULLSTOP integerValue:value5 PARENTHESISC SEMICOLON {: RESULT = new Paint(value1, value2, value3, value4, value5, 2); :}
+            | PAINT PARENTHESISO stringParam:value1 COMMA stringParam:value2 COMMA integerValue:value3 FULLSTOP FULLSTOP integerValue:value4 COMMA integerValue:value5 FULLSTOP FULLSTOP integerValue:value6 PARENTHESISC SEMICOLON {: RESULT = new Paint(value1, value2, value3, value4, value5, value6, 3); :} 
             ;
 
-stringParam::=  IDLITERAL
-                | ID
+stringParam::=  IDLITERAL:id {: RESULT = new Operation(id, OperationType.LITERAL); :} 
+                | ID:id {: RESULT = new Operation(id, OperationType.ID); :} 
                 ;
 
-intParam::=     operation
-                | rank
+intParam::=     operation:value {: RESULT = value; :}
                 ;
-
-rank::=     integerValue FULLSTOP FULLSTOP integerValue   
-            ;
-
-integerValue::=    INTEGER
-                   | ID
-                   ;

@@ -1,4 +1,7 @@
 package com.hluther.AST;
+
+import com.hluther.entityClasses.Canvas;
+
 /**
  * Clase que ejecuta las acciones de una instrucción de declaración y que implementa
  * la interfaz de instrucción
@@ -26,7 +29,7 @@ public class Declaration implements Instruction{
      * @return No retorna nada porque no es una sentencia que genere un valor.
      */
     @Override
-    public Object execute(SymbolTable symbolTable) {
+    public Object execute(SymbolTable symbolTable, Canvas currentCanvas) {
         symbolTable.add(new Symbol(id, type));
         return null;
     }

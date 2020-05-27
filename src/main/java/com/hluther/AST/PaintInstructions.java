@@ -1,5 +1,6 @@
 package com.hluther.AST;
 
+import com.hluther.entityClasses.Canvas;
 import java.util.LinkedList;
 /**
  *
@@ -17,7 +18,7 @@ public class PaintInstructions implements Instruction{
     
    
     @Override
-    public Object execute(SymbolTable symbolTable) {
+    public Object execute(SymbolTable symbolTable, Canvas currentCanvas) {
         //Guardado de todas las variables declaradas.
         System.out.println("Guardando Variables.");
         int counter = 0; 
@@ -25,7 +26,7 @@ public class PaintInstructions implements Instruction{
             counter++;
             System.out.println(counter);
             if(vars.get(i)!=null)
-                vars.get(i).execute(symbolTable);
+                vars.get(i).execute(symbolTable, currentCanvas);
         }
         
         //Ejecucion de acciones en cada bloque de instrucciones.
@@ -35,7 +36,7 @@ public class PaintInstructions implements Instruction{
             counter++;
             System.out.println(counter);
             if(instructions.get(i)!=null)
-                instructions.get(i).execute(symbolTable);
+                instructions.get(i).execute(symbolTable, currentCanvas);
         }
         
         return null;

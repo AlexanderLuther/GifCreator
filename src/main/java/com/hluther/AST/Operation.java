@@ -1,5 +1,6 @@
 package com.hluther.AST;
 
+import com.hluther.entityClasses.Canvas;
 import java.util.Objects;
 
 /**
@@ -95,7 +96,7 @@ public class Operation implements Instruction{
      * @return Esta instrucción retorna el value producido por la operación que se ejecutó.
      */    
     @Override
-    public Object execute(SymbolTable symbolTable) {
+    public Object execute(SymbolTable symbolTable, Canvas currentCanvas) {
         if(null == tipo){
             return null;
         }
@@ -109,27 +110,27 @@ public class Operation implements Instruction{
             case ID:
                 return symbolTable.getValue(value.toString());        
             case SUM:
-                return (Integer)leftOperator.execute(symbolTable) + (Integer)rightOperator.execute(symbolTable);
+                return (Integer)leftOperator.execute(symbolTable, currentCanvas) + (Integer)rightOperator.execute(symbolTable, currentCanvas);
             case SUBTRACTION:
-                return (Integer)leftOperator.execute(symbolTable) - (Integer)rightOperator.execute(symbolTable);
+                return (Integer)leftOperator.execute(symbolTable, currentCanvas) - (Integer)rightOperator.execute(symbolTable, currentCanvas);
             case MULTIPLICATION:
-                return (Integer)leftOperator.execute(symbolTable) * (Integer)rightOperator.execute(symbolTable);
+                return (Integer)leftOperator.execute(symbolTable, currentCanvas) * (Integer)rightOperator.execute(symbolTable, currentCanvas);
             case DIVISION:
-                return (Integer)leftOperator.execute(symbolTable) / (Integer)rightOperator.execute(symbolTable);
+                return (Integer)leftOperator.execute(symbolTable, currentCanvas) / (Integer)rightOperator.execute(symbolTable, currentCanvas);
             case COMPARATION:
-                return Objects.equals((Integer)leftOperator.execute(symbolTable), (Integer)rightOperator.execute(symbolTable));   
+                return Objects.equals((Integer)leftOperator.execute(symbolTable, currentCanvas), (Integer)rightOperator.execute(symbolTable, currentCanvas));   
             case LESS_EQUAL_THAN:
-                return (Integer)leftOperator.execute(symbolTable) <= (Integer)rightOperator.execute(symbolTable);    
+                return (Integer)leftOperator.execute(symbolTable, currentCanvas) <= (Integer)rightOperator.execute(symbolTable, currentCanvas);    
             case GREATER_EQUAL_THAN:
-                return (Integer)leftOperator.execute(symbolTable) >= (Integer)rightOperator.execute(symbolTable);
+                return (Integer)leftOperator.execute(symbolTable, currentCanvas) >= (Integer)rightOperator.execute(symbolTable, currentCanvas);
             case LESS_THAN:
-                return (Integer)leftOperator.execute(symbolTable) < (Integer)rightOperator.execute(symbolTable);    
+                return (Integer)leftOperator.execute(symbolTable, currentCanvas) < (Integer)rightOperator.execute(symbolTable, currentCanvas);    
             case GREATER_THAN:
-                return (Integer)leftOperator.execute(symbolTable) > (Integer)rightOperator.execute(symbolTable);
+                return (Integer)leftOperator.execute(symbolTable, currentCanvas) > (Integer)rightOperator.execute(symbolTable, currentCanvas);
             case AND:
-                return (Boolean)leftOperator.execute(symbolTable) && (Boolean)rightOperator.execute(symbolTable);
+                return (Boolean)leftOperator.execute(symbolTable, currentCanvas) && (Boolean)rightOperator.execute(symbolTable, currentCanvas);
             case OR:
-                return (Boolean)leftOperator.execute(symbolTable) || (Boolean)rightOperator.execute(symbolTable);    
+                return (Boolean)leftOperator.execute(symbolTable, currentCanvas) || (Boolean)rightOperator.execute(symbolTable, currentCanvas);    
             default:
             return null;
         }

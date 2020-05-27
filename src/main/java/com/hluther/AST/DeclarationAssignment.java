@@ -1,4 +1,7 @@
 package com.hluther.AST;
+
+import com.hluther.entityClasses.Canvas;
+
 /**
  *
  * @author helmuth
@@ -22,9 +25,9 @@ public class DeclarationAssignment implements Instruction{
     }
 
     @Override
-    public Object execute(SymbolTable symbolTable) {
+    public Object execute(SymbolTable symbolTable, Canvas currentCanvas) {
         symbolTable.add(new Symbol(id, type));
-        symbolTable.setValue(id, value.execute(symbolTable));
+        symbolTable.setValue(id, value.execute(symbolTable, currentCanvas));
         return null;
     }     
 }
