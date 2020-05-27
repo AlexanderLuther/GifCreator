@@ -35,11 +35,13 @@ public class Paint implements Instruction {
             this.startIndexX = startIndex;
             this.endIndexX = endIndex;
             this.posY = pos;
+            this.type = 1;
         }
-        else{
+        else if(type == 2){
             this.startIndexY = startIndex;
             this.endIndexY = endIndex;
             this.posX = pos;
+            this.type = 2;
         
         }
     }
@@ -80,20 +82,27 @@ public class Paint implements Instruction {
             System.out.println("El color no existe");
         }
         else{
-            switch(type){
+            int pos;
+            int start;
+            int end;
+            switch(this.type){
                 case 0:
                     image.getCanvasPanel().getCells((Integer)posY.execute(symbolTable, currentCanvas) - 1, (Integer)posX.execute(symbolTable, currentCanvas) -1).setBackground(color.getColor());
                 break;
                 case 1:
-                    int y = (Integer)posX.execute(symbolTable, currentCanvas) - 1;
-                    for(int i = (Integer)startIndexX.execute(symbolTable, currentCanvas); i <= (Integer)endIndexX.execute(symbolTable, currentCanvas); i++){
-                        System.out.println("Dentro del for");
-                        image.getCanvasPanel().getCells(i - 1, y).setBackground(color.getColor());
+                    pos = (Integer)posY.execute(symbolTable, currentCanvas) - 1;
+                    start = (Integer)startIndexX.execute(symbolTable, currentCanvas);
+                    end = (Integer)endIndexX.execute(symbolTable, currentCanvas);
+                    for(int i = start; i <= end; i++){
+                        image.getCanvasPanel().getCells(pos, i - 1).setBackground(color.getColor());
                     }
                 break;
                 case 2:
-                    for(int i = (Integer)startIndexY.execute(symbolTable, currentCanvas); i <= (Integer)endIndexY.execute(symbolTable, currentCanvas); i++){
-                        image.getCanvasPanel().getCells((Integer)posY.execute(symbolTable, currentCanvas) - 1, i - 1).setBackground(color.getColor());
+                    pos = (Integer)posX.execute(symbolTable, currentCanvas) - 1;
+                    start = (Integer)startIndexY.execute(symbolTable, currentCanvas);
+                    end = (Integer)endIndexY.execute(symbolTable, currentCanvas);
+                    for(int i = start; i <= end; i++){
+                        image.getCanvasPanel().getCells(i - 1, pos).setBackground(color.getColor());
                     }
                 break;
                 case 3:
