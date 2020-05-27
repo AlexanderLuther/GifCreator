@@ -4,27 +4,32 @@ import com.hluther.gui.GifCreatorFrame;
 import com.hluther.lexer.PaintFileLexer;
 import com.hluther.controlClasses.PaintFileDriver;
 import com.hluther.entityClasses.Canvas;
-import com.hluther.entityClasses.Data;
-import com.hluther.entityClasses.TemporalData;
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.LinkedList;
+import com.hluther.AST.DeclarationAssignment;
+import com.hluther.AST.Operation;
+import com.hluther.AST.Instruction;
+import com.hluther.AST.Declaration;
+import com.hluther.AST.Symbol.Type;
+import com.hluther.AST.Operation.OperationType;
+import com.hluther.AST.Assignment;
+import com.hluther.AST.CanvasInstructions;
+import com.hluther.AST.PaintInstructions;
+import com.hluther.AST.While;
+import com.hluther.AST.If;
 
 parser code {:
 
     private GifCreatorFrame gifCreatorFrame;
     private PaintFileDriver paintFileDriver;
     private Hashtable<String, Canvas> canvasTable;
-    private Hashtable<String, Data> symbolTable;
-    private ArrayList<TemporalData> temporalData;
-    private Data data;
     
     public PaintFileParser(PaintFileLexer lexer, GifCreatorFrame gifCreatorFrame, PaintFileDriver paintFileDriver, Hashtable<String, Canvas> canvasTable) { 
         super(lexer);
         this.gifCreatorFrame = gifCreatorFrame;
         this.paintFileDriver = paintFileDriver;
         this.canvasTable = canvasTable;
-        this.symbolTable = new Hashtable<>();
-        this.temporalData = new ArrayList<>();
     }
 
     public void syntax_error(Symbol s){
@@ -48,31 +53,6 @@ parser code {:
         gifCreatorFrame.printError(msg, 3);
     }
 
-
-    public void addEmptyVar(String id, int type, int row, int column){
-        if(existVar(id)){
-            data = new Data(id, type, true);
-            symbolTable.put(id, data);
-        }
-        else{
-             semanticError(id, row, column, 0);
-        }
-    }
-    
-    public void addVar(String newId, String id, int type, int newIdRow, int newIdColumn, int idRow, int idColumn){
-        if(existVar(newId)){
-            temporalData.add(new TemporalData(newId, id, idRow, idColumn, type));
-        }
-        else{
-            semanticError(id, newIdRow, newIdColumn, 0);
-        }
-    }
-
-    public boolean existVar(String id){
-        return symbolTable.get(id) == null;  
-    }
-
-
 :}
 
 /* Terminals */
@@ -83,152 +63,162 @@ terminal Integer    INTEGER;
 terminal Boolean    TRUE, FALSE;
 
 /* Non-terminals */
-non terminal             varStructure, vars, intType, stringType, booleanType, integerInitialization, stringInitialization, booleanInitialization, stringList, integerList, stringValue,
-                         booleanList, instructions, instruction, assignValues, paint, stringParam, intParam, rank, integerValue, loop, conditional, else, conditions, logicalOp, relationalOp;
-non terminal Boolean    booleanValue;
-non terminal Integer    term, operation, factor;
+non terminal                            paintStart, paint;
+non terminal LinkedList<Instruction>    varStructure, vars, instruction, instructions;
+non terminal Instruction                integerDeclaration, stringDeclaration, booleanDeclaration, stringAssigment, booleanAssigment, stringVarAssigment, booleanVarAssigment,
+                                        integerOpAssigment, assignValues, logicalOp, loop, conditional;
+non terminal Operation                  booleanValue, stringValue, factor, term, operation, assignValue, integerValue, relationalOp, conditions;
 
 precedence left MULTIPLICATION, DIVISION;
 precedence left PLUS, MINUS;
 
 /* The grammar */
-start with varStructure;
+start with paintStart;
+
+paintStart::=   varStructure:abstractSintaxTree {: paintFileDriver.executeAST(abstractSintaxTree); :}
+                ;
+
+varStructure::=     VARS SQUAREBRACKETO vars:varsList SQUAREBRACKETC instructions:instructionsList {: RESULT = new LinkedList<>(); RESULT.add(new PaintInstructions(varsList, instructionsList)); :}
+                    ;
+                
 
 //------------------------------------  DECLARACION DE VARIABLES    ------------------------------------//
-varStructure::= VARS SQUAREBRACKETO vars SQUAREBRACKETC instructions {: paintFileDriver.createData(symbolTable, temporalData, gifCreatorFrame);  System.out.println("VARIABLES"); :}
-                ;
-
-vars::=     intType vars
-            | stringType vars 
-            | booleanType vars
-            | intType
-            | stringType 
-            | booleanType 
+vars::=     INT integerDeclaration:inst SEMICOLON vars:instList {: RESULT = instList; RESULT.addLast(inst); :}
+            | STRING stringDeclaration:inst SEMICOLON vars:instList {: RESULT = instList; RESULT.addLast(inst); :}
+            | BOOLEAN booleanDeclaration:inst SEMICOLON vars:instList {: RESULT = instList; RESULT.addLast(inst); :} 
+            | STRING stringAssigment:inst SEMICOLON vars:instList {: RESULT = instList; RESULT.addLast(inst); :}
+            | BOOLEAN booleanAssigment:inst SEMICOLON vars:instList {: RESULT = instList; RESULT.addLast(inst); :}
+            | STRING stringVarAssigment:inst SEMICOLON vars:instList {: RESULT = instList; RESULT.addLast(inst); :}
+            | BOOLEAN booleanVarAssigment:inst SEMICOLON vars:instList {: RESULT = instList; RESULT.addLast(inst); :}
+            | INT integerDeclaration:inst SEMICOLON {: RESULT = new LinkedList<>(); RESULT.addLast(inst); :}
+            | STRING stringDeclaration:inst SEMICOLON {: RESULT = new LinkedList<>(); RESULT.addLast(inst); :}
+            | BOOLEAN booleanDeclaration:inst SEMICOLON {: RESULT = new LinkedList<>(); RESULT.addLast(inst); :}  
+            | STRING stringAssigment:inst SEMICOLON {: RESULT = new LinkedList<>(); RESULT.addLast(inst); :}
+            | BOOLEAN booleanAssigment:inst SEMICOLON {: RESULT = new LinkedList<>(); RESULT.addLast(inst); :}
+            | STRING stringVarAssigment:inst SEMICOLON {: RESULT = new LinkedList<>(); RESULT.addLast(inst); :}
+            | BOOLEAN booleanVarAssigment:inst SEMICOLON {: RESULT = new LinkedList<>(); RESULT.addLast(inst); :}
+            | INT integerOpAssigment:inst SEMICOLON vars:instList {: RESULT = instList; RESULT.addLast(inst); :}
+            | INT integerOpAssigment:inst SEMICOLON {: RESULT = new LinkedList<>(); RESULT.addLast(inst); :} 
             ;
 
-intType::=  INT ID:name SEMICOLON {: addEmptyVar(name, 0, nameleft, nameright); :}
-            | INT integerInitialization SEMICOLON
-            | INT ID:newName EQUALS ID:name SEMICOLON {: addVar(newName, name, 0, newNameleft, newNameright, nameleft, nameright); :}
-            | INT ID:name COMMA integerList SEMICOLON {: addEmptyVar(name, 0, nameleft, nameright); :}
-            | INT integerInitialization COMMA integerList SEMICOLON
-            | INT ID:newName EQUALS ID:name COMMA integerList SEMICOLON {: addVar(newName, name, 0, newNameleft, newNameright, nameleft, nameright); :}
-            ;
-        
-stringType::=   STRING ID:name SEMICOLON  {: addEmptyVar(name, 1, nameleft, nameright); :}
-                | STRING stringInitialization SEMICOLON
-                | STRING ID:newName EQUALS ID:name SEMICOLON {: addVar(newName, name, 1, newNameleft, newNameright, nameleft, nameright); :}
-                | STRING ID COMMA:name stringList SEMICOLON {: addEmptyVar(name, 1, nameleft, nameright); :}
-                | STRING stringInitialization COMMA stringList SEMICOLON
-                | STRING ID:newName EQUALS ID:name COMMA stringList SEMICOLON {: addVar(newName, name, 1, newNameleft, newNameright, nameleft, nameright); :}
+integerOpAssigment::=   ID:id EQUALS operation:value {: RESULT = new DeclarationAssignment(id, value, Type.INT); :}
+                        ;
+
+stringVarAssigment::=   ID:id EQUALS ID:value {: RESULT = new DeclarationAssignment(id, new Operation(value, OperationType.ID), Type.STRING); :}
+                        ;
+
+booleanVarAssigment::=  ID:id EQUALS ID:value {: RESULT = new DeclarationAssignment(id, new Operation(value, OperationType.ID), Type.BOOLEAN); :}
+                        ;
+
+integerDeclaration::=   ID:id {: RESULT = new Declaration(id, Type.INT); :}
+                        ;
+ 
+stringDeclaration::=    ID:id {: RESULT = new Declaration(id, Type.STRING); :}
+                        ;
+
+booleanDeclaration::=   ID:id {: RESULT = new Declaration(id, Type.BOOLEAN); :}
+                        ;
+
+stringAssigment::=      ID:id EQUALS stringValue:value {: RESULT = new DeclarationAssignment(id, value, Type.STRING); :}
+                        ;
+
+stringValue::=  IDLITERAL:value {: RESULT = new Operation(value, OperationType.LITERAL); :}
+                | STRINGLITERAL:value {: RESULT = new Operation(value, OperationType.LITERAL); :}
                 ;
 
-booleanType::=  BOOLEAN ID:name SEMICOLON {: addEmptyVar(name, 2, nameleft, nameright); :}
-                | BOOLEAN booleanInitialization SEMICOLON
-                | BOOLEAN ID:newName EQUALS ID:name SEMICOLON {: addVar(newName, name, 2, newNameleft, newNameright, nameleft, nameright); :}
-                | BOOLEAN ID:name COMMA booleanList SEMICOLON {: addEmptyVar(name, 2, nameleft, nameright); :}
-                | BOOLEAN booleanInitialization COMMA booleanList SEMICOLON
-                | BOOLEAN ID:newName EQUALS ID:name COMMA booleanList SEMICOLON {: addVar(newName, name, 2, newNameleft, newNameright, nameleft, nameright); :}
-                ;
+booleanAssigment::=     ID:id EQUALS booleanValue:value {: RESULT = new DeclarationAssignment(id, value, Type.BOOLEAN); :}
+                        ;
 
-integerInitialization::=    ID:name EQUALS INTEGER:amount
-                            {:  if(existVar(name)){
-                                    data = new Data(name, amount, 0, false);
-                                    symbolTable.put(name, data);
-                                }
-                                else semanticError(name, nameleft, nameright, 0);
-                            :}
-                            ;
-
-stringInitialization::=     ID:name EQUALS stringValue:value
-                            {:  if(existVar(name)){
-                                 //   data = new Data(name, value.replaceAll("\"", ""), 1, false);
-                                   // symbolTable.put(name, data);
-                                }
-                                else semanticError(name, nameleft, nameright, 0);
-                            :}
-                            ;
-
-stringValue::=  STRINGLITERAL
-                | IDLITERAL
-                ;
-
-booleanInitialization::=    ID:name EQUALS booleanValue:value
-                            {:  if(existVar(name)){
-                                    data = new Data(name, value, 2, false);
-                                    symbolTable.put(name, data);
-                                }
-                                else semanticError(name, nameleft, nameright, 0);
-                            :}
-                            ;
-                            
-booleanValue::=     TRUE:value {: RESULT = value; :}
-                    | FALSE:value {: RESULT = value; :}
+booleanValue::=     TRUE:value {: RESULT = new Operation(value); :}
+                    | FALSE:value {: RESULT = new Operation(value); :} 
                     ;
-
-integerList::=  ID:name COMMA integerList {: addEmptyVar(name, 0, nameleft, nameright); :}
-                | ID:newName EQUALS ID:name COMMA integerList {: addVar(newName, name, 0, newNameleft, newNameright, nameleft, nameright); :}
-                | integerInitialization COMMA integerList
-                | ID:name {: addEmptyVar(name, 0, nameleft, nameright); :}
-                | ID:newName EQUALS ID:name {: addVar(newName, name, 0, newNameleft, newNameright, nameleft, nameright); :}
-                | integerInitialization
-                ;
-
-stringList::=   ID:name COMMA stringList {: addEmptyVar(name, 1, nameleft, nameright); :}
-                | ID:newName EQUALS ID:name COMMA stringList {: addVar(newName, name, 1, newNameleft, newNameright, nameleft, nameright); :}
-                | stringInitialization COMMA stringList
-                | ID:name {: addEmptyVar(name, 1, nameleft, nameright); :}
-                | ID:newName EQUALS ID:name {: addVar(newName, name, 1, newNameleft, newNameright, nameleft, nameright); :}
-                | stringInitialization
-                ;
-
-booleanList::=   ID:name COMMA booleanList {: addEmptyVar(name, 2, nameleft, nameright); :}
-                | ID:newName EQUALS ID:name COMMA booleanList {: addVar(newName, name, 2, newNameleft, newNameright, nameleft, nameright); :}
-                | booleanInitialization COMMA booleanList
-                | ID:name {: addEmptyVar(name, 2, nameleft, nameright); :}
-                | ID:newName EQUALS ID:name {: addVar(newName, name, 2, newNameleft, newNameright, nameleft, nameright); :}
-                | booleanInitialization
-                ;
-
-
-
-
-
 
 
 //------------------------------------  OPERACIONES ARITMETICAS    ------------------------------------//
-operation::=    operation PLUS term
-                | operation MINUS term
-                | term
+operation::=    operation:value1 PLUS term:value2 {: RESULT = new Operation(value1, value2, OperationType.SUM); :}
+                | operation:value1 MINUS term:value2 {: RESULT = new Operation(value1, value2, OperationType.SUBTRACTION); :}
+                | term:value {: RESULT = value; :}
                 ;    
 
-term::=     term MULTIPLICATION factor
-            | term DIVISION factor
-            | factor
+term::=     term:value1 MULTIPLICATION factor:value2  {: RESULT = new Operation(value1, value2, OperationType.MULTIPLICATION); :}
+            | term:value1 DIVISION factor:value2  {: RESULT = new Operation(value1, value2, OperationType.DIVISION); :}
+            | factor:value {: RESULT = value; :}
             ;
 
-factor::=   INTEGER  
-            | ID
+factor::=   INTEGER:value {: RESULT = new Operation(value); :}
+            | ID:id {: RESULT = new Operation(id, OperationType.ID); :}
             ;
+
 
 
 //------------------------------------  DECLARACION DE INSTRUCCIONES    ------------------------------------//
-instructions::=     INSTRUCTIONS PARENTHESISO ID PARENTHESISC SQUAREBRACKETO instruction SQUAREBRACKETC instructions
-                    | INSTRUCTIONS PARENTHESISO ID PARENTHESISC SQUAREBRACKETO instruction SQUAREBRACKETC 
+instructions::=     INSTRUCTIONS PARENTHESISO ID:id PARENTHESISC SQUAREBRACKETO instruction:instList SQUAREBRACKETC instructions:canvasInst {: RESULT = canvasInst; RESULT.add(new CanvasInstructions(id, instList)); :}
+                    | INSTRUCTIONS PARENTHESISO ID:id PARENTHESISC SQUAREBRACKETO instruction:instList SQUAREBRACKETC {: RESULT = new LinkedList<>(); RESULT.add(new CanvasInstructions(id, instList)); :}
                     ;
 
-instruction::=   assignValues instruction
+instruction::=   assignValues:inst instruction:instList {: RESULT = instList; RESULT.add(inst); :}
                 | paint instruction
-                | conditional instruction
-                | loop instruction
-                | assignValues 
+                | conditional:inst instruction:instList {: RESULT = instList; RESULT.add(inst); :}
+                | loop:inst instruction:instList {: RESULT = instList; RESULT.add(inst); :}
+                | assignValues:inst {: RESULT = new LinkedList<>(); RESULT.add(inst); :} 
                 | paint
-                | conditional
-                | loop
+                | conditional:inst {: RESULT = new LinkedList<>(); RESULT.add(inst); :}
+                | loop:inst  {: RESULT = new LinkedList<>(); RESULT.add(inst); :}
                 ;
 
 
 //------------------------------------  ASIGNACION DE VALORES    ------------------------------------//
+assignValues::=     ID:id EQUALS assignValue:value SEMICOLON {: RESULT = new Assignment(id, value); :}
+                    ;
 
+assignValue::=      IDLITERAL:value {: new Operation(value, OperationType.LITERAL); :}
+                    | operation:value {: RESULT = value; :}
+                    | relationalOp:value {: RESULT = value; :} 
+                    ;
+
+
+//------------------------------------  OPERACIONES RELACIONALES    ------------------------------------//
+relationalOp::=    integerValue:value1 COMPARATION integerValue:value2  {: RESULT = new Operation(value1, value2, OperationType.COMPARATION); :}
+                    | integerValue:value1 LESSEQUALSTHAN integerValue:value2 {: RESULT = new Operation(value1, value2, OperationType.LESS_EQUAL_THAN); :}
+                    | integerValue:value1 MOREEQUALSTHAN integerValue:value2 {: RESULT = new Operation(value1, value2, OperationType.GREATER_EQUAL_THAN); :}
+                    | integerValue:value1 LESSTHAN integerValue:value2 {: RESULT = new Operation(value1, value2, OperationType.LESS_THAN); :}
+                    | integerValue:value1 MORETHAN integerValue:value2 {: RESULT = new Operation(value1, value2, OperationType.GREATER_THAN); :}
+                    ;
+
+integerValue::=    INTEGER:value {: RESULT = new Operation(value); :}
+                   | ID:value {: RESULT = new Operation(value, OperationType.ID); :}
+                   ;
+
+
+//------------------------------------  INSTRUCCION WHILE    ------------------------------------//
+loop::=     WHILE PARENTHESISO conditions:conditions PARENTHESISC CURLYBRACKETO instruction:instList CURLYBRACKETC {: RESULT = new While(conditions, instList); :}
+            | WHILE PARENTHESISO conditions:conditions PARENTHESISC CURLYBRACKETO CURLYBRACKETC {: RESULT = new While(conditions, null); :}
+            ;
+
+//------------------------------------  CONDICIONES    ------------------------------------//
+conditions::=   ID:id OR conditions:value {: RESULT = new Operation(new Operation(id, OperationType.ID), value, OperationType.OR); :}
+                | relationalOp:value1 OR conditions:value2 {: RESULT = new Operation(value1, value2, OperationType.OR); :}
+                | TRUE:value1 OR conditions:value2 {: RESULT = new Operation(new Operation(value1), value2, OperationType.OR); :}
+                | FALSE:value1 OR conditions:value2  {: RESULT = new Operation(new Operation(value1), value2, OperationType.OR); :}
+                | ID:id AND conditions:value {: RESULT = new Operation(new Operation(id, OperationType.ID), value, OperationType.AND); :}
+                | relationalOp:value1 AND conditions:value2 {: RESULT = new Operation(value1, value2, OperationType.AND); :}
+                | TRUE:value1 AND conditions:value2 {: RESULT = new Operation(new Operation(value1), value2, OperationType.AND); :}
+                | FALSE:value1 AND conditions:value2  {: RESULT = new Operation(new Operation(value1), value2, OperationType.AND); :}
+                | ID:id {: RESULT = new Operation(id, OperationType.ID); :} 
+                | relationalOp:value {: RESULT = value; :}
+                | TRUE:value {: RESULT = new Operation(value); :}
+                | FALSE:value {: RESULT = new Operation(value); :}
+                ;
+
+
+//------------------------------------  INSTRUCCION IF-ELSE    ------------------------------------//
+conditional::=      IF PARENTHESISO conditions:conditions PARENTHESISC CURLYBRACKETO instruction:instList CURLYBRACKETC ELSE CURLYBRACKETO instruction:elseList CURLYBRACKETC {: RESULT = new If(conditions, instList, elseList); :}
+                    | IF PARENTHESISO conditions:conditions PARENTHESISC CURLYBRACKETO CURLYBRACKETC ELSE CURLYBRACKETO instruction:elseList CURLYBRACKETC {: RESULT = new If(conditions, null, elseList); :}
+                    | IF PARENTHESISO conditions:conditions PARENTHESISC CURLYBRACKETO instruction:instList CURLYBRACKETC ELSE CURLYBRACKETO CURLYBRACKETC {: RESULT = new If(conditions, instList, null); :}
+                    | IF PARENTHESISO conditions:conditions PARENTHESISC CURLYBRACKETO CURLYBRACKETC ELSE CURLYBRACKETO CURLYBRACKETC {: RESULT = new If(conditions, null, null); :}    
+                    | IF PARENTHESISO conditions:conditions PARENTHESISC CURLYBRACKETO instruction:instList CURLYBRACKETC {: RESULT = new If(conditions, instList); :}
+                    | IF PARENTHESISO conditions:conditions PARENTHESISC CURLYBRACKETO CURLYBRACKETC {: RESULT = new If(conditions, null); :}
+                    ;
 
 
 //------------------------------------  INSTRUCCION PINTAR    ------------------------------------//
@@ -249,44 +239,3 @@ rank::=     integerValue FULLSTOP FULLSTOP integerValue
 integerValue::=    INTEGER
                    | ID
                    ;
-
-
-//------------------------------------  INSTRUCCION WHILE    ------------------------------------//
-loop::=     WHILE PARENTHESISO conditions PARENTHESISC CURLYBRACKETO instruction CURLYBRACKETC
-            ;
-
-
-//------------------------------------  INSTRUCCION IF-ELSE    ------------------------------------//
-conditional::=      IF PARENTHESISO conditions PARENTHESISC CURLYBRACKETO instruction CURLYBRACKETC else
-                    ;
-
-else::=     ELSE CURLYBRACKETO instruction CURLYBRACKETC
-            |    
-            ;
-
-//------------------------------------  CONDICIONES    ------------------------------------//
-conditions::=   ID logicalOp conditions
-                | relationalOp logicalOp conditions
-                | TRUE logicalOp conditions
-                | FALSE logicalOp conditions
-                | ID
-                | relationalOp
-                | TRUE
-                | FALSE
-                ;
-
-
-//------------------------------------  OPERACIONES LOGICAS    ------------------------------------//
-logicalOp::=    AND
-                | OR
-                ;
-                
-
-//------------------------------------  OPERACIONES RELACIONALES    ------------------------------------//
-relationalOp::=    integerValue COMPARATION integerValue
-                    | integerValue LESSEQUALSTHAN integerValue
-                    | integerValue MOREEQUALSTHAN integerValue
-                    | integerValue LESSTHAN integerValue
-                    | integerValue MORETHAN integerValue
-                    | integerValue BETWEEN integerValue
-                    ;

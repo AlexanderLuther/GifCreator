@@ -1,164 +1,47 @@
 package com.hluther.controlClasses;
 
-import com.hluther.entityClasses.Data;
-import com.hluther.entityClasses.TemporalData;
-import com.hluther.gui.GifCreatorFrame;
-import java.util.ArrayList;
-import java.util.Hashtable;
+import com.hluther.AST.Instruction;
+import com.hluther.AST.SymbolTable;
+import java.util.LinkedList;
+
 /**
  *
  * @author helmuth
  */
 public class PaintFileDriver {
     
-    private Data data;
-    
-    public void createData(Hashtable<String, Data> symbolTable, ArrayList<TemporalData> temporalData, GifCreatorFrame gifCreatorFrame){
-    
-        System.out.println("Variables a asignar");
-        for(int i = 0; i < temporalData.size(); i++){
-            System.out.println("Nombre de la variable: " + temporalData.get(i).getId());
-            System.out.println("Nombre de la variable que dara el valor: " + temporalData.get(i).getIdValue());
-            System.out.println("Tipo de variable: " + temporalData.get(i).getType());
+    /**
+     * Recibe una lista de instrucciones y la ejecuta
+     * @param ast lista de instrucciones
+     */
+    public void executeAST(LinkedList<Instruction> abstractSintaxTree){
+        if(abstractSintaxTree == null){
+            System.out.println("No es posible ejecutar las instrucciones porque\r\n"
+                    + "el árbol no fue cargado de forma adecuada por la existencia\r\n"
+                    + "de errores léxicos o sintácticos.");
+            return;
         }
+        //Se crea una tabla de símbolos global para ejecutar las instrucciones.
+        SymbolTable  symbolTable = new SymbolTable();
+        //Se ejecuta cada instruccion en el ast, es decir, cada instruccion de 
+        //la lista principal de instrucciones.
         
-        System.out.println("Variables ya guardadas");
-        for(Data currentData : symbolTable.values()){
-            
-            switch(currentData.getType()){
-                case 0:
-                    System.out.println("Id: " + currentData.getId());
-                    if(currentData.isEmpty()){
-                        System.out.println("No inicializada");
-                    }
-                    else{
-                        System.out.println("Valor: " + currentData.getIntegerValue());
-                    }
-                break;
-                case 1:
-                    System.out.println("Id: " + currentData.getId());
-                    if(currentData.isEmpty()){
-                        System.out.println("No inicializada");
-                    }
-                    else{
-                        System.out.println("Valor: " + currentData.getStringValue());
-                    }
-                break;
-                case 2:
-                    System.out.println("Id: " + currentData.getId());
-                    if(currentData.isEmpty()){
-                        System.out.println("No inicializada");
-                    }
-                    else{
-                        System.out.println("Valor: " + currentData.isBooleanValue());
-                    }
-                break;
-            }
-        
+        int counter = 0; 
+        for(int i = abstractSintaxTree.size() -1; i >= 0; i--){
+            counter++;
+            System.out.println(counter);
+            //Si existe un error léxico o sintáctico en cierta instrucción esta
+            //será inválida y se cargará como null, por lo tanto no deberá ejecutarse
+            //es por esto que se hace esta validación.
+            if(abstractSintaxTree.get(i)!=null)
+                abstractSintaxTree.get(i).execute(symbolTable);
         }
         
         
-        
-        
-        for(TemporalData tempData : temporalData){
-            if(symbolTable.get(tempData.getIdValue()) != null){
-                data = symbolTable.get(tempData.getIdValue());
-                switch(tempData.getType()){
-                    case 0:
-                        if(data.getType() == 0){
-                            if(data.isEmpty()){
-                                gifCreatorFrame.printError("Error Semantico -> La variable ["+data.getId()+"] no fue inicializada. Linea: "+tempData.getIdRow()+" Columna: "+tempData.getIdColumn(), 3);
-                            }
-                            else{
-                                symbolTable.put(tempData.getId(), new Data(tempData.getId(), data.getIntegerValue(), 0, false));
-                            }
-                        }
-                        else{
-                            gifCreatorFrame.printError("Error Semantico -> La variable ["+data.getId()+"] no es de tipo int. Linea: "+tempData.getIdRow()+" Columna: "+tempData.getIdColumn(), 3);
-                        }
-                    break;
-                    case 1:
-                        if(data.getType() == 1){
-                            if(data.isEmpty()){
-                                gifCreatorFrame.printError("Error Semantico -> La variable ["+data.getId()+"] no fue inicializada. Linea: "+tempData.getIdRow()+" Columna: "+tempData.getIdColumn(), 3);
-                            }
-                            else{
-                                symbolTable.put(tempData.getId(), new Data(tempData.getId(), data.getStringValue(), 1, false));
-                            }
-                        }
-                        else{
-                            gifCreatorFrame.printError("Error Semantico -> La variable ["+data.getId()+"] no es de tipo String. Linea: "+tempData.getIdRow()+" Columna: "+tempData.getIdColumn(), 3);
-                        }
-                    break;
-                    case 2:
-                        if(data.getType() == 2){
-                            if(data.isEmpty()){
-                                gifCreatorFrame.printError("Error Semantico -> La variable ["+data.getId()+"] no fue inicializada. Linea: "+tempData.getIdRow()+" Columna: "+tempData.getIdColumn(), 3);
-                            }
-                            else{
-                                symbolTable.put(tempData.getId(), new Data(tempData.getId(), data.isBooleanValue(), 2, false));
-                            }
-                        }
-                        else{
-                            gifCreatorFrame.printError("Error Semantico -> La variable ["+data.getId()+"] no es de tipo boolean. Linea: "+tempData.getIdRow()+" Columna: "+tempData.getIdColumn(), 3);
-                        } 
-                    break;
-                }  
-            }  
-            else{
-                gifCreatorFrame.printError("Error Semantico -> No existe ninguna variable con el nombre ["+tempData.getIdValue()+"]. Imposible asignar un valor.  Linea: "+tempData.getIdRow()+" Columna: "+tempData.getIdColumn(), 3);
-            }
+        for(int i = 0; i < symbolTable.size(); i++){
+            System.out.println(symbolTable.get(i).getId() + " =  " + symbolTable.get(i).getValue());
         }
-        
-        
-        
-        
-        
-        
-        
-        
-        System.out.println("Variables asignadas");
-         for(Data currentData : symbolTable.values()){
-            
-            switch(currentData.getType()){
-                case 0:
-                    System.out.println("Id: " + currentData.getId());
-                    if(currentData.isEmpty()){
-                        System.out.println("No inicializada");
-                    }
-                    else{
-                        System.out.println("Valor: " + currentData.getIntegerValue());
-                    }
-                break;
-                case 1:
-                    System.out.println("Id: " + currentData.getId());
-                    if(currentData.isEmpty()){
-                        System.out.println("No inicializada");
-                    }
-                    else{
-                        System.out.println("Valor: " + currentData.getStringValue());
-                    }
-                break;
-                case 2:
-                    System.out.println("Id: " + currentData.getId());
-                    if(currentData.isEmpty()){
-                        System.out.println("No inicializada");
-                    }
-                    else{
-                        System.out.println("Valor: " + currentData.isBooleanValue());
-                    }
-                break;
-            }
-        
-        }
-        
-        
-        
         
     }
-    
-    
-    
-    
     
 }
